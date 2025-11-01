@@ -5,9 +5,9 @@ const columnMap = {
   'done': 'done-tasks',
 };
 
-let currentLayout = null;
-window.addEventListener("resize", handleResizeScreenBoard);
-window.addEventListener("load", handleResizeScreenBoard);
+// let currentLayout = null;
+// window.addEventListener("resize", handleResizeScreenBoard);
+// window.addEventListener("load", handleResizeScreenBoard);
 
 async function initBoard() {
   await getData();

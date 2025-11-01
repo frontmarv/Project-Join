@@ -72,7 +72,7 @@ body {
   content: url(../assets/img/search-active.svg);
 }
 
-.search-hl {
+.search-highlight {
   display: inline;
   background: rgba(69,137,255,0.22);
   border-radius: 3px;

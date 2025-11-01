@@ -1,5 +1,5 @@
 
-const HL_CLASS = "search-hl";
+const HIGHLIGHT_CLASS = "search-highlight";
 
 function initSearch() {
   const input = document.getElementById("search-tasks");
@@ -54,7 +54,7 @@ function resetHighlight(titleElement) {
 function highlightTitle(titleElement, query) {
   const raw = titleElement.dataset.rawText;
   const re = new RegExp(`(${escapeRegExp(query)})`, "gi");
-  titleElement.innerHTML = raw.replace(re, `<span class="${HL_CLASS}">$1</span>`);
+  titleElement.innerHTML = raw.replace(re, `<span class="${HIGHLIGHT_CLASS}">$1</span>`);
 }
 
 function escapeRegExp(str) {

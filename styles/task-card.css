@@ -6,7 +6,7 @@
   box-shadow: 0 0 0.625rem 0.188rem rgba(0, 0, 0, 0.1);
   border-radius: 1.5rem;
   color: var(--color-black);
-  min-width: 0;
+  min-width: fit-content;
   max-width: 100%;
 }
 
@@ -98,6 +98,7 @@
   color: black;
   pointer-events: none;
   user-select: none;
+  text-wrap: nowrap;
   z-index: 2;
 }
 
