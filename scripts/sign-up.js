@@ -143,7 +143,7 @@ function showSuccessfulSignUpMessage() {
 
 function redirectToLoginAfterDelay() {
     setTimeout(() => {
-        window.location.href = '../index.html'
+        window.location.replace('../index.html');
     }, 2000);
 }
 

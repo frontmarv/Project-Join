@@ -40,17 +40,24 @@ async function renderTaskEditDlg(taskId) {
 }
 
 async function renderAddTaskDlg(defaultTaskState = "to-do") {
-  const dlg = document.getElementById("dlg-box");
-  dlg.classList.add("dlg-add-task");
-  dlg.innerHTML = getAddTaskDlgTpl(defaultTaskState);
-  await InsertLoader.loadInsertByElement(dlg.querySelector("[data-insert]"));
-  await waitFor(".contact-options");
-  populateAssignmentListFromFirebase({ assignedContacts: [] });
-  await waitFor(".dlg-edit__subtask-list");
-  initSubtaskInput();
-  initSubtaskHandlers();
-  initSubtaskIconButtons();
-  displayDlg();
+  let isSmallScreen = window.innerWidth < 1025;
+  if (isSmallScreen) {
+    window.location.replace('../pages/add-task.html');
+    return
+  } else {
+    const dlg = document.getElementById("dlg-box");
+    dlg.classList.add("dlg-add-task");
+    dlg.innerHTML = getAddTaskDlgTpl(defaultTaskState);
+    await InsertLoader.loadInsertByElement(dlg.querySelector("[data-insert]"));
+    await waitFor(".contact-options");
+    populateAssignmentListFromFirebase({ assignedContacts: [] });
+    await waitFor(".dlg-edit__subtask-list");
+    initSubtaskInput();
+    initSubtaskHandlers();
+    initSubtaskIconButtons();
+    displayDlg();
+  }
+
 }
 
 function loadTasks() {

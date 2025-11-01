@@ -7,6 +7,7 @@ let contactPhone = document.getElementById('contact-phone');
 let contactProfilImg = document.querySelector('.header__contact-profil-img');
 
 let showContact = false;
+let currentUserInEdit = "";
 let userArrayGlobal = [];
 
 window.addEventListener("resize", handleResizeScreenContacts);
@@ -109,8 +110,8 @@ function renderContactsIntoSections(initialLettersArray, userArray) {
 
 function checkLoggedInUser(user) {
     if (user.name === LOGGED_IN_USER) {
-        let userName = user.name + ' (You)';
-        return userName
+        let modifiedUserName = user.name + ' (You)';
+        return modifiedUserName
     } else {
         let userName = user.name
         return userName
@@ -163,22 +164,26 @@ function showContactDetailsinCard(selectedContact) {
     setContactCardtoVisible();
 }
 
+function cleanName(userName) {
+    return userName.replace(/\s*\(You\)\s*$/, '');
+}
 
 function getContactInfofromContactlistandDB(contactElement) {
     let userName = contactElement.querySelector('.contact-name').innerText;
+    let cleanUserName = cleanName(userName);
     let email = contactElement.querySelector('.contact-email').innerText;
-    let selectedUser = userArrayGlobal.find(user => user.name === userName);
+    let selectedUser = userArrayGlobal.find(user => user.name === cleanUserName);
     let phone = selectedUser.phone;
     let profilImgColor = selectedUser.profilImgColor;
-    return { userName, email, phone, profilImgColor };
+    return { cleanUserName, email, phone, profilImgColor };
 }
 
 
-function setContactInfoIntoCard({ userName, email, phone, profilImgColor }) {
-    contactName.innerText = userName;
+function setContactInfoIntoCard({ cleanUserName, email, phone, profilImgColor }) {
+    contactName.innerText = cleanUserName;
     contactMail.innerText = email;
     contactPhone.innerText = phone;
-    let userInitals = getUserNameInitials(userName);
+    let userInitals = getUserNameInitials(cleanUserName);
     contactProfilImg.innerHTML = getBigUserProfilImg(profilImgColor, userInitals);
 }
 

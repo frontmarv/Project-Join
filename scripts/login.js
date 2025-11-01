@@ -78,8 +78,8 @@ async function attemptLogin() {
     if (loginIsValid) {
         getAndStoreUserId(existingUser.name);
         let multipatch = { "loggedIn": true };
-        saveChangesToDB(multipatch);
-        window.location.href = "./pages/summary.html"
+        await saveChangesToDB(multipatch);
+        window.location.replace("./pages/summary.html");
     }
 }
 
