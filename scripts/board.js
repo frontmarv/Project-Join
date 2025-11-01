@@ -5,9 +5,9 @@ const columnMap = {
   'done': 'done-tasks',
 };
 
-// let currentLayout = null;
-// window.addEventListener("resize", handleResizeScreenBoard);
-// window.addEventListener("load", handleResizeScreenBoard);
+let currentLayout = null;
+window.addEventListener("resize", handleResizeScreenBoard);
+window.addEventListener("load", handleResizeScreenBoard);
 
 async function initBoard() {
   await getData();
@@ -135,4 +135,28 @@ function toggleTasksAutoHeight(enable) {
   document.querySelectorAll(".tasks").forEach(col => {
     col.style.height = enable ? "auto" : "calc(100vh - 27rem)";
   });
+}
+
+function handleResizeScreenBoard() {
+  const isSmallScreen = window.innerWidth < 1025;
+  const boardHead = document.getElementById('board-head');
+  setLayout(isSmallScreen);
+  if (currentLayout === 'mobile') {
+    renderMobileHead(boardHead);
+  } else if (currentLayout === 'desktop') {
+    renderDesktopHead(boardHead);
+  }
+}
+
+function renderMobileHead(boardHead) {
+  boardHead.innerHTML = getAddTaskBtnMobile();
+}
+
+function renderDesktopHead(boardHead) {
+  boardHead.innerHTML = getBoardHeadDesktop();
+}
+
+function setLayout(isSmallScreen) {
+  if (isSmallScreen) { currentLayout = 'mobile'; }
+  else { currentLayout = 'desktop'; }
 }
