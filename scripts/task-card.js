@@ -20,10 +20,19 @@ function getSubtaskStats(task) {
 
 function getAssignedUsersHtml(assigned) {
   const ids = normalizeAssignedContacts(assigned);
-  return ids.map(id => {
-    const user = users.find(user => user.id === id);
+  const MAX = 5;
+
+  const visible = ids.slice(0, MAX);
+  const remain = Math.max(0, ids.length - MAX);
+
+  const avatars = visible.map(id => {
+    const user = users.find(u => u.id === id);
     return user ? getAssignedUserInCardTpl(user) : "";
-  }).join("");
+  });
+
+  if (remain > 0) avatars.push(getMoreUsersBadgeTpl(remain));
+
+  return avatars.join("");
 }
 
 function normalizeAssignedContacts(data) {

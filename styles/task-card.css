@@ -108,15 +108,13 @@
 .task__assignment-and-priority-box {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .task__assignments {
   display: flex;
-  flex: 1;
-  flex-direction: row;
   align-items: center;
-  gap: 1rem;
-  max-width: 95%;
+  cursor: default;
 }
 
 .task__assignments__user-dates {
@@ -127,11 +125,12 @@
 }
 
 .task__assignments svg {
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
+  flex: 0 0 auto;
   object-fit: cover;
-  margin-left: -1.5rem;
-  cursor: default;
+  margin-left: -0.5rem;
 }
 
 .task__assignments svg:first-child {
@@ -155,44 +154,22 @@
   cursor: default;
 }
 
-@media screen and (max-width: 1440px) {
 
-  .task__subtasks {
-    text-wrap: initial;
-  }
 
-  .task__subtasks-and-progressbar-box {
-    flex-wrap: wrap;
+@media (max-width: 1440px) {
+  .task__assignments svg {
+    margin-left: -0.8rem;
   }
 }
 
-@media screen and (max-width: 1024px) {
-  .task {
-    min-width: 250px;
-    width: 250px;
+@media (max-width: 1250px) {
+  .task__assignments svg {
+    margin-left: -1.2rem;
   }
+}
 
-
-
-  .task__content-metadata-box {
-    overflow: hidden;
-    height: 65px;
-  }
-
-  .task__description {
-    display: -webkit-box !important;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-  }
-
-  .task__assignment-and-priority-box {
-    justify-content: space-between;
-  }
-
-  .task__assignments {
-    max-width: 85%;
+@media (max-width: 1150px) {
+  .task__assignments svg {
+    margin-left: -1.4rem;
   }
 }

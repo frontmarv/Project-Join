@@ -203,6 +203,18 @@ body {
   z-index: 1000;
 }
 
+@media (max-width: 1440px) {
+  .board__table {
+    gap: 0.5rem;
+  }
+
+  .task__subtasks-and-progressbar-box {
+    flex-direction: column;
+    gap: 0.25rem !important;
+  }
+}
+
+
 @media screen and (max-width: 1024px) {
 
   main {
