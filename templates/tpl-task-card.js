@@ -51,3 +51,14 @@ function getAssignedUserInCardTpl(user) {
     </svg>
   `;
 }
+
+function getMoreUsersBadgeTpl(count) {
+  return /*html*/ `
+    <svg width="32" height="32" viewBox="0 0 42 42" aria-hidden="true" focusable="false">
+      <title>+${count} Users</title>
+      <circle cx="21" cy="21" r="20" fill="#42526E" stroke="white" stroke-width="2"/>
+      <text x="21" y="23" text-anchor="middle" dominant-baseline="middle"
+            font-size="12" fill="white" font-family="sans-serif">+${count}</text>
+    </svg>
+  `;
+}
