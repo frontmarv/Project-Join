@@ -63,7 +63,7 @@ async function deleteUserFlow() {
     await deleteUser(STORED_USER_KEY);
     renderContactList();
     setContactCardtoInvisible();
-    if (window.innerWidth < 1025) {
+    if (isSmallScreen) {
         showContact = false;
         handleResizeScreenContacts();
     }
@@ -189,7 +189,6 @@ function setContactInfoIntoCard({ cleanUserName, email, phone, profilImgColor })
 
 
 function handleResizeScreenContacts() {
-    let isSmallScreen = window.innerWidth < 1025;
     handleContent(isSmallScreen);
 }
 
@@ -212,7 +211,7 @@ function handleContent(isSmallScreen) {
 
 
 function showContactMobile() {
-    if (window.innerWidth < 1025) {
+    if (isSmallScreen) {
         document.querySelector('.content-left').style.display = 'none';
         document.querySelector('.content-right').style.display = 'flex';
         document.querySelector('.add-user-icon').style.display = 'none';
@@ -255,7 +254,6 @@ function hideContactActionMenu() {
 
 
 function handleMenuClick(event) {
-    let isSmallScreen = window.innerWidth < 1025;
     let menu = document.querySelector('.manage-contact__actions');
     if (isSmallScreen && !menu.contains(event.target)) {
         hideContactActionMenu();

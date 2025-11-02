@@ -5,7 +5,6 @@ let logoAdded = false;
 let helpAdded = false;
 
 function handleResizeScreen() {
-    let isSmallScreen = window.innerWidth < 1025;
     handleLogo(isSmallScreen);
     handleHelp(isSmallScreen);
 }

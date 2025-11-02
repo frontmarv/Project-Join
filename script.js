@@ -5,7 +5,7 @@ let userAvatar = document.querySelector('.header__user-info');
 let LOGGED_IN_USER;
 let STORED_USER_KEY = "";
 let rawData;
-
+let isSmallScreen = window.innerWidth < 1025;
 if (overlay) {
     overlay.addEventListener('click', hideDlg);
 }

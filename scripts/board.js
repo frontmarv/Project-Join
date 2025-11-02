@@ -40,7 +40,6 @@ async function renderTaskEditDlg(taskId) {
 }
 
 async function renderAddTaskDlg(defaultTaskState = "to-do") {
-  let isSmallScreen = window.innerWidth < 1025;
   if (isSmallScreen) {
     window.location.replace('../pages/add-task.html');
     return
@@ -145,7 +144,6 @@ function toggleTasksAutoHeight(enable) {
 }
 
 function handleResizeScreenBoard() {
-  const isSmallScreen = window.innerWidth < 1025;
   const boardHead = document.getElementById('board-head');
   setLayout(isSmallScreen);
   if (currentLayout === 'mobile') {

@@ -31,7 +31,7 @@ password.addEventListener('keyup', () => {
     updatePasswordLockIcon();
 });
 window.addEventListener('load', () => {
-    if (window.innerWidth < 1025) {
+    if (isSmallScreen) {
         setTimeout(() => {
             welcomeScreenBckgrnd.classList.add('hidden');
             fullsizeScreenWelcome();
@@ -129,7 +129,6 @@ function togglePasswordIcon() {
 }
 
 function handleResizeScreen() {
-    let isSmallScreen = window.innerWidth < 1025;
     if (isSmallScreen && !headerAdded) {
         main.insertAdjacentHTML('beforeend', renderHeaderSignup());
         headerAdded = true;
