@@ -4,11 +4,20 @@ function getTasksTemplate(task) {
     <div class="task" draggable="true"
         ondragstart="startDragging('${task.id}')"
         onclick="renderTaskInfoDlg('${task.id}')">
-
+<div class="task-card--header">
       <span class="${view.categoryClass}">
         ${formatCategory(task.category)}
       </span>
-
+       <img class="task-card-menu"
+     src="../assets/img/contacts-options-active.svg"
+     alt=""
+     draggable="false"
+     onclick="toggleCardMenu(event, this)"
+     onpointerdown="event.stopPropagation(); event.preventDefault();"
+     onmousedown="event.stopPropagation(); event.preventDefault();"
+     ontouchstart="event.stopPropagation(); event.preventDefault();"
+     ondragstart="event.stopPropagation(); event.preventDefault(); return false;">
+</div>
       <div class="task__content-metadata-box">
         <span class="task__title">${task.title || ''}</span>
         <span class="task__description">${task.description || ''}</span>
@@ -61,4 +70,11 @@ function getMoreUsersBadgeTpl(count) {
             font-size="12" fill="white" font-family="sans-serif">+${count}</text>
     </svg>
   `;
+}
+
+
+function toggleCardMenu(event, icon) {
+    event.stopPropagation();
+    event.preventDefault();
+    icon.classList.toggle('rotate90');
 }

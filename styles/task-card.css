@@ -9,25 +9,35 @@
   max-width: 20vw;
 }
 
-.task__category {
-  display: inline-flex;
-  width: fit-content;
+.task-card--header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  color: var(--color-white);
-  background-color: var(--color-11);
-  border-radius: 0.5rem;
-  padding: 0.25rem 1rem;
 }
 
+.task:active,
+.task-card--header *:active {
+  transform: none !important;
+}
+
+.task img,
+.task svg {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.task__category,
 .task__category2 {
   display: inline-flex;
   width: fit-content;
   align-items: center;
   color: var(--color-white);
-  background-color: var(--color-6);
   border-radius: 0.5rem;
   padding: 0.25rem 1rem;
 }
+.task__category { background-color: var(--color-11); }
+.task__category2 { background-color: var(--color-6); }
 
 .task__content-metadata-box {
   display: flex;
@@ -48,7 +58,6 @@
   color: var(--color-maincolor);
   font-size: 1rem;
   font-weight: 700;
-  overflow-wrap: break-word;
 }
 
 .task__description {
@@ -132,10 +141,7 @@
   object-fit: cover;
   margin-left: -0.5rem;
 }
-
-.task__assignments svg:first-child {
-  margin-left: 0;
-}
+.task__assignments svg:first-child { margin-left: 0; }
 
 .task__assignments-circle {
   display: flex;
@@ -154,22 +160,37 @@
   cursor: default;
 }
 
+.task-card-menu {
+  width: 2rem;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s ease;
+  display: inline-block;
+  will-change: transform;
+}
 
+.task-card-menu:hover:not(.rotate90) {
+  transform: scale(1.1);
+}
+
+.task-card-menu.rotate90 {
+  transform: rotate(90deg);
+}
+
+.task-card-menu.rotate90:hover {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.task:active .task-card-menu {
+  transform: none !important;
+}
 
 @media (max-width: 1440px) {
-  .task__assignments svg {
-    margin-left: -0.8rem;
-  }
+  .task__assignments svg { margin-left: -0.8rem; }
 }
-
 @media (max-width: 1250px) {
-  .task__assignments svg {
-    margin-left: -1.2rem;
-  }
+  .task__assignments svg { margin-left: -1.2rem; }
 }
-
 @media (max-width: 1150px) {
-  .task__assignments svg {
-    margin-left: -1.4rem;
-  }
+  .task__assignments svg { margin-left: -1.4rem; }
 }
