@@ -322,20 +322,23 @@ a:focus-visible {
   flex-direction: column;
 }
 
-/* normal */
 .category-selection .selector {
-  border: 1px solid var(--color-lightblue);
+  border: 1px solid var(--color-lightgrey);
   transition: border-color .15s ease;
 }
 
-
-/* Fehler: rot bis man reinklickt/auswählt */
-.category-error .selector:placeholder-shown {
-  border-color: var(--color-error) !important;
+/* Ungültig = ROT */
+.category-selection.invalid .selector {
+  border-color: var(--color-error);
 }
 
-/* Fehler + Fokus: blau (wie bei nativen Feldern) */
-.category-error .selector:focus {
+/* Fokus = BLAU */
+.category-selection .selector:focus {
+  border-color: var(--color-lightblue);
+}
+
+/* (optional) Nach Auswahl sicher wieder GRAU */
+.category-selection.valid .selector {
   border-color: var(--color-lightblue);
 }
 
