@@ -7,7 +7,6 @@ let contactPhone = document.getElementById('contact-phone');
 let contactProfilImg = document.querySelector('.header__contact-profil-img');
 
 let showContact = false;
-let currentUserInEdit = "";
 let userArrayGlobal = [];
 
 window.addEventListener("resize", handleResizeScreenContacts);
@@ -189,6 +188,7 @@ function setContactInfoIntoCard({ cleanUserName, email, phone, profilImgColor })
 
 
 function handleResizeScreenContacts() {
+    let isSmallScreen = window.innerWidth < 1025;
     handleContent(isSmallScreen);
 }
 

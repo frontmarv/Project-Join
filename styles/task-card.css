@@ -59,6 +59,18 @@
   hyphens: auto;
 }
 
+/* ________________________________ für ... nach 2 lines of text  */
+.task__description {
+  display: -webkit-box;
+  display: box;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
 .task__subtasks-and-progressbar-box {
   display: flex;
   justify-content: space-between;
@@ -171,5 +183,12 @@
 @media (max-width: 1150px) {
   .task__assignments svg {
     margin-left: -1.4rem;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .task {
+    min-width: 200px;
+    max-width: 300px;
   }
 }
