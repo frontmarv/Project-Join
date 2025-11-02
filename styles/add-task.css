@@ -322,20 +322,19 @@ a:focus-visible {
   flex-direction: column;
 }
 
-/* normal */
+/* Default = ROT (ungültig) */
 .category-selection .selector {
-  border: 1px solid var(--color-lightblue);
+  border: 1px solid var(--color-error);
   transition: border-color .15s ease;
 }
 
-
-/* Fehler: rot bis man reinklickt/auswählt */
-.category-error .selector:placeholder-shown {
-  border-color: var(--color-error) !important;
+/* Fokus = BLAU */
+.category-selection .selector:focus {
+  border-color: var(--color-lightblue);
 }
 
-/* Fehler + Fokus: blau (wie bei nativen Feldern) */
-.category-error .selector:focus {
+/* Nach Auswahl (gültig) → BLAU */
+.category-selection.valid .selector {
   border-color: var(--color-lightblue);
 }
 

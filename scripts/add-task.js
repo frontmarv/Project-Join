@@ -10,7 +10,8 @@ async function initAddTask() {
   initSubtaskInput();
   initSubtaskHandlers();
   initSubtaskIconButtons();
-
+  setupCategoryInvalidHandler();
+  updateCategoryValidity();
 }
 
 /** Helper: wartet, bis ein Selector im DOM existiert */
@@ -35,6 +36,7 @@ function changePriorityBtn(priorityBtn) {
   changePriorityBtnIcon(priorityBtn.id);
   chosenPriority = priorityBtn.id;
 }
+
 function changePriorityBtnColor(btn) {
   const colors = { urgent: "#FF3D00", medium: "#FFA700", low: "#7AE229" };
   ["urgent", "medium", "low"].forEach(id => {
@@ -46,6 +48,7 @@ function changePriorityBtnColor(btn) {
   selectedBtn.style.backgroundColor = colors[selectedBtn.id];
   selectedBtn.style.color = "#FFFFFF";
 }
+
 function resetPriorityButtons() {
   ["urgent", "medium", "low"].forEach(id => {
     const btn = document.getElementById(id);
@@ -56,6 +59,7 @@ function resetPriorityButtons() {
   });
   chosenPriority = "medium";
 }
+
 function changePriorityBtnIcon(btnId) {
   document.querySelectorAll(".priority-options-btn img").forEach(img => {
     img.src = img.dataset.default;
@@ -90,7 +94,7 @@ document.addEventListener('click', (e) => {
     if (visibleInput) visibleInput.value = text; // Anzeige
     if (proxyInput)   proxyInput.value   = text; // Proxy erfüllt required
     if (hiddenInput)  hiddenInput.value  = value; // tatsächlicher Wert
-
+    updateCategoryValidity();
     currentRoot.classList.remove('open');
     return;
   }
@@ -102,33 +106,64 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Submit: verlässt sich auf native Browser-Validierung (Proxy ist required)
+function setupCategoryInvalidHandler() {
+  waitFor('#category-proxy').then((proxy) => {
+    if (!proxy) return;
+
+    // Browser-Validation feuert -> als ungültig markieren
+    proxy.addEventListener('invalid', () => {
+      const root = document.querySelector('.category-selection');
+      root?.classList.add('invalid');
+      root?.classList.remove('valid');
+    }, true);
+
+    // Beim Start den Zustand anhand des Hidden-Felds setzen
+    updateCategoryValidity();
+  });
+}
+
+function updateCategoryValidity() {
+  const root   = document.querySelector('.category-selection');
+  const hidden = document.getElementById('category-hidden');
+  if (!root || !hidden) return;
+
+  if (hidden.value.trim()) {
+    root.classList.remove('invalid');
+    root.classList.add('valid');
+  } else {
+    root.classList.add('invalid');
+    root.classList.remove('valid');
+  }
+}
+
 window.handleCreateTask = async function handleCreateTask(event) {
   event.preventDefault();
   const form = event.target;
 
   if (!form.checkValidity()) {
-    form.reportValidity(); // zeigt „Fülle dieses Feld aus“
+    form.reportValidity();
     return;
   }
 
-  try {
-    await createTask?.();
-  } catch (err) {
-    console.error('createTask() failed:', err);
-    return;
-  }
+  await createTask?.();
 
   // Reset
   form.reset();
+
   const catVisible = document.querySelector('.category-selection .selector');
   const catProxy   = document.getElementById('category-proxy');
   const catHidden  = document.getElementById('category-hidden');
+
   if (catVisible) catVisible.value = '';
   if (catProxy)   catProxy.value   = '';
   if (catHidden)  catHidden.value  = '';
+
+  // ✅ HIER einfügen:
+  updateCategoryValidity();
+
   resetPriorityButtons?.();
 };
+
 
 /* ================= Task-Erstellung ================= */
 async function createTask() {
@@ -158,11 +193,13 @@ function showAlertOverlay() {
   const overlay = document.getElementById("alert-overlay");
   overlay.classList.remove("d-none");
 }
+
 function closeAlertOverlay() {
   const overlay = document.getElementById("alert-overlay");
   overlay.classList.add("d-none");
   window.location.reload();
 }
+
 function goToBoard() {
   window.location.href = "./board.html";
 }
@@ -172,20 +209,24 @@ function getSelectedUserIds(selectId = "assigned-to") {
   return Array.from(document.getElementById(selectId).selectedOptions)
               .map(option => option.value);
 }
+
 function getSelectedCategoryText() {
   const el = document.querySelector(".category-selection .selector");
   return (el && el.value) ? el.value.trim() : "";
 }
+
 function getSelectedCategoryValue() {
   const el = document.getElementById("category-hidden");
   return (el && el.value) ? el.value.trim() : "";
 }
+
 function formatCategory(category) {
   return String(category || "")
     .replace(/([A-Z])/g, " $1")
     .replace(/^./, str => str.toUpperCase())
     .trim();
 }
+
 function clearTask() {
   const form = document.getElementById("task-form");
   form.reset();
@@ -196,6 +237,7 @@ function clearTask() {
   if (catProxy)   catProxy.value   = "";
   if (catHidden)  catHidden.value  = "";
   resetPriorityButtons();
+  updateCategoryValidity();
 }
 
 /* ================= Responsive Hinweisboxen ================= */
@@ -207,6 +249,7 @@ function relocateRequiredInfo() {
     toggleSecondInfoBox(isSmallScreen);
   }
 }
+
 function toggleFirstInfoBox(isSmallScreen) {
   let requiredInfo = document.getElementById("required-info");
   if (!requiredInfo) return;
@@ -216,6 +259,7 @@ function toggleFirstInfoBox(isSmallScreen) {
     requiredInfo.classList.remove("d-none");
   }
 }
+
 function toggleSecondInfoBox(isSmallScreen) {
   let rightColumn = document.querySelector(".add-task__right-column");
   if (!rightColumn) return;
