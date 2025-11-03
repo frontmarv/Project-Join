@@ -174,7 +174,7 @@ body {
 
 .task:active {
   cursor: grabbing;
-  transform: translateY(-1px);
+  /* transform: translateY(-1px); */
 }
 
 .task.dragging {

@@ -9,17 +9,51 @@
   max-width: 20vw;
 }
 
-.task-card--header {
+.task-card__header {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
 
-.task:active,
-.task-card--header *:active {
-  transform: none !important;
+.task-card__menu {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  display: none;
+  flex-direction: column;
+  width: fit-content;
+  height: fit-content;
+  background-color: var(--color-maincolor);
+  color: var(--color-white);
+  padding: 16px;
+  gap: 16px;
+  border-radius: 20px 0px 20px 20px;
 }
+
+.task-card__menu__header {
+  padding-left: 5px;
+}
+
+.task-card__menu p,
+.task-card__menu span {
+  text-wrap: nowrap;
+}
+
+.task-card__menu p {
+  display: flex;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  align-items: center;
+}
+
+.task-card__menu span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 
 .task img,
 .task svg {
@@ -36,8 +70,14 @@
   border-radius: 0.5rem;
   padding: 0.25rem 1rem;
 }
-.task__category { background-color: var(--color-11); }
-.task__category2 { background-color: var(--color-6); }
+
+.task__category {
+  background-color: var(--color-11);
+}
+
+.task__category2 {
+  background-color: var(--color-6);
+}
 
 .task__content-metadata-box {
   display: flex;
@@ -152,7 +192,10 @@
   object-fit: cover;
   margin-left: -0.5rem;
 }
-.task__assignments svg:first-child { margin-left: 0; }
+
+.task__assignments svg:first-child {
+  margin-left: 0;
+}
 
 .task__assignments-circle {
   display: flex;
@@ -171,37 +214,29 @@
   cursor: default;
 }
 
-.task-card-menu {
+.task-card-menu-icon {
   width: 2rem;
   cursor: pointer;
   pointer-events: auto;
-  transition: transform 0.2s ease;
   display: inline-block;
-  will-change: transform;
 }
 
-.task-card-menu:hover:not(.rotate90) {
+.task-card-menu-icon:hover {
   transform: scale(1.1);
 }
 
-.task-card-menu.rotate90 {
-  transform: rotate(90deg);
-}
-
-.task-card-menu.rotate90:hover {
-  transform: rotate(90deg) scale(1.1);
-}
-
-.task:active .task-card-menu {
-  transform: none !important;
-}
-
 @media (max-width: 1440px) {
-  .task__assignments svg { margin-left: -0.8rem; }
+  .task__assignments svg {
+    margin-left: -0.8rem;
+  }
 }
+
 @media (max-width: 1250px) {
-  .task__assignments svg { margin-left: -1.2rem; }
+  .task__assignments svg {
+    margin-left: -1.2rem;
+  }
 }
+
 @media (max-width: 1150px) {
   .task__assignments svg {
     margin-left: -1.4rem;
