@@ -68,7 +68,6 @@
   hyphens: auto;
 }
 
-/* ________________________________ für ... nach 2 lines of text  */
 .task__description {
   display: -webkit-box;
   display: box;
@@ -211,7 +210,11 @@
 
 @media screen and (max-width: 1024px) {
   .task {
-    min-width: 200px;
+    min-width: 230px;
     max-width: 300px;
+  }
+
+  .task__content-metadata-box {
+    height: 85px;
   }
 }

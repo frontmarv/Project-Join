@@ -5,6 +5,7 @@
 .dlg-edit__main {
   gap: 2rem;
   padding: 0 0.5rem;
+  width: initial;
 }
 
 .dlg-edit__header {

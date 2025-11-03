@@ -222,6 +222,14 @@ body {
 
 @media screen and (max-width: 1024px) {
 
+  .dlg {
+    width: 90vw;
+  }
+
+  .scroll-wrapper {
+    overflow-y: initial;
+  }
+
   main {
     width: 100vw;
   }
@@ -269,7 +277,7 @@ body {
   }
 
   .tasks {
-    max-height: 300px;
+    max-height: 320px;
     max-width: 100%;
     flex-direction: row;
     padding-bottom: 10px;

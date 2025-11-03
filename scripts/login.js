@@ -8,9 +8,13 @@ const logo = document.getElementById('joinlogo');
 const headerSignup = document.querySelector('.header__signup');
 const main = document.querySelector('main');
 const footer = document.querySelector('footer');
-const welcomeScreenBckgrnd = document.getElementById('welcomescreen-mobile');
+const welcomescreenMobile = document.getElementById('welcomescreen-mobile');
 let headerAdded = false;
+let hasShownWelcomeAnimation = sessionStorage.getItem('welcomeAnimationShown');
 
+if (!hasShownWelcomeAnimation) {
+    sessionStorage.setItem('welcomeAnimationShown', 'true');
+}
 
 window.addEventListener("DOMContentLoaded", () => {
     let animationImages = [
@@ -26,27 +30,29 @@ window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("resize", handleResizeScreen);
 window.addEventListener("load", handleResizeScreen);
 email.addEventListener('keyup', clearLoginError());
+
 password.addEventListener('keyup', () => {
     clearLoginError();
     updatePasswordLockIcon();
 });
+
 window.addEventListener('load', () => {
-    if (isSmallScreen) {
-        setTimeout(() => {
-            welcomeScreenBckgrnd.classList.add('hidden');
-            fullsizeScreenWelcome();
-        }, 300);
-        setTimeout(() => {
-            logo.classList.remove('welcome-logo');
-        }, 400);
+    if (!hasShownWelcomeAnimation) {
+        if (isSmallScreen) {
+            welcomeScreenAnimationMobile()
+        } else {
+            welcomeScreenAnimationDesktop()
+        }
     } else {
-        welcomeScreenBckgrnd.classList.add('d-none');
-        fullsizeScreenWelcome();
+        welcomeScreenNoAnimation()
     }
 });
 
-function fullsizeScreenWelcome() {
+function welcomeScreenAnimation() {
+    logo.style.transition = 'none';
+    logo.classList.add('start');
     setTimeout(() => {
+        logo.style.transition = 'transform 1s ease-in-out';
         logo.classList.remove('start');
     }, 200);
     setTimeout(() => {
@@ -54,6 +60,29 @@ function fullsizeScreenWelcome() {
         main.classList.remove('invisible');
         headerSignup.classList.remove('invisible');
     }, 600);
+}
+
+function welcomeScreenAnimationDesktop() {
+    welcomescreenMobile.classList.add('d-none');
+    welcomeScreenAnimation();
+}
+
+function welcomeScreenAnimationMobile() {
+    logo.classList.add('welcome-logo');
+    setTimeout(() => {
+        welcomescreenMobile.classList.add('hidden');
+        welcomeScreenAnimation();
+    }, 300);
+    setTimeout(() => {
+        logo.classList.remove('welcome-logo');
+    }, 400);
+}
+
+function welcomeScreenNoAnimation() {
+    welcomescreenMobile.classList.add('d-none');
+    footer.classList.remove('invisible');
+    main.classList.remove('invisible');
+    headerSignup.classList.remove('invisible');
 }
 
 async function fetchData() {
@@ -82,6 +111,32 @@ async function attemptLogin() {
         window.location.replace("./pages/summary.html");
     }
 }
+
+async function guestLogin() {
+    let multipatch = { "loggedIn": false };
+    try {
+        const res = await fetch(DB_URL + "users.json");
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const users = await res.json();
+        if (!users) throw new Error("No users found in database");
+        const userKeys = Object.keys(users);
+        await Promise.all(
+            userKeys.map(key =>
+                fetch(DB_URL + "users/" + key + ".json", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(multipatch)
+                })
+            )
+        );
+    } catch (error) {
+        console.error("Error applying multipatch to all users:", error);
+    }
+    window.location.replace("./pages/summary.html");
+}
+
+
+
 
 function validateLoginInputs(existingUser) {
     if (existingUser == undefined || verifyPassword(existingUser) == false) {

@@ -1,5 +1,11 @@
 const greetingName = document.getElementById('greeting-name');
 const greetingHeader = document.getElementById('greeting-header');
+let hasShownGreeting = sessionStorage.getItem('greetingShown');
+
+if (!hasShownGreeting) {
+    showGreetingMobile();
+    sessionStorage.setItem('greetingShown', 'true');
+}
 
 async function initSummary() {
     await getData();
@@ -110,4 +116,18 @@ function formatDate(dateStr) {
     const date = new Date(dateStr);
     return date.toLocaleDateString("de-DE");
 }
+
+
+function showGreetingMobile() {
+    document.querySelector('.summary-content__left').classList.add('d-none');
+    document.querySelector('.summary-content__right').classList.add('greetingMobile');
+    setTimeout(() => {
+        document.querySelector('.summary-content__right').classList.remove('greetingMobile');
+    }, 1000);
+    setTimeout(() => {
+        document.querySelector('.summary-content__right').classList.add('d-none');
+        document.querySelector('.summary-content__left').classList.remove('d-none');
+    }, 1600);
+}
+
 

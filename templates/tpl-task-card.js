@@ -8,15 +8,17 @@ function getTasksTemplate(task) {
       <span class="${view.categoryClass}">
         ${formatCategory(task.category)}
       </span>
-       <img class="task-card-menu"
-     src="../assets/img/contacts-options-active.svg"
-     alt=""
-     draggable="false"
-     onclick="toggleCardMenu(event, this)"
-     onpointerdown="event.stopPropagation(); event.preventDefault();"
-     onmousedown="event.stopPropagation(); event.preventDefault();"
-     ontouchstart="event.stopPropagation(); event.preventDefault();"
-     ondragstart="event.stopPropagation(); event.preventDefault(); return false;">
+      <img class="task-card-menu"
+      src="../assets/img/contacts-options-active.svg"
+      alt=""
+      draggable="false"
+      onclick="toggleCardMenu(event, this)"
+      onmouseover="event.target.closest('.task').draggable = false"
+      onmouseout="event.target.closest('.task').draggable = true"
+      onpointerdown="event.stopPropagation();"
+      onmousedown="event.stopPropagation();"
+      ontouchstart="event.stopPropagation();"
+      ondragstart="event.stopPropagation(); return false;">
 </div>
       <div class="task__content-metadata-box">
         <span class="task__title">${task.title || ''}</span>
@@ -74,7 +76,7 @@ function getMoreUsersBadgeTpl(count) {
 
 
 function toggleCardMenu(event, icon) {
-    event.stopPropagation();
-    event.preventDefault();
-    icon.classList.toggle('rotate90');
+  event.stopPropagation();
+  event.preventDefault();
+  icon.classList.toggle('rotate90');
 }

@@ -14,6 +14,7 @@
   scrollbar-width: none;
   gap: 1.5rem;
   padding: 0 0.5rem;
+  width: initial;
 }
 
 .dlg__header_task-category {
