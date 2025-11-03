@@ -62,7 +62,7 @@ async function deleteUserFlow() {
     await deleteUser(STORED_USER_KEY);
     renderContactList();
     setContactCardtoInvisible();
-    if (isSmallScreen) {
+    if (window.innerWidth < 1025) {
         showContact = false;
         handleResizeScreenContacts();
     }

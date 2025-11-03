@@ -53,7 +53,7 @@ async function closeDlgAndSaveData() {
     await saveChangesToDB(multipatch);
     renderContactList();
     setContactCardtoInvisible();
-    if (isSmallScreen) {
+    if (window.innerWidth < 1025) {
         showContact = false;
         handleResizeScreenContacts();
     }

@@ -38,7 +38,7 @@ password.addEventListener('keyup', () => {
 
 window.addEventListener('load', () => {
     if (!hasShownWelcomeAnimation) {
-        if (isSmallScreen) {
+        if (window.innerWidth < 1025) {
             welcomeScreenAnimationMobile()
         } else {
             welcomeScreenAnimationDesktop()

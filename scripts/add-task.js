@@ -242,6 +242,7 @@ function clearTask() {
 
 /* ================= Responsive Hinweisboxen ================= */
 function relocateRequiredInfo() {
+  isSmallScreen = window.innerWidth < 1025;
   let currentPath = window.location.pathname;
   let relativePath = "/pages/add-task.html";
   if (currentPath.endsWith(relativePath)) {

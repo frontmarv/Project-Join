@@ -46,5 +46,5 @@ async function logOutUser() {
         await saveChangesToDB(multipatch);
         window.location.replace("../index.html");
     }
-
+    sessionStorage.removeItem('greetingShown');
 }
