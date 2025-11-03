@@ -2,7 +2,7 @@ const greetingName = document.getElementById('greeting-name');
 const greetingHeader = document.getElementById('greeting-header');
 let hasShownGreeting = sessionStorage.getItem('greetingShown');
 
-if (!hasShownGreeting) {
+if (!hasShownGreeting && isSmallScreen) {
     showGreetingMobile();
     sessionStorage.setItem('greetingShown', 'true');
 }
