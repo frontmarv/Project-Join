@@ -19,17 +19,17 @@
 }
 
 .task-card__header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.task-card__header-bottom {
   width: 100%;
   text-align: center;
   background-color: var(--color-lightergrey);
   border-radius: 1rem;
+}
+
+.task-card__header-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .task-card__menu-icon {
