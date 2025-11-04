@@ -130,7 +130,11 @@ a:focus-visible {
 }
 
 .input--validation-modifier:valid {
-  border: 1px solid var(--color-lightblue);
+  border: 1px solid var(--color-error);
+}
+
+.input--validation-modifier:not(:placeholder-shown):valid {
+  border-color: var(--color-lightblue);
 }
 
 .subtasks__input--border-color input {
@@ -224,19 +228,22 @@ a:focus-visible {
   }
 
   .task-content__footer {
-    flex-direction: column;
-    align-items: flex-start;
-    height: fit-content;
-    width: fit-content;
     position: fixed;
-    bottom: 100px;
-    padding: 10px 0px;
-    margin: 0;
-    background-color: var(--color-background);
+    left: 0;
+    right: 0;
+    bottom: calc(var(--mobile-nav-height) + var(--footer-gap));
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--color-background);
+    box-sizing: border-box;
+    z-index: 1001;             /* über der Nav */
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
   }
 
   .task-content__footer-btn {
-    width: 99vw;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
     justify-content: center;
     gap: 2rem;
   }
@@ -265,6 +272,7 @@ a:focus-visible {
   #required-mobile{
     font-size: 16px;
   }
+
 }
 
 /* Container ist der Positionierungs-Anker */
@@ -347,4 +355,32 @@ a:focus-visible {
   height: 100%;
   opacity: 0;          /* unsichtbar */
   pointer-events: none;/* nicht klickbar */
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.2;
+  margin-top: 0.25rem;
+  display: none;
+}
+
+.has-error .field-error {
+  display: block;
+}
+
+.input-error {
+  border: 1px solid var(--color-error) !important;
+}
+
+.input-error:focus {
+  border: 1px solid var(--color-lightblue) !important; /* wie gewohnt */
+}
+
+.valid-input {
+  border: 1px solid var(--color-lightblue) !important;
+}
+
+.invalid-input {
+  border: 1px solid var(--color-error) !important;
 }
