@@ -26,6 +26,31 @@ d.addEventListener('change', () => {
 }
 
 
+// Enter soll die nächsten Felder fokussieren, nicht submitten
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter") return;
+
+  const el = e.target;
+  const form = el.closest("form");
+  if (!form) return;
+
+  // Reihenfolge definieren
+  const focusOrder = ["title", "description", "due-date"];
+  const currentId = el.id;
+  const currentIndex = focusOrder.indexOf(currentId);
+
+  // Wenn Enter in einem Input gedrückt wird → NICHT submitten
+  if (currentIndex !== -1) {
+    e.preventDefault();
+    
+    const nextFieldId = focusOrder[currentIndex + 1];
+    if (nextFieldId) {
+      document.getElementById(nextFieldId).focus();
+    }
+  }
+});
+
+
 // Due date initial invalid style
 window.addEventListener('load', () => {
   const d = document.getElementById('due-date');
