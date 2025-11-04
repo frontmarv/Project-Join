@@ -171,8 +171,7 @@ body {
   padding: 0.625rem;
   overflow-y: auto;
   scrollbar-width: none;
-  max-height: calc(100vh - 27rem);
-  height: auto;
+  height: calc(100vh - 27rem);
 }
 
 .task:hover {

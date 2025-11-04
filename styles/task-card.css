@@ -304,4 +304,8 @@
   .task-card__menu__move:hover {
     background-color: var(--color-navselected);
   }
+
+  .task__assignments svg {
+    margin-left: -0.5rem;
+  }
 }
