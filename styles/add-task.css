@@ -67,6 +67,8 @@
 .add-task__right-column {
   width: 50%;
   padding-left: 1.25rem;
+  display: grid;
+  gap: 1rem;
 }
 
 .priority-options {
