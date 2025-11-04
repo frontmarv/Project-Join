@@ -17,6 +17,7 @@ function handleLogo(isSmallScreen) {
         logoAdded = true;
     } else if (!isSmallScreen && logoAdded) {
         document.getElementById('join-logo')?.remove();
+        document.getElementById('page-title').innerHTML = "Kanban Project Management Tool";
         logoAdded = false;
     }
 }
