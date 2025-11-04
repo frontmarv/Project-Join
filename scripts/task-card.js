@@ -30,16 +30,24 @@ function isOverdue(dueDate) {
 function markOverdueDates() {
   const today = new Date().setHours(0, 0, 0, 0);
 
-  document.querySelectorAll('.task-card__due-date').forEach(el => {
-    const dateStr = el.dataset.dueDate;
-    if (!dateStr) return;
+  document.querySelectorAll('.task').forEach(taskEl => {
+    const state = taskEl.closest('.tasks')?.id || '';
+    const dateEl = taskEl.querySelector('.task-card__due-date');
+    const dateStr = dateEl?.dataset.dueDate;
+
+    if (!dateEl || !dateStr) return;
 
     const due = new Date(dateStr).setHours(0, 0, 0, 0);
 
+    if (state.includes('done')) {
+      dateEl.classList.remove('task-card__due-date--overdue');
+      return;
+    }
+
     if (due <= today) {
-      el.classList.add('task-card__due-date--overdue');
+      dateEl.classList.add('task-card__due-date--overdue');
     } else {
-      el.classList.remove('task-card__due-date--overdue');
+      dateEl.classList.remove('task-card__due-date--overdue');
     }
   });
 }
