@@ -59,7 +59,7 @@ body {
 }
 
 .task-search-and-add {
-  width: 50%;
+  width: 60%;
   display: flex;
   justify-content: space-evenly;
 }
@@ -131,6 +131,7 @@ body {
 .board__table__column__title {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
 }
 
 .board__table h2 {
