@@ -111,10 +111,12 @@ body {
 
 .add-task-to-btn:hover {
   content: url(../assets/img/add-btn-border-hover.svg);
+  cursor: pointer;
 }
 
 .add-task-to-btn:active {
   content: url(../assets/img/add-btn-border-active.svg);
+  cursor: pointer;
 }
 
 .board__table {
@@ -131,7 +133,6 @@ body {
 .board__table__column__title {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
 }
 
 .board__table h2 {

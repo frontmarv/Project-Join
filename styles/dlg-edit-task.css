@@ -164,6 +164,7 @@
 .dlg-edit__main__assigned-user-container {
   display: flex;
   margin-top: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .dlg-edit__main__add-subtasks-box {
