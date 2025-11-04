@@ -12,7 +12,6 @@ async function getData() {
     }
 
     const data = await response.json();
-    console.log("Fetched data:", data);
 
     // Prüfen, ob users und tasks existieren
     if (data.users) {
