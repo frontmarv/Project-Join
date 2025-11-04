@@ -12,27 +12,44 @@ function getTasksTemplate(task, {previousTask, nextTask}) {
     <div class="task" draggable="true"
         ondragstart="startDragging('${task.id}')"
         onclick="renderTaskInfoDlg('${task.id}')">
+
       <div class="task-card__header">
-        <span class="${view.categoryClass}">
-          ${formatCategory(task.category)}
-        </span>
-        <img class="task-card__menu-icon"
-        src="../assets/img/drag&drop-mobile.svg"
-        alt=""
-        draggable="false"
-        onclick="toggleCardMenu(event, (this))"
-        onmouseover="event.target.closest('.task').draggable = false"
-        onmouseout="event.target.closest('.task').draggable = true"
-        onpointerdown="event.stopPropagation();"
-        onmousedown="event.stopPropagation();"
-        ontouchstart="event.stopPropagation();"
-        ondragstart="event.stopPropagation();">
-      <div class="task-card__menu" onclick="event.stopPropagation()">
+        <div class="task-card__header-top">
+          <span class="${view.categoryClass}">
+            ${formatCategory(task.category)}
+          </span>
+          <img class="task-card__menu-icon"
+            src="../assets/img/drag&drop-mobile.svg"
+            alt=""
+            draggable="false"
+            onclick="toggleCardMenu(event, (this))"
+            onmouseover="event.target.closest('.task').draggable = false"
+            onmouseout="event.target.closest('.task').draggable = true"
+            onpointerdown="event.stopPropagation();"
+            onmousedown="event.stopPropagation();"
+            ontouchstart="event.stopPropagation();"
+            ondragstart="event.stopPropagation();">
+        </div>
+
+        <div class="task-card__header-bottom">
+          <span class="task-card__due-date"> Due Date: 
+            ${task.dueDate ? formatDate(task.dueDate) : ''}
+          </span>
+        </div>
+
+        <div class="task-card__menu" onclick="event.stopPropagation()">
           <p class="task-card__menu__header">Move to</p>
-          <p class="task-card__menu__move" onclick="manualMoveTaskToNewColmn('${task.id}', '${previousTask}')"><img src="../assets/img/arrow_upward.svg" alt="white arrow pointing upwards"><span id="previous-category">${previousTask}</span></p>
-          <p class="task-card__menu__move" onclick="manualMoveTaskToNewColmn('${task.id}', '${nextTask}')"><img src="../assets/img/arrow_downward.svg" alt="white arrow pointing downwards"><span id="next-category">${nextTask}</span></p>
+          <p class="task-card__menu__move"
+            onclick="manualMoveTaskToNewColmn('${task.id}', '${previousTask}')">
+            <img src="../assets/img/arrow_upward.svg"><span>${previousTask}</span>
+          </p>
+          <p class="task-card__menu__move"
+            onclick="manualMoveTaskToNewColmn('${task.id}', '${nextTask}')">
+            <img src="../assets/img/arrow_downward.svg"><span>${nextTask}</span>
+          </p>
+        </div>
       </div>
-    </div>
+
       <div class="task__content-metadata-box">
         <span class="task__title">${task.title || ''}</span>
         <span class="task__description">${task.description || ''}</span>
@@ -43,9 +60,7 @@ function getTasksTemplate(task, {previousTask, nextTask}) {
       </div>
 
       <div class="task__assignment-and-priority-box">
-        <div class="task__assignments">
-          ${view.assignedHtml}
-        </div>
+        <div class="task__assignments">${view.assignedHtml}</div>
         <div class="task__priority">
           <img src="${view.priorityIcon}" alt="${task.priority} priority icon">
         </div>

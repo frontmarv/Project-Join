@@ -10,6 +10,17 @@ function buildTaskViewModel(task) {
 }
 
 
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  if (isNaN(date)) return '';
+  return date.toLocaleDateString('de-DE', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  });
+}
+
+
 function getSubtaskStats(task) {
   return {
     total: getTotalSubtaskCount(task),

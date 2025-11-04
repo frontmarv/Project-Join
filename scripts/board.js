@@ -16,8 +16,21 @@ async function initBoard() {
   loadTasks();
   updateAllPlaceholders();
   initSearch();
+  enableSearchBoxClickFocus();
 }
 
+function enableSearchBoxClickFocus() {
+  const searchBoxes = document.querySelectorAll('.board__head__searchbox');
+  searchBoxes.forEach(box => {
+    box.addEventListener('click', () => {
+      const input = box.querySelector('input');
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    });
+  });
+}
 
 async function renderTaskInfoDlg(taskId) {
   await getData();

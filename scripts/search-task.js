@@ -36,34 +36,80 @@ function filterTasks(query) {
   document.querySelectorAll(".task").forEach((card) =>
     processCardFilter(card, clean)
   );
+
   toggleTasksAutoHeight(clean.length >= 2);
+  updateSearchPlaceholders(clean);
 }
 
 
 function processCardFilter(card, query) {
   const title = card.querySelector(".task__title");
+  const description = card.querySelector(".task__description");
   if (!title) return;
+
   resetHighlight(title);
-  if (query.length < 2) return (card.style.display = "");
-  const hasMatch = title.dataset.rawText.toLowerCase().includes(query);
+  if (description) resetHighlight(description);
+
+  if (query.length < 2) {
+    card.style.display = "";
+    return;
+  }
+
+  const titleText = title.dataset.rawText.toLowerCase();
+  const descText = description ? description.dataset.rawText.toLowerCase() : "";
+
+  const hasMatch = titleText.includes(query) || descText.includes(query);
   card.style.display = hasMatch ? "" : "none";
-  if (hasMatch) highlightTitle(title, query);
+  if (!hasMatch) return;
+
+  if (titleText.includes(query)) {
+    highlightText(title, query);
+  }
+  if (description && descText.includes(query)) {
+    highlightText(description, query);
+  }
 }
 
-
-function resetHighlight(titleElement) {
-  if (!titleElement.dataset.rawText) titleElement.dataset.rawText = titleElement.textContent;
-  titleElement.textContent = titleElement.dataset.rawText;
+function resetHighlight(element) {
+  element.dataset.rawText ??= element.textContent;
+  element.textContent = element.dataset.rawText;
 }
 
-
-function highlightTitle(titleElement, query) {
-  const raw = titleElement.dataset.rawText;
-  const re = new RegExp(`(${escapeRegExp(query)})`, "gi");
-  titleElement.innerHTML = raw.replace(re, `<span class="${HIGHLIGHT_CLASS}">$1</span>`);
+function highlightText(element, query) {
+  const origText = element.dataset.rawText;
+  const expression = new RegExp(`(${escapeRegExp(query)})`, "gi");
+  element.innerHTML = origText.replace(expression, `<span class="${HIGHLIGHT_CLASS}">$1</span>`);
 }
-
 
 function escapeRegExp(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function updateSearchPlaceholders(query) {
+  Object.values(columnMap).forEach(columnId => {
+    const column = document.getElementById(columnId);
+    const tasks = column.querySelectorAll('.task');
+    const visibleTasks = Array.from(tasks).filter(task => task.style.display !== 'none');
+    const existingPlaceholder = column.querySelector('.no-tasks-placeholder');
+
+    if (query.length < 2) {
+      if (existingPlaceholder) existingPlaceholder.remove();
+      if (tasks.length === 0) {
+        const placeholder = document.createElement('div');
+        placeholder.innerHTML = getPlaceholderTpl();
+        column.appendChild(placeholder.firstElementChild);
+      }
+      return;
+    }
+
+    if (visibleTasks.length === 0) {
+      if (!existingPlaceholder) {
+        const placeholder = document.createElement('div');
+        placeholder.innerHTML = getSearchPlaceholderTpl();
+        column.appendChild(placeholder.firstElementChild);
+      }
+    } else {
+      if (existingPlaceholder) existingPlaceholder.remove();
+    }
+  });
 }

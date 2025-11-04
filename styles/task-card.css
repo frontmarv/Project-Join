@@ -12,11 +12,22 @@
 .task-card__header {
   position: relative;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  gap: 0.3rem;
 }
 
+.task-card__header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.task-card__menu-icon {
+  cursor: pointer;
+}
 
 .task img,
 .task svg {
@@ -40,6 +51,12 @@
 
 .task__category2 {
   background-color: var(--color-6);
+}
+
+.task-card__due-date {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-maincolor);
 }
 
 .task__content-metadata-box {
