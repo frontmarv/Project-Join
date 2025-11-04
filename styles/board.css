@@ -112,6 +112,7 @@ body {
 .add-task-to-btn {
   height: 1.5rem;
   width: 1.5rem;
+  -webkit-user-drag: none;
 }
 
 .add-task-to-btn:hover {
@@ -222,9 +223,7 @@ body {
   }
 }
 
-
 @media screen and (max-width: 1024px) {
-
   .dlg {
     width: 90vw;
   }
