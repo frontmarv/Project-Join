@@ -12,7 +12,36 @@ async function initAddTask() {
   initSubtaskIconButtons();
   setupCategoryInvalidHandler();
   updateCategoryValidity();
+
+  const d = document.getElementById('due-date');
+d.addEventListener('change', () => {
+  if (d.value) {
+    d.classList.add('valid-input');
+    d.classList.remove('invalid-input');
+  } else {
+    d.classList.add('invalid-input');
+    d.classList.remove('valid-input');
+  }
+});
 }
+
+
+// Due date initial invalid style
+window.addEventListener('load', () => {
+  const d = document.getElementById('due-date');
+  if (!d.value) {
+    d.classList.add('input-error');
+  }
+});
+
+
+const date = document.getElementById('due-date');
+const dateErr = document.getElementById('date-error');
+
+date?.addEventListener('input', () => {
+  if (date.value.trim()) clearError(date, dateErr);
+});
+
 
 /** Helper: wartet, bis ein Selector im DOM existiert */
 function waitFor(selector) {
@@ -74,41 +103,65 @@ function changePriorityBtnIcon(btnId) {
 
 /* ========== Category Dropdown & Validation (=Variante Proxy) ========== */
 
-// Öffnen/Schließen + Auswahl + Außenklick (delegiert)
+// Kategorie: öffnen/schließen, auswählen, außenklick
 document.addEventListener('click', (e) => {
-  // Toggle
-  const trigger = e.target.closest('.category-selection .selector');
-  const root    = e.target.closest('.category-selection');
-  if (trigger && root) {
-    root.classList.toggle('open');
+  const root = e.target.closest('.category-selection');
+
+  // 1) Toggle beim Klick auf das sichtbare Input
+  if (root && e.target.closest('.selector')) {
+    const willOpen = !root.classList.contains('open');
+    root.classList.toggle('open', willOpen);
+    setCatExpanded(root, willOpen);
     return;
   }
 
-  // Option gewählt
+  // 2) Option gewählt
   const opt = e.target.closest('.category-selection .category-options li');
   if (opt) {
-    const currentRoot   = opt.closest('.category-selection');
-    const visibleInput  = currentRoot.querySelector('.selector');
-    const proxyInput    = document.getElementById('category-proxy');
-    const hiddenInput   = document.getElementById('category-hidden');
+    const currentRoot  = opt.closest('.category-selection');
+    const visibleInput = currentRoot.querySelector('.selector');
+    const proxyInput   = document.getElementById('category-proxy');
+    const hiddenInput  = document.getElementById('category-hidden');
 
     const text  = opt.textContent.trim();
     const value = opt.dataset.value || text;
 
     if (visibleInput) visibleInput.value = text; // Anzeige
-    if (proxyInput)   proxyInput.value   = text; // Proxy erfüllt required
-    if (hiddenInput)  hiddenInput.value  = value; // tatsächlicher Wert
-    updateCategoryValidity();
+    if (proxyInput)   proxyInput.value   = value; // Proxy erfüllt required
+    if (hiddenInput)  hiddenInput.value  = value; // Formularwert
+
+    // optional: aria-selected aktualisieren
+    currentRoot.querySelectorAll('.category-options [aria-selected="true"]')
+      .forEach(el => el.setAttribute('aria-selected', 'false'));
+    opt.setAttribute('aria-selected', 'true');
+
+    // Validität/UI aktualisieren (falls vorhanden)
+    if (typeof updateCategoryValidity === 'function') updateCategoryValidity();
+    if (typeof clearError === 'function') {
+      const errEl = document.getElementById('category-error');
+      clearError(visibleInput, errEl);
+    }
+
     currentRoot.classList.remove('open');
+    setCatExpanded(currentRoot, false);
     return;
   }
 
-  // Klick außerhalb -> schließen
+  // 3) Klick außerhalb → schließen
   if (!e.target.closest('.category-selection')) {
-    document.querySelectorAll('.category-selection.open')
-      .forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.category-selection.open').forEach(el => {
+      el.classList.remove('open');
+      setCatExpanded(el, false);
+    });
   }
 });
+
+// kleine Helper-Funktion für aria-expanded
+function setCatExpanded(root, open) {
+  root?.setAttribute('aria-expanded', String(open));
+  const input = root?.querySelector('.selector');
+  input?.setAttribute('aria-expanded', String(open));
+}
 
 function setupCategoryInvalidHandler() {
   waitFor('#category-proxy').then((proxy) => {
@@ -143,16 +196,17 @@ function updateCategoryValidity() {
 
 window.handleCreateTask = async function handleCreateTask(event) {
   event.preventDefault();
-  const form = event.target;
 
-  if (!form.checkValidity()) {
-    form.reportValidity();
+   if (!validateTaskForm()) {
+    // Fokus auf erstes fehlerhaftes Feld
+    const firstErrorInput = document.querySelector('.input-error');
+    firstErrorInput?.focus();
     return;
   }
 
   await createTask?.();
 
-  // Reset
+  const form = event.target;
   form.reset();
 
   const catVisible = document.querySelector('.category-selection .selector');
@@ -168,6 +222,16 @@ window.handleCreateTask = async function handleCreateTask(event) {
 
   resetPriorityButtons?.();
 };
+
+
+// Live-Reset beim Tippen/Ändern
+['title','due-date'].forEach(id => {
+  const el = document.getElementById(id);
+  const err = document.getElementById(id === 'title' ? 'title-error' : 'date-error');
+  el?.addEventListener('input', () => {
+    if (el.value.trim()) clearError(el, err);
+  });
+});
 
 
 /* ================= Task-Erstellung ================= */
@@ -286,4 +350,62 @@ function toggleSecondInfoBox(isSmallScreen) {
   } else if (!isSmallScreen && document.getElementById("required-mobile")) {
     document.getElementById("required-mobile").remove();
   }
+}
+
+// Hilfen zum Setzen/Zurücksetzen von Fehlern
+function showError(inputEl, errorEl, message) {
+  if (inputEl) inputEl.classList.add('input-error');
+  if (errorEl) {
+    errorEl.textContent = message;
+    errorEl.parentElement?.classList.add('has-error');
+  }
+}
+
+function clearError(inputEl, errorEl) {
+  if (inputEl) inputEl.classList.remove('input-error');
+  if (errorEl) {
+    errorEl.textContent = '';
+    errorEl.parentElement?.classList.remove('has-error');
+  }
+}
+
+// Custom-Validierung
+function validateTaskForm() {
+  let valid = true;
+
+  const title      = document.getElementById('title');
+  const titleErr   = document.getElementById('title-error');
+
+  const date       = document.getElementById('due-date');
+  const dateErr    = document.getElementById('date-error');
+
+  const catVisible = document.querySelector('.category-selection .selector');
+  const catHidden  = document.getElementById('category-hidden');
+  const catErr     = document.getElementById('category-error');
+
+  // Title
+  if (!title.value.trim()) {
+    showError(title, titleErr, 'This field is required');
+    valid = false;
+  } else {
+    clearError(title, titleErr);
+  }
+
+  // Due date
+  if (!date.value.trim()) {
+    showError(date, dateErr, 'This field is required');
+    valid = false;
+  } else {
+    clearError(date, dateErr);
+  }
+
+  // Category (hidden muss gesetzt sein)
+  if (!catHidden.value.trim()) {
+    showError(catVisible, catErr, 'This field is required');
+    valid = false;
+  } else {
+    clearError(catVisible, catErr);
+  }
+
+  return valid;
 }
