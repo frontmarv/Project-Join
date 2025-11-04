@@ -92,9 +92,9 @@ function countingLoop(index, counters, tasks) {
 function getDeadlineDates() {
     let allDeadlines = [];
     for (let index = 0; index < tasks.length; index++) {
-        if (tasks[index].priority === "urgent") {
+        
             allDeadlines.push(tasks[index].dueDate);
-        }
+
     }
     allDeadlines.sort((a, b) => new Date(a) - new Date(b));
     showUpcomingDeadline(allDeadlines);
