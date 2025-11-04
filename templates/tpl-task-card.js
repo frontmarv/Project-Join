@@ -106,7 +106,7 @@ function getMoreUsersBadgeTpl(count) {
 function toggleCardMenu(event, element) {
   event.stopPropagation();
   event.preventDefault();
-  element.nextElementSibling.style.display = "flex";
+  element.parentElement.parentElement.querySelector('.task-card__menu').style.display = "flex";
 }
 
 
