@@ -6,7 +6,7 @@ document.addEventListener("click", (event) => {
   });
 });
 
-function getTasksTemplate(task) {
+function getTasksTemplate(task, {previousTask, nextTask}) {
   const view = buildTaskViewModel(task);
   return /*html*/ `
     <div class="task" draggable="true"
@@ -29,8 +29,8 @@ function getTasksTemplate(task) {
         ondragstart="event.stopPropagation();">
       <div class="task-card__menu" onclick="event.stopPropagation()">
           <p class="task-card__menu__header">Move to</p>
-          <p onclick=""><img src="../assets/img/arrow_upward.svg" alt="white arrow pointing upwards"><span id="previous-category">In Progress</span></p>
-          <p onclick=""><img src="../assets/img/arrow_downward.svg" alt="white arrow pointing downwards"><span id="next-category">Await Feedback</span></p>
+          <p class="task-card__menu__move" onclick="manualMoveTaskToNewColmn('${task.id}', '${previousTask}')"><img src="../assets/img/arrow_upward.svg" alt="white arrow pointing upwards"><span id="previous-category">${previousTask}</span></p>
+          <p class="task-card__menu__move" onclick="manualMoveTaskToNewColmn('${task.id}', '${nextTask}')"><img src="../assets/img/arrow_downward.svg" alt="white arrow pointing downwards"><span id="next-category">${nextTask}</span></p>
       </div>
     </div>
       <div class="task__content-metadata-box">
@@ -93,4 +93,5 @@ function toggleCardMenu(event, element) {
   event.preventDefault();
   element.nextElementSibling.style.display = "flex";
 }
+
 

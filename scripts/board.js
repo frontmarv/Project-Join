@@ -5,9 +5,11 @@ const columnMap = {
   'done': 'done-tasks',
 };
 
+
 let currentLayout = null;
 window.addEventListener("resize", handleResizeScreenBoard);
 window.addEventListener("load", handleResizeScreenBoard);
+
 
 async function initBoard() {
   await getData();
@@ -15,6 +17,7 @@ async function initBoard() {
   updateAllPlaceholders();
   initSearch();
 }
+
 
 async function renderTaskInfoDlg(taskId) {
   await getData();
@@ -24,6 +27,7 @@ async function renderTaskInfoDlg(taskId) {
   dlgBox.innerHTML = getTaskInfoDlgTpl(task);
   displayDlg();
 }
+
 
 async function renderTaskEditDlg(taskId) {
   await getData();
@@ -38,6 +42,7 @@ async function renderTaskEditDlg(taskId) {
   fillEditFormWithTaskData(task);
   populateAssignmentListFromFirebase(task);
 }
+
 
 async function renderAddTaskDlg(defaultTaskState = "to-do") {
   if (window.innerWidth < 1025) {
@@ -56,14 +61,15 @@ async function renderAddTaskDlg(defaultTaskState = "to-do") {
     initSubtaskIconButtons();
     displayDlg();
   }
-
 }
+
 
 function loadTasks() {
   clearColumns();
   tasks.forEach(task => appendTaskToColumn(task));
   updateAllPlaceholders();
 }
+
 
 async function deleteTask(taskId) {
   try {
@@ -79,24 +85,29 @@ async function deleteTask(taskId) {
   }
 }
 
+
 function clearColumns() {
   Object.values(columnMap).forEach(id => {
     document.getElementById(id).innerHTML = "";
   });
 }
 
+
 function appendTaskToColumn(task) {
   const colId = columnMap[task.taskState];
+  const surroundingTasks = getSurroundingCategories(task);
   if (!colId) return;
   const col = document.getElementById(colId);
   const wrapper = document.createElement("div");
-  wrapper.innerHTML = getTasksTemplate(task).trim();
+  wrapper.innerHTML = getTasksTemplate(task, surroundingTasks).trim();
   col.appendChild(wrapper.firstElementChild);
 }
+
 
 function updateAllPlaceholders() {
   Object.values(columnMap).forEach(updateColumnPlaceholder);
 }
+
 
 function updateColumnPlaceholder(columnId) {
   const col = document.getElementById(columnId);
@@ -110,6 +121,7 @@ function updateColumnPlaceholder(columnId) {
   }
 }
 
+
 function fillEditFormWithTaskData(task) {
   document.getElementById("title-input").value = task.title || "";
   document.getElementById("descriptions-input").value = task.description || "";
@@ -118,6 +130,7 @@ function fillEditFormWithTaskData(task) {
   if (btn) changePriorityBtn(btn);
   loadSubtasksIntoForm(task);
 }
+
 
 function loadSubtasksIntoForm(task) {
   const ul = document.querySelector(".dlg-edit__subtask-list");
@@ -132,16 +145,19 @@ function loadSubtasksIntoForm(task) {
   });
 }
 
+
 const getUserNameById = id => users.find(user => user.id === id)?.name || "Unknown User";
 const getUserPicById = id => users.find(user => user.id === id)?.profilImgColor || null;
 const getUserInitialsById = id =>
   users.find(user => user.id === id)?.name?.split(" ").map(name => name[0].toUpperCase()).join("") || "";
+
 
 function toggleTasksAutoHeight(enable) {
   document.querySelectorAll(".tasks").forEach(col => {
     col.style.height = enable ? "auto" : "calc(100vh - 27rem)";
   });
 }
+
 
 function handleResizeScreenBoard() {
   isSmallScreen = window.innerWidth < 1025;
@@ -154,15 +170,34 @@ function handleResizeScreenBoard() {
   }
 }
 
+
 function renderMobileHead(boardHead) {
   boardHead.innerHTML = getAddTaskBtnMobile();
 }
+
 
 function renderDesktopHead(boardHead) {
   boardHead.innerHTML = getBoardHeadDesktop();
 }
 
+
 function setLayout(isSmallScreen) {
   if (isSmallScreen) { currentLayout = 'mobile'; }
   else { currentLayout = 'desktop'; }
 }
+
+
+function getSurroundingCategories(task) {
+  let obj = task.taskState;
+  const keys = Object.keys(columnMap);
+  const index = keys.indexOf(obj);
+  const prevKey = keys[index - 1];
+  const nextKey = keys[index + 1];
+  const previousTask = prevKey ? prevKey.charAt(0).toUpperCase() + prevKey.slice(1) : "Done";
+  const nextTask = nextKey ? nextKey.charAt(0).toUpperCase() + nextKey.slice(1) : "To-do";
+  return { previousTask, nextTask }
+}
+
+
+
+

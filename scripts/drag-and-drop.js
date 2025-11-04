@@ -71,3 +71,9 @@ async function refreshBoard() {
 }
 
 document.addEventListener("dragend", stopDragging);
+
+async function manualMoveTaskToNewColmn(TaskId, newStateUpperCase) {
+  let newState = newStateUpperCase.charAt(0).toLowerCase() + newStateUpperCase.slice(1)
+  await updateTaskState(TaskId, newState);
+  await refreshBoard();
+}
