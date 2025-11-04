@@ -109,6 +109,11 @@ body {
   height: 1.2rem;
 }
 
+.add-task-to-btn {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
 .add-task-to-btn:hover {
   content: url(../assets/img/add-btn-border-hover.svg);
   cursor: pointer;
@@ -133,6 +138,7 @@ body {
 .board__table__column__title {
   display: flex;
   justify-content: space-between;
+  height: 3rem;
 }
 
 .board__table h2 {
@@ -157,7 +163,6 @@ body {
 .tasks {
   display: flex;
   flex-direction: column;
-  margin-top: 1rem;
   gap: 1rem;
   min-width: 0;
   cursor: grab;
