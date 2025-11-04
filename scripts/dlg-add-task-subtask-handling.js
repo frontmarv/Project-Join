@@ -1,204 +1,112 @@
 
 function initSubtaskInput() {
-  const subtaskInputRef = document.getElementById('subtask-input');
-  const subtaskListRef = document.querySelector('.dlg-edit__subtask-list');
-  if (!subtaskInputRef || !subtaskListRef) return;
-
-  subtaskInputRef.addEventListener('keydown', (event) => {
-    const inputValue = subtaskInputRef.value.trim();
-
-    if (event.key === 'Enter' && inputValue !== '') {
+  const input = document.getElementById('subtask-input');
+  const list = document.querySelector('.dlg-edit__subtask-list');
+  if (!input || !list) return;
+  input.addEventListener('keydown', event => {
+    const value = input.value.trim();
+    if (event.key === 'Enter' && value) {
       event.preventDefault();
-
-      const template = document.createElement('template');
-      template.innerHTML = getSubtaskTpl(inputValue).trim();
-
-      const newSubtaskEl = template.content.firstElementChild;
-
-      subtaskListRef.appendChild(newSubtaskEl);
-
-      subtaskInputRef.value = '';
+      list.innerHTML += getSubtaskTpl(value);
+      input.value = '';
     }
-
     if (event.key === 'Escape') {
       event.preventDefault();
-      subtaskInputRef.value = '';
-      subtaskInputRef.blur();
+      input.value = '';
+      input.blur();
     }
   });
 }
+
 
 
 function initSubtaskHandlers() {
-  const subtaskListRef = document.querySelector('.dlg-edit__subtask-list');
-  if (!subtaskListRef) return;
-
-  subtaskListRef.addEventListener('dblclick', (event) => {
-    handleSubtaskEdit(event);
-  });
-
-  subtaskListRef.addEventListener('click', (event) => {
-    const listItem = event.target.closest('.dlg-edit__main__subtask.edit-mode');
-    if (listItem) {
-      const input = listItem.querySelector('.edit-input');
-      if (input) {
-        input.focus();
-        input.select();
-      }
-    }
-
+  const list = document.querySelector('.dlg-edit__subtask-list');
+  if (!list) return;
+  list.addEventListener('dblclick', event => handleSubtaskEdit(event));
+  list.addEventListener('click', event => {
     handleSubtaskConfirm(event);
     handleSubtaskDelete(event);
   });
-}
-
-
-function initSubtaskIconButtons() {
-  const subtaskInputRef = document.getElementById('subtask-input');
-  const confirmRef = document.querySelector('.subtask-input__confirm-img');
-  const cancelRef = document.querySelector('.subtask-input__cancel-img');
-  const subtaskListRef = document.querySelector('.dlg-edit__subtask-list');
-
-  if (!subtaskInputRef || !subtaskListRef) return;
-
-  if (confirmRef) {
-    confirmRef.addEventListener('mousedown', (event) => {
-      event.preventDefault();
-
-      const inputValue = subtaskInputRef.value.trim();
-      if (inputValue === '') return;
-
-
-      const template = document.createElement('template');
-      template.innerHTML = getSubtaskTpl(inputValue).trim();
-      const newSubtaskEl = template.content.firstElementChild;
-
-      subtaskListRef.appendChild(newSubtaskEl);
-
-      subtaskInputRef.value = '';
-      subtaskInputRef.focus();
-    });
-  }
-
-  if (cancelRef) {
-    cancelRef.addEventListener('mousedown', (event) => {
-      event.preventDefault();
-      subtaskInputRef.value = '';
-      subtaskInputRef.focus();
-    });
-  }
-
-  subtaskInputRef.addEventListener('keydown', (event) => {
+  list.addEventListener('keydown', event => {
+    const input = event.target.closest('.edit-input');
+    if (!input) return;
+    const listItem = input.closest('li');
     if (event.key === 'Escape') {
-      subtaskInputRef.value = '';
+      event.preventDefault();
+      listItem.outerHTML = getSubtaskTpl(input.dataset.original || input.value);
+    }
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const newText = input.value.trim();
+      if (newText) listItem.outerHTML = getSubtaskTpl(newText);
     }
   });
 }
 
 
-function handleSubtaskEdit(event) {
-  const target = event?.target;
-  if (!target) return;
 
-  if (target.classList.contains('subtask-edit-box__delete-img')) return;
-
-  const listItem = target.closest('li');
-  if (!listItem || listItem.classList.contains('edit-mode')) return;
-
-  const isEditTrigger =
-    target.classList.contains('subtask-edit-box__edit-img') ||
-    target.closest('.dlg-edit__main__subtask');
-
-  if (!isEditTrigger) return;
-
-  const textNode = Array.from(listItem.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
-  const currentText = textNode?.nodeValue?.replace('•', '').trim() || '';
-
-  const newHTML = getEditSubtaskTpl(currentText);
-  listItem.insertAdjacentHTML('afterend', newHTML);
-  listItem.remove();
-
-  const subtaskList = document.querySelector('.dlg-edit__subtask-list');
-  const newListItem = subtaskList.querySelector('li:last-child');
-  const input = newListItem.querySelector('input');
-
-  if (input) {
+function initSubtaskIconButtons() {
+  const input = document.getElementById('subtask-input');
+  const list = document.querySelector('.dlg-edit__subtask-list');
+  const confirm = document.querySelector('.subtask-input__confirm-img');
+  const cancel = document.querySelector('.subtask-input__cancel-img');
+  if (!input || !list) return;
+  confirm?.addEventListener('mousedown', event => {
+    event.preventDefault();
+    const value = input.value.trim();
+    if (!value) return;
+    list.innerHTML += getSubtaskTpl(value);
+    input.value = '';
     input.focus();
-    input.select();
-
-    input.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        newListItem.remove();
-        const originalHTML = getSubtaskTpl(currentText);
-        subtaskList.insertAdjacentHTML('beforeend', originalHTML);  // Hier nochmal drüber schauen
-      }
-
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        const newText = input.value.trim();
-        if (newText) {
-          const newHTML = getSubtaskTpl(newText);
-          newListItem.insertAdjacentHTML('afterend', newHTML);  // Hier nochmal drüber schauen
-          newListItem.remove();
-        }
-      }
-    });
-  }
+  });
+  cancel?.addEventListener('mousedown', event => {
+    event.preventDefault();
+    input.value = '';
+    input.focus();
+  });
 }
 
 
-function handleSubtaskDelete(event) {
-  const deleteBtn = event.target.closest('.subtask-edit-box__delete-img');
-  if (!deleteBtn) return;
 
-  const listItem = deleteBtn.closest('li');
+function handleSubtaskEdit(subtask) {
+  const listItem = subtask.target.closest('li');
+  if (!listItem || listItem.classList.contains('edit-mode')) return;
+  if (subtask.target.closest('.subtask-edit-box__delete-img')) return;
+  const text = (listItem.textContent || '').replace('•', '').trim();
+  listItem.outerHTML = getEditSubtaskTpl(text);
+  const input = document.querySelector('.edit-input:last-of-type');
+  input?.setAttribute('data-original', text);
+  input?.focus();
+  input?.select();
+}
+
+
+
+function handleSubtaskDelete(subtask) {
+  const listItem = subtask.target.closest('.subtask-edit-box__delete-img')?.closest('li');
   if (listItem) listItem.remove();
 }
 
-function handleSubtaskConfirm(event) {
-  const target = event.target;
-  if (!target.classList.contains('subtask-edit-box__confirm-img')) return;
 
-  const listItem = target.closest('li');
+function handleSubtaskConfirm(subtask) {
+  const listItem = subtask.target.closest('.subtask-edit-box__confirm-img')?.closest('li');
   if (!listItem) return;
-
   const input = listItem.querySelector('input');
-  if (!input) return;
-
-  const newText = input.value.trim();
+  const newText = input?.value.trim();
   if (!newText) return;
-
-  const newHTML = getSubtaskTpl(newText);
-
-  listItem.insertAdjacentHTML('afterend', newHTML);  // Hier nochmal drüber schauen
-  listItem.remove();
+  listItem.outerHTML = getSubtaskTpl(newText);
 }
+
 
 function collectSubtasksFromEditDialog() {
   const list = document.querySelector('.dlg-edit__subtask-list');
   if (!list) return {};
-
-  const items = Array.from(list.querySelectorAll('li')).filter(li => !li.classList.contains('edit-mode'));
-
-  const subtasksObj = {};
-  items.forEach((li, index) => {
-
-    let text = '';
-    const textNode = Array.from(li.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
-    if (textNode && textNode.nodeValue) {
-      text = textNode.nodeValue.replace('•', '').trim();
-    } else {
-      text = (li.textContent || '').replace('•', '').trim();
-    }
-
-    if (text) {
-      subtasksObj[`subtask${index}`] = {
-        task: text,
-        taskChecked: false
-      };
-    }
+  const items = [...list.querySelectorAll('li:not(.edit-mode)')];
+  const result = {};
+  items.forEach((li, i) => {
+    const value = (li.textContent || '').replace('•', '').trim();
+    if (value) result[`subtask${i}`] = { task: value, taskChecked: false };
   });
-
-  return subtasksObj;
+  return result;
 }
