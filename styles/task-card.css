@@ -59,6 +59,11 @@
   color: var(--color-maincolor);
 }
 
+.task-card__due-date--overdue {
+  color: var(--color-error);
+  font-weight: 500;
+}
+
 .task__content-metadata-box {
   display: flex;
   flex-direction: column;

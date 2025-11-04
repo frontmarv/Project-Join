@@ -20,6 +20,30 @@ function formatDate(dateStr) {
   });
 }
 
+function isOverdue(dueDate) {
+  if (!dueDate) return false;
+  const today = new Date().setHours(0, 0, 0, 0);
+  const date = new Date(dueDate).setHours(0, 0, 0, 0);
+  return date <= today;
+}
+
+function markOverdueDates() {
+  const today = new Date().setHours(0, 0, 0, 0);
+
+  document.querySelectorAll('.task-card__due-date').forEach(el => {
+    const dateStr = el.dataset.dueDate;
+    if (!dateStr) return;
+
+    const due = new Date(dateStr).setHours(0, 0, 0, 0);
+
+    if (due <= today) {
+      el.classList.add('task-card__due-date--overdue');
+    } else {
+      el.classList.remove('task-card__due-date--overdue');
+    }
+  });
+}
+
 
 function getSubtaskStats(task) {
   return {

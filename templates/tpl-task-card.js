@@ -32,8 +32,9 @@ function getTasksTemplate(task, {previousTask, nextTask}) {
         </div>
 
         <div class="task-card__header-bottom">
-          <span class="task-card__due-date"> Due Date: 
-            ${task.dueDate ? formatDate(task.dueDate) : ''}
+          <span class="task-card__due-date ${isOverdue(task.dueDate) ? 'task-card__due-date--overdue' : ''}"
+                data-due-date="${task.dueDate || ''}">
+                Due Date: ${task.dueDate ? formatDate(task.dueDate) : ''}
           </span>
         </div>
 

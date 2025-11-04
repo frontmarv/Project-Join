@@ -14,6 +14,7 @@ window.addEventListener("load", handleResizeScreenBoard);
 async function initBoard() {
   await getData();
   loadTasks();
+  markOverdueDates();
   updateAllPlaceholders();
   initSearch();
   enableSearchBoxClickFocus();
@@ -87,6 +88,7 @@ function loadTasks() {
   clearColumns();
   tasks.forEach(task => appendTaskToColumn(task));
   updateAllPlaceholders();
+  markOverdueDates();
 }
 
 
