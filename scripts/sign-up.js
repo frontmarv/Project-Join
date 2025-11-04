@@ -30,6 +30,7 @@ checkbox.addEventListener("change", () => {
     evaluateFormValidity();
 });
 
+
 function updatePasswordIcon(event) {
     let passwordIcon = event.target.parentElement.querySelector('img');
     let type = event.target.type;
@@ -43,17 +44,20 @@ function updatePasswordIcon(event) {
     }
 }
 
+
 function handlePasswordInputChange(element) {
     if (confirmPassword.value !== "") {
         validatePasswordMatch();
     }
 }
 
+
 function isValidFullName(element) {
     let inputName = element.value;
     let test = nameInputRegex.test(inputName);
     return test
 }
+
 
 function handleNameValidation(element) {
     let validInput = isValidFullName(element);
@@ -65,6 +69,7 @@ function handleNameValidation(element) {
     evaluateFormValidity();
 }
 
+
 function setWrapperColor(validInput, elementById) {
     elementById.classList.remove('error', 'valid-input');
     if (!validInput) {
@@ -75,6 +80,7 @@ function setWrapperColor(validInput, elementById) {
         formState.isNameValid = true;
     }
 }
+
 
 function validatePasswordMatch() {
     if (confirmPassword.value === "") {
@@ -91,11 +97,13 @@ function validatePasswordMatch() {
     evaluateFormValidity();
 }
 
+
 function resetPwStyles() {
     missmatchWarning.style.visibility = "hidden";
     pwWrapper.classList.remove('valid-input', 'error');
     confirmPwWrapper.classList.remove('valid-input', 'error');
 }
+
 
 function setPwSuccess() {
     missmatchWarning.style.visibility = "hidden";
@@ -103,12 +111,14 @@ function setPwSuccess() {
     confirmPwWrapper.classList.add('valid-input');
 }
 
+
 function setPwError() {
     missmatchWarning.style.visibility = "visible";
     pwWrapper.classList.remove('valid-input');
     confirmPwWrapper.classList.remove('valid-input');
     confirmPwWrapper.classList.add('error');
 }
+
 
 function setPasswordVisibility(clickedElement) {
     let wrapper = clickedElement.parentElement;
@@ -120,15 +130,18 @@ function setPasswordVisibility(clickedElement) {
             : '../assets/img/pw-visible.svg';
 }
 
+
 function enableSignUpBtn() {
     signUpBtn.setAttribute('aria-disabled', 'false');
     signUpBtn.classList.remove('disabled');
 }
 
+
 function disableSignUpBtn() {
     signUpBtn.setAttribute('aria-disabled', 'true');
     signUpBtn.classList.add('disabled');
 }
+
 
 function showSuccessfulSignUpMessage() {
     let body = document.querySelector('body');
@@ -141,11 +154,13 @@ function showSuccessfulSignUpMessage() {
     }, 10);
 }
 
+
 function redirectToLoginAfterDelay() {
     setTimeout(() => {
         window.location.replace('../index.html');
     }, 2000);
 }
+
 
 function evaluateFormValidity() {
     if (Object.values(formState).every(Boolean)) { enableSignUpBtn() }

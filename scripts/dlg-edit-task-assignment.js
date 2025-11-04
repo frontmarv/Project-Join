@@ -13,12 +13,14 @@ function toggleDropdown(forceState) {
   }
 }
 
+
 function filterContacts(term) {
   listItemsRef.forEach((listItem) => {
     const name = listItem.querySelector(".username").textContent.toLowerCase();
     listItem.style.display = name.includes(term) ? "flex" : "none";
   });
 }
+
 
 function updateCheckboxVisual(checkbox, isChecked, isHovering) {
   if (isHovering) {
@@ -31,6 +33,7 @@ function updateCheckboxVisual(checkbox, isChecked, isHovering) {
       : "../assets/img/checkbox-unchecked.svg";
   }
 }
+
 
 function initCheckboxHandlers() {
   listItemsRef.forEach((listItem) => {
@@ -54,6 +57,7 @@ function initCheckboxHandlers() {
   });
 }
 
+
 function initDropdownHandlers() {
   searchInputRef.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -71,6 +75,7 @@ function initDropdownHandlers() {
   });
 }
 
+
 function initContactAssign() {
   selectRef = document.getElementById("contact-select");
   searchInputRef = document.getElementById("contact-search");
@@ -85,6 +90,7 @@ function initContactAssign() {
   initDropdownHandlers();
   initCheckboxHandlers();
 }
+
 
 function populateAssignmentListFromFirebase(task) {
   const contactsDropDownList = document.querySelector('.contact-options');
@@ -105,6 +111,7 @@ function populateAssignmentListFromFirebase(task) {
     });
   });
 
+
   function refreshAssignedUserContainer() {
     const selectedIds = getSelectedAssignmentIds();
     avatarContainer.innerHTML = selectedIds
@@ -118,6 +125,7 @@ function populateAssignmentListFromFirebase(task) {
       .join('');
   }
 }
+
 
 function getSelectedAssignmentIds() {
   const ul = document.querySelector('.contact-options');

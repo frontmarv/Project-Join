@@ -4,12 +4,14 @@ function generateUserId(userName) {
   return `${initials}${randomNumbers}`;
 }
 
+
 function capitalizeInitials(userName) {
   return userName
     .split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
+
 
 function getRandomColor() {
   const colors = [
@@ -20,6 +22,7 @@ function getRandomColor() {
   const randomColorVar = colors[Math.floor(Math.random() * colors.length)];
   return getComputedStyle(document.documentElement).getPropertyValue(randomColorVar).trim();
 }
+
 
 function createDataObject() {
   let userName = capitalizeInitials(nameInput.value)
@@ -35,6 +38,7 @@ function createDataObject() {
   return data
 }
 
+
 async function pushDataToDB(key, data) {
   let response = await fetch(DB_URL + "users/" + key + ".json", {
     method: "PUT",
@@ -45,6 +49,7 @@ async function pushDataToDB(key, data) {
   });
   let responseToJson = await response.json();
 }
+
 
 function sendSignupForm() {
   let key = generateUserId(nameInput.value);

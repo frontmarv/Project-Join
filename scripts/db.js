@@ -28,6 +28,7 @@ async function getData() {
   }
 }
 
+
 async function saveTaskToFirebase(task, taskKey) {
   // taskKey z.B. "task3"
   const url = `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskKey}.json`;
@@ -41,6 +42,7 @@ async function saveTaskToFirebase(task, taskKey) {
   const data = await response.json();
   console.log('Gespeichert unter Key:', taskKey, data);
 }
+
 
 async function getNextTaskKey() {
   const url = 'https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks.json';

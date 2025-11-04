@@ -28,6 +28,7 @@ function initSubtaskInput() {
   });
 }
 
+
 function initSubtaskHandlers() {
   const subtaskListRef = document.querySelector('.dlg-edit__subtask-list');
   if (!subtaskListRef) return;
@@ -50,6 +51,7 @@ function initSubtaskHandlers() {
     handleSubtaskDelete(event);
   });
 }
+
 
 function initSubtaskIconButtons() {
   const subtaskInputRef = document.getElementById('subtask-input');
@@ -92,6 +94,7 @@ function initSubtaskIconButtons() {
     }
   });
 }
+
 
 function handleSubtaskEdit(event) {
   const target = event?.target;

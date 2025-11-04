@@ -48,14 +48,20 @@ function setMultipatch() {
 
 
 async function closeDlgAndSaveData() {
-    removeAnimationClass();
-    let multipatch = setMultipatch();
-    await saveChangesToDB(multipatch);
-    renderContactList();
-    setContactCardtoInvisible();
-    if (window.innerWidth < 1025) {
-        showContact = false;
-        handleResizeScreenContacts();
+    let userName = document.getElementById('contact-dlg-name-input').value;
+    if (userName === "") {
+        wrongInputPulseAnimation();
+        return;
+    } else {
+        removeAnimationClass();
+        let multipatch = setMultipatch();
+        await saveChangesToDB(multipatch);
+        renderContactList();
+        setContactCardtoInvisible();
+        if (window.innerWidth < 1025) {
+            showContact = false;
+            handleResizeScreenContacts();
+        }
     }
 }
 

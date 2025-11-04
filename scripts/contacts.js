@@ -163,9 +163,11 @@ function showContactDetailsinCard(selectedContact) {
     setContactCardtoVisible();
 }
 
+
 function cleanName(userName) {
     return userName.replace(/\s*\(You\)\s*$/, '');
 }
+
 
 function getContactInfofromContactlistandDB(contactElement) {
     let userName = contactElement.querySelector('.contact-name').innerText;

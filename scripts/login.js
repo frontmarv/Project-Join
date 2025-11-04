@@ -48,6 +48,7 @@ window.addEventListener('load', () => {
     }
 });
 
+
 function welcomeScreenAnimation() {
     logo.style.transition = 'none';
     logo.classList.add('start');
@@ -62,10 +63,12 @@ function welcomeScreenAnimation() {
     }, 600);
 }
 
+
 function welcomeScreenAnimationDesktop() {
     welcomescreenMobile.classList.add('d-none');
     welcomeScreenAnimation();
 }
+
 
 function welcomeScreenAnimationMobile() {
     logo.classList.add('welcome-logo');
@@ -78,12 +81,14 @@ function welcomeScreenAnimationMobile() {
     }, 400);
 }
 
+
 function welcomeScreenNoAnimation() {
     welcomescreenMobile.classList.add('d-none');
     footer.classList.remove('invisible');
     main.classList.remove('invisible');
     headerSignup.classList.remove('invisible');
 }
+
 
 async function fetchData() {
     try {
@@ -99,6 +104,7 @@ async function fetchData() {
     }
 }
 
+
 async function attemptLogin() {
     let data = await fetchData();
     let dataArray = Object.values(data)
@@ -111,6 +117,7 @@ async function attemptLogin() {
         window.location.replace("./pages/summary.html");
     }
 }
+
 
 async function guestLogin() {
     let multipatch = { "loggedIn": false };
@@ -136,8 +143,6 @@ async function guestLogin() {
 }
 
 
-
-
 function validateLoginInputs(existingUser) {
     if (existingUser == undefined || verifyPassword(existingUser) == false) {
         showLoginError();
@@ -145,9 +150,11 @@ function validateLoginInputs(existingUser) {
     } else { return true }
 }
 
+
 function verifyPassword(existingUser) {
     return existingUser.password === password.value;
 }
+
 
 function showLoginError() {
     errorMsg.style.visibility = "visible";
@@ -155,16 +162,19 @@ function showLoginError() {
     passwordWrapper.classList.add('error');
 }
 
+
 function clearLoginError() {
     errorMsg.style.visibility = "hidden";
     emailWrapper.classList.remove('error');
     passwordWrapper.classList.remove('error');
 }
 
+
 function togglePasswordVisibility() {
     password.type = password.type === 'password' ? 'text' : 'password';
     togglePasswordIcon();
 }
+
 
 function updatePasswordLockIcon() {
     if (password.value === "") {
@@ -174,6 +184,7 @@ function updatePasswordLockIcon() {
     }
 }
 
+
 function togglePasswordIcon() {
     if (password.type === 'password') {
         passwordIcon.src = '../assets/img/pw-not-visible.svg';
@@ -182,6 +193,7 @@ function togglePasswordIcon() {
         passwordIcon.src = '../assets/img/pw-visible.svg';
     }
 }
+
 
 function handleResizeScreen() {
     if (isSmallScreen && !headerAdded) {

@@ -10,6 +10,7 @@ let isSmallScreen;
 window.addEventListener("load", getScreenSize);
 window.addEventListener('resize', getScreenSize);
 
+
 function getScreenSize() {
     isSmallScreen = window.innerWidth < 1025;
 }
@@ -18,9 +19,11 @@ if (overlay) {
     overlay.addEventListener('click', hideDlg);
 }
 
+
 function toggleMenuVisiblity() {
     userMenu.classList.toggle('d-none');
 }
+
 
 function displayDlg() {
     const dlg = document.getElementById('dlg-box');
@@ -29,12 +32,14 @@ function displayDlg() {
     overlay.classList.remove('d-none');
 }
 
+
 function hideDlg() {
     const dlg = document.getElementById('dlg-box');
     dlg.classList.add('d-none');
     dlg.classList.remove('dlg-add-task');
     document.getElementById('overlay').classList.add('d-none');
 }
+
 
 function getUserNameInitials(userName) {
     return userName
@@ -44,10 +49,12 @@ function getUserNameInitials(userName) {
         .join('');
 }
 
+
 function setMinDueDate() {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('due-date').setAttribute('min', today);
 };
+
 
 async function saveChangesToDB(multipatch) {
     try {
@@ -69,6 +76,7 @@ async function saveChangesToDB(multipatch) {
     }
 }
 
+
 function getAndStoreUserId(userName) {
     for (const key in rawData) {
         if (rawData[key].name === userName) {
@@ -77,6 +85,7 @@ function getAndStoreUserId(userName) {
         }
     }
 }
+
 
 async function fetchAllUsers() {
     try {
@@ -92,6 +101,7 @@ async function fetchAllUsers() {
         console.error("Error fetching data:", error.message);
     }
 }
+
 
 function extractActiveUserInfo(users) {
     let userLoggedIn = users.find(user => user.loggedIn === true);

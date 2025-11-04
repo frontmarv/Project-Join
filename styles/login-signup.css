@@ -5,7 +5,6 @@ body {
 
 .content-wrapper {
     display: flex;
-    visibility: visible;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -19,7 +18,6 @@ body {
     font-weight: bold;
     display: inline-flex;
     align-items: center;
-    width: auto;
 }
 
 .header {
@@ -44,7 +42,6 @@ body {
 .header__signup {
     display: flex;
     opacity: 1;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 2.1875rem;
@@ -135,7 +132,6 @@ h1 {
 
 .useraccess-form__btnholder {
     display: flex;
-    flex-direction: row;
     gap: 2.188rem;
     height: 3.875rem;
 }
@@ -200,23 +196,25 @@ h1 {
     width: 11.25rem;
 }
 
-.guest:hover {
+.guest:hover,
+.guest:active {
     background-color: var(--color-white);
+    box-shadow: 0 0.25rem 0.25rem color-mix(in srgb, var(--color-black) 25%, transparent);
+}
+
+.guest:hover {
     color: var(--color-lightblue);
     border: 0.125rem solid var(--color-lightblue);
-    box-shadow: 0 0.25rem 0.25rem color-mix(in srgb, var(--color-black) 25%, transparent);
 }
 
 .guest:active {
     color: var(--color-navselected);
-    box-shadow: 0 0.25rem 0.25rem color-mix(in srgb, var(--color-black) 25%, transparent);
     border: 0.063rem solid var(--color-navselected);
 }
 
 .useraccess-form__privacy-policy {
     margin-top: 0.5rem;
     display: flex;
-    flex-direction: row;
     align-items: flex-start;
     gap: 0.5rem;
 }
@@ -258,7 +256,6 @@ input[type="checkbox"]:checked+label:hover {
 
 .footer__privacy-legal-box {
     display: flex;
-    flex-direction: row;
     padding-bottom: 2.5rem;
     gap: 1rem;
 }
@@ -325,7 +322,7 @@ input[type="checkbox"]:checked+label:hover {
         overflow-x: hidden;
     }
 
-    #msg{
+    #msg {
         display: none !important;
     }
 

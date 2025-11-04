@@ -7,6 +7,7 @@ function createPlaceholder() {
   return placeholder;
 }
 
+
 function startDragging(id) {
   draggedTaskId = id;
   const card = document.querySelector(`[onclick="renderTaskInfoDlg('${id}')"]`);
@@ -17,6 +18,7 @@ function startDragging(id) {
   placeholder.style.width = "100%";
 }
 
+
 function stopDragging() {
   const card = document.querySelector(".task.dragging");
   if (card) card.classList.remove("dragging");
@@ -24,11 +26,13 @@ function stopDragging() {
   draggedTaskId = null;
 }
 
+
 function allowDrop(event) {
   event.preventDefault();
   const col = event.currentTarget;
   if (!col.contains(placeholder)) col.appendChild(placeholder);
 }
+
 
 async function moveTo(event) {
   event.preventDefault();
@@ -41,9 +45,11 @@ async function moveTo(event) {
   stopDragging();
 }
 
+
 function isValidDropTarget(target) {
   return draggedTaskId && target.classList.contains("tasks");
 }
+
 
 function mapColumnIdToTaskState(id) {
   const map = {
@@ -55,6 +61,7 @@ function mapColumnIdToTaskState(id) {
   return map[id];
 }
 
+
 async function updateTaskState(id, state) {
   const url = `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${id}.json`;
   await fetch(url, {
@@ -64,6 +71,7 @@ async function updateTaskState(id, state) {
   });
 }
 
+
 async function refreshBoard() {
   await getData();
   loadTasks();
@@ -71,6 +79,7 @@ async function refreshBoard() {
 }
 
 document.addEventListener("dragend", stopDragging);
+
 
 async function manualMoveTaskToNewColmn(TaskId, newStateUpperCase) {
   let newState = newStateUpperCase.charAt(0).toLowerCase() + newStateUpperCase.slice(1)

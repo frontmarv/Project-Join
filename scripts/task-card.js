@@ -1,4 +1,3 @@
-
 function buildTaskViewModel(task) {
   const { total, done, percent } = getSubtaskStats(task);
 
@@ -10,6 +9,7 @@ function buildTaskViewModel(task) {
   };
 }
 
+
 function getSubtaskStats(task) {
   return {
     total: getTotalSubtaskCount(task),
@@ -17,6 +17,7 @@ function getSubtaskStats(task) {
     percent: getSubtaskProgressPercent(task)
   };
 }
+
 
 function getAssignedUsersHtml(assigned) {
   const ids = normalizeAssignedContacts(assigned);
@@ -35,12 +36,14 @@ function getAssignedUsersHtml(assigned) {
   return avatars.join("");
 }
 
+
 function normalizeAssignedContacts(data) {
   if (Array.isArray(data)) return data;
   if (data && typeof data === "object")
     return Object.values(data).filter(Boolean);
   return [];
 }
+
 
 function getCategoryClass(category) {
   const map = {
@@ -50,6 +53,7 @@ function getCategoryClass(category) {
   return map[category] || "task__category";
 }
 
+
 function getPriorityIcon(priority) {
   const base = "../assets/img/priority-";
   if (priority === "urgent") return base + "urgent.svg";
@@ -57,15 +61,18 @@ function getPriorityIcon(priority) {
   return base + "low.svg";
 }
 
+
 function getCheckedSubtaskCount(task) {
   if (!task?.subtasks || typeof task.subtasks !== 'object') return 0;
   return Object.values(task.subtasks).filter(st => st && st.taskChecked === true).length;
 }
 
+
 function getTotalSubtaskCount(task) {
   if (!task?.subtasks || typeof task.subtasks !== 'object') return 0;
   return Object.keys(task.subtasks).length;
 }
+
 
 function getSubtaskProgressPercent(task) {
   const total = getTotalSubtaskCount(task);

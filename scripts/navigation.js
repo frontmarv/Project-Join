@@ -10,6 +10,7 @@ function handleResizeScreen() {
     handleHelp(isSmallScreen);
 }
 
+
 function handleLogo(isSmallScreen) {
     if (isSmallScreen && !logoAdded) {
         document.getElementById('page-title').innerHTML = getJoinLogo();
@@ -19,6 +20,7 @@ function handleLogo(isSmallScreen) {
         logoAdded = false;
     }
 }
+
 
 function handleHelp(isSmallScreen) {
     let dropDownMenu = document.querySelector('.user-drop-down-menu');

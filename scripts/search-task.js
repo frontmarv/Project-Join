@@ -9,11 +9,13 @@ function initSearch() {
   patchLoadTasks();
 }
 
+
 function clearSearchOnEsc(event) {
   if (event.key !== "Escape") return;
   event.target.value = "";
   filterTasks("");
 }
+
 
 function patchLoadTasks() {
   if (loadTasks.__patched) return;
@@ -28,6 +30,7 @@ function patchLoadTasks() {
   loadTasks.__patched = true;
 }
 
+
 function filterTasks(query) {
   const clean = query.trim().toLowerCase();
   document.querySelectorAll(".task").forEach((card) =>
@@ -35,6 +38,7 @@ function filterTasks(query) {
   );
   toggleTasksAutoHeight(clean.length >= 2);
 }
+
 
 function processCardFilter(card, query) {
   const title = card.querySelector(".task__title");
@@ -46,16 +50,19 @@ function processCardFilter(card, query) {
   if (hasMatch) highlightTitle(title, query);
 }
 
+
 function resetHighlight(titleElement) {
   if (!titleElement.dataset.rawText) titleElement.dataset.rawText = titleElement.textContent;
   titleElement.textContent = titleElement.dataset.rawText;
 }
+
 
 function highlightTitle(titleElement, query) {
   const raw = titleElement.dataset.rawText;
   const re = new RegExp(`(${escapeRegExp(query)})`, "gi");
   titleElement.innerHTML = raw.replace(re, `<span class="${HIGHLIGHT_CLASS}">$1</span>`);
 }
+
 
 function escapeRegExp(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

@@ -12,6 +12,7 @@ document.addEventListener('click', function (event) {
     }
 });
 
+
 function getLoggedInUserImg(userInitals) {
     return /*html*/ `
     <svg class="svg__wrapper loggedIn">
@@ -20,6 +21,7 @@ function getLoggedInUserImg(userInitals) {
     </svg>
     `
 }
+
 
 async function renderUserAvatar() {
     let users = await fetchAllUsers();
@@ -33,6 +35,7 @@ async function renderUserAvatar() {
     let userImg = getLoggedInUserImg(userInitals)
     userAvatar.innerHTML = userImg;
 }
+
 
 async function logOutUser() {
     let userKey = getAndStoreUserId(LOGGED_IN_USER);
