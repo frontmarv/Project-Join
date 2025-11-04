@@ -29,6 +29,7 @@ d.addEventListener('change', () => {
 // Due date initial invalid style
 window.addEventListener('load', () => {
   const d = document.getElementById('due-date');
+  if (!d) return; 
   if (!d.value) {
     d.classList.add('input-error');
   }

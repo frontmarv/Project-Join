@@ -73,6 +73,12 @@ async function renderAddTaskDlg(defaultTaskState = "to-do") {
     initSubtaskHandlers();
     initSubtaskIconButtons();
     displayDlg();
+
+    // warten bis der Date-Input im Dialog wirklich da ist
+await waitFor('#dlg-box #due-date');
+
+// Validation über Delegation am Dialog-Root initialisieren
+initDueDateValidationDelegated(document.getElementById('dlg-box'));
   }
 }
 
@@ -212,5 +218,36 @@ function getSurroundingCategories(task) {
 }
 
 
+function syncValidityClass(el) {
+  if (!el) return;
+  if (el.value && el.value.trim() !== '') {
+    el.classList.add('valid-input');
+    el.classList.remove('invalid-input', 'input-error');
+  } else {
+    el.classList.add('input-error');
+    el.classList.remove('valid-input');
+  }
+}
 
+function initDueDateValidationDelegated(scope) {
+  if (!scope) return;
+
+  // Startzustand einmalig setzen, falls Feld schon da
+  const d = scope.querySelector('#due-date');
+  if (d) syncValidityClass(d);
+
+  // Delegation: reagiert auch, wenn Dialog-Inhalt neu gerendert wird
+  const onEvent = (e) => {
+    if (!e.target.matches('#due-date')) return;
+    syncValidityClass(e.target);
+  };
+
+  // doppelte Bindung vermeiden
+  if (scope.dataset.ddBound === 'true') return;
+  scope.dataset.ddBound = 'true';
+
+  scope.addEventListener('input', onEvent, true);
+  scope.addEventListener('change', onEvent, true);
+  scope.addEventListener('blur', onEvent, true);
+}
 
