@@ -43,8 +43,11 @@ async function renderTaskInfoDlg(taskId) {
   await getData();
   const task = tasks.find(task => task.id === taskId);
   if (!task) return;
+
   const dlgBox = document.getElementById("dlg-box");
+  dlgBox.classList.remove("dlg-add-task");
   dlgBox.innerHTML = getTaskInfoDlgTpl(task);
+
   displayDlg();
 }
 
@@ -53,8 +56,11 @@ async function renderTaskEditDlg(taskId) {
   await getData();
   const task = tasks.find(task => task.id === taskId);
   if (!task) return;
+
   const dlgBox = document.getElementById("dlg-box");
+  dlgBox.classList.remove("dlg-add-task");
   dlgBox.innerHTML = getTaskEditDlgTpl(task);
+
   displayDlg();
   initSubtaskInput();
   initSubtaskIconButtons();
@@ -67,25 +73,28 @@ async function renderTaskEditDlg(taskId) {
 async function renderAddTaskDlg(defaultTaskState = "to-do") {
   if (window.innerWidth < 1025) {
     window.location.replace('../pages/add-task.html');
-    return
+    return;
   } else {
     const dlg = document.getElementById("dlg-box");
     dlg.classList.add("dlg-add-task");
     dlg.innerHTML = getAddTaskDlgTpl(defaultTaskState);
+
     await InsertLoader.loadInsertByElement(dlg.querySelector("[data-insert]"));
     await waitFor(".contact-options");
     populateAssignmentListFromFirebase({ assignedContacts: [] });
     await waitFor(".dlg-edit__subtask-list");
+
     initSubtaskInput();
     initSubtaskHandlers();
     initSubtaskIconButtons();
-    displayDlg();
 
 
-await waitFor('#dlg-box #due-date');
+    dlg.classList.remove("d-none");
+    document.getElementById('overlay').classList.remove('d-none');
+    setTimeout(() => dlg.classList.add("show"), 10);
 
-// Validation über Delegation am Dialog-Root initialisieren
-initDueDateValidationDelegated(document.getElementById('dlg-box'));
+    await waitFor('#dlg-box #due-date');
+    initDueDateValidationDelegated(document.getElementById('dlg-box'));
   }
 }
 

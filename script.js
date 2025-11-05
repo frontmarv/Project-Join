@@ -26,30 +26,31 @@ function toggleMenuVisiblity() {
 
 
 function displayDlg() {
-  const dlg = document.getElementById('dlg-box');
-  const overlay = document.getElementById('overlay');
+    const dlg = document.getElementById('dlg-box');
+    const overlay = document.getElementById('overlay');
 
-  overlay.classList.remove('d-none');
-  dlg.classList.remove('d-none');
-  dlg.classList.remove('show');           // sicherstellen: Startzustand (rechts draußen)
-  void dlg.offsetWidth;                   // Reflow erzwingen (fix fürs erste Öffnen)
-  requestAnimationFrame(() => dlg.classList.add('show')); // dann sliden
+    dlg.classList.remove('d-none');
+    overlay.classList.remove('d-none');
+
+    setTimeout(() => {
+        dlg.classList.add('show');
+    }, 10);
 }
 
 function hideDlg() {
-  const dlg = document.getElementById('dlg-box');
-  const overlay = document.getElementById('overlay');
+    const dlg = document.getElementById('dlg-box');
+    const overlay = document.getElementById('overlay');
+    
+    dlg.classList.remove('show');
+    const wasAddTask = dlg.classList.contains('dlg-add-task');
 
-  dlg.classList.remove('show');           // slide nach rechts raus
+    setTimeout(() => {
+        dlg.classList.add('d-none');
+        overlay.classList.add('d-none');
 
-  const done = () => {
-    dlg.classList.add('d-none');
-    dlg.classList.remove('dlg-add-task');
-    overlay.classList.add('d-none');
-  };
-
-  dlg.addEventListener('transitionend', done, { once: true });
-  setTimeout(done, 450); // Fallback, falls 'transitionend' nicht feuert
+        if (wasAddTask) dlg.classList.remove('dlg-add-task');
+        dlg.innerHTML = "";
+    }, 300);
 }
 
 
