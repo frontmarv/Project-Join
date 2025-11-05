@@ -121,11 +121,12 @@ function formatDate(dateStr) {
 function showGreetingMobile() {
     document.querySelector('.summary-content__left').classList.add('d-none');
     document.querySelector('.summary-content__right').classList.add('greetingMobile');
+    document.querySelector('.summary-content__right').style.display = "block";
     setTimeout(() => {
         document.querySelector('.summary-content__right').classList.remove('greetingMobile');
     }, 1000);
     setTimeout(() => {
-        document.querySelector('.summary-content__right').classList.add('d-none');
+        document.querySelector('.summary-content__right').style.display = "none";
         document.querySelector('.summary-content__left').classList.remove('d-none');
     }, 1600);
 }

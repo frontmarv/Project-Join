@@ -26,7 +26,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 
-async function getDatafromFirebase() {
+async function getUsersfromFirebase() {
     try {
         let response = await fetch(DB_URL + "users/" + ".json");
         if (!response.ok) {
@@ -119,7 +119,7 @@ function checkLoggedInUser(user) {
 
 
 async function renderContactList() {
-    let userArray = await getDatafromFirebase();
+    let userArray = await getUsersfromFirebase();
     contactList.innerHTML = "";
     let initialLettersArray = getInitialLetters(userArray);
     contactList.innerHTML += renderInitialLettersSections(initialLettersArray);
@@ -158,7 +158,9 @@ function setContactCardtoInvisible() {
 
 
 function showContactDetailsinCard(selectedContact) {
-    let contactInfo = getContactInfofromContactlistandDB(selectedContact);
+    const userName = selectedContact.querySelector('.contact-name').innerHTML;
+    getAndStoreUserId(userName);
+    let contactInfo = getContactInfofromContactlistandDB(userName);
     setContactInfoIntoCard(contactInfo);
     setContactCardtoVisible();
 }
@@ -169,11 +171,10 @@ function cleanName(userName) {
 }
 
 
-function getContactInfofromContactlistandDB(contactElement) {
-    let userName = contactElement.querySelector('.contact-name').innerText;
+function getContactInfofromContactlistandDB(userName) {
     let cleanUserName = cleanName(userName);
-    let email = contactElement.querySelector('.contact-email').innerText;
     let selectedUser = userArrayGlobal.find(user => user.name === cleanUserName);
+    let email = selectedUser.email;
     let phone = selectedUser.phone;
     let profilImgColor = selectedUser.profilImgColor;
     return { cleanUserName, email, phone, profilImgColor };

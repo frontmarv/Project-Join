@@ -194,6 +194,7 @@ h1 {
     border: 0.063rem solid var(--color-maincolor);
     transition: all var(--transition-normal) ease;
     width: 11.25rem;
+    cursor: pointer;
 }
 
 .guest:hover,

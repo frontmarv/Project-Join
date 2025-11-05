@@ -82,7 +82,7 @@ function getEditContactDlgTpl() {
                         <div class="inputfields__button-holder">
                             <button class="empty-btn" onclick="removeAnimationClass()">Cancel<img src="../assets/img/close.svg"
                                     alt="icon of the letter X"></button>
-                            <button class="filled-btn" onclick="closeDlgAndSaveData()">Save<img src="../assets/img/done.svg"
+                            <button class="filled-btn" onclick="validateAndSaveData()">Save<img src="../assets/img/done.svg"
                                     alt="icon of a checkmark"></button>
                         </div>
                     </div>

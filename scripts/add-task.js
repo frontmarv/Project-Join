@@ -255,7 +255,6 @@ async function createTask() {
   await saveTaskToFirebase(newTask, key);
 
   showAlertOverlay();
-  console.log(tasks);
 }
 
 

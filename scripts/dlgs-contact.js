@@ -47,21 +47,28 @@ function setMultipatch() {
 }
 
 
-async function closeDlgAndSaveData() {
+function validateAndSaveData() {
     let userName = document.getElementById('contact-dlg-name-input').value;
     if (userName === "") {
         wrongInputPulseAnimation();
         return;
     } else {
-        removeAnimationClass();
-        let multipatch = setMultipatch();
-        await saveChangesToDB(multipatch);
-        renderContactList();
-        setContactCardtoInvisible();
-        if (window.innerWidth < 1025) {
-            showContact = false;
-            handleResizeScreenContacts();
-        }
+        saveDataEditContactDlg()
+    }
+}
+
+
+async function saveDataEditContactDlg() {
+    removeAnimationClass();
+    let multipatch = setMultipatch();
+    await saveChangesToDB(multipatch);
+    await renderContactList();
+    let userName = rawData[STORED_USER_KEY].name;
+    let contactInfo = getContactInfofromContactlistandDB(userName);
+    setContactInfoIntoCard(contactInfo);
+    if (window.innerWidth < 1025) {
+        showContact = true;
+        handleResizeScreenContacts();
     }
 }
 

@@ -27,15 +27,14 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-window.addEventListener("resize", handleResizeScreen);
-window.addEventListener("load", handleResizeScreen);
-email.addEventListener('keyup', clearLoginError());
 
+email.addEventListener('keyup', clearLoginError());
 password.addEventListener('keyup', () => {
     clearLoginError();
     updatePasswordLockIcon();
 });
-
+window.addEventListener("resize", handleResizeScreen);
+window.addEventListener("load", handleResizeScreen);
 window.addEventListener('load', () => {
     if (!hasShownWelcomeAnimation) {
         if (window.innerWidth < 1025) {
@@ -48,6 +47,11 @@ window.addEventListener('load', () => {
     }
 });
 
+password.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        attemptLogin();
+    }
+});
 
 function welcomeScreenAnimation() {
     logo.style.transition = 'none';
