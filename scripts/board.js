@@ -6,10 +6,22 @@ const columnMap = {
 };
 
 
-const getUserNameById = id => users.find(user => user.id === id)?.name || "Unknown User";
-const getUserPicById = id => users.find(user => user.id === id)?.profilImgColor || null;
-const getUserInitialsById = id =>
-  users.find(user => user.id === id)?.name?.split(" ").map(name => name[0].toUpperCase()).join("") || "";
+const getUserNameById = id => {
+  const user = users.find(user => user.id === id);
+  return user?.name || "Unknown User";
+};
+
+
+const getUserPicById = id => {
+  const user = users.find(user => user.id === id);
+  return user?.profilImgColor || null;
+};
+
+
+const getUserInitialsById = id => {
+  const user = users.find(user => user.id === id);
+  return user?.name?.split(" ").map(n => n[0].toUpperCase()).join("") || "";
+};
 
 
 let currentLayout = null;
@@ -26,6 +38,7 @@ async function initBoard() {
   enableSearchBoxClickFocus();
 }
 
+
 function enableSearchBoxClickFocus() {
   const searchBoxes = document.querySelectorAll('.board__head__searchbox');
   searchBoxes.forEach(box => {
@@ -39,29 +52,53 @@ function enableSearchBoxClickFocus() {
   });
 }
 
+
 async function renderTaskInfoDlg(taskId) {
-  await getData();
-  const task = tasks.find(task => task.id === taskId);
+  const task = await loadTaskForInfo(taskId);
   if (!task) return;
-
-  const dlgBox = document.getElementById("dlg-box");
-  dlgBox.classList.remove("dlg-add-task");
-  dlgBox.innerHTML = getTaskInfoDlgTpl(task);
-
+  setupTaskInfoDialog(task);
   displayDlg();
 }
 
 
-async function renderTaskEditDlg(taskId) {
+async function loadTaskForInfo(taskId) {
   await getData();
-  const task = tasks.find(task => task.id === taskId);
-  if (!task) return;
+  return tasks.find(task => task.id === taskId) || null;
+}
 
+
+function setupTaskInfoDialog(task) {
+  const dlgBox = document.getElementById("dlg-box");
+  dlgBox.classList.remove("dlg-add-task");
+  dlgBox.innerHTML = getTaskInfoDlgTpl(task);
+  return dlgBox;
+}
+
+
+async function renderTaskEditDlg(taskId) {
+  const task = await loadTaskForEdit(taskId);
+  if (!task) return;
+  setupTaskEditDialog(task);
+  displayDlg();
+  initializeTaskEditFeatures(task);
+}
+
+
+async function loadTaskForEdit(taskId) {
+  await getData();
+  return tasks.find(task => task.id === taskId) || null;
+}
+
+
+function setupTaskEditDialog(task) {
   const dlgBox = document.getElementById("dlg-box");
   dlgBox.classList.remove("dlg-add-task");
   dlgBox.innerHTML = getTaskEditDlgTpl(task);
+  return dlgBox;
+}
 
-  displayDlg();
+
+function initializeTaskEditFeatures(task) {
   initSubtaskInput();
   initSubtaskIconButtons();
   initSubtaskHandlers();
@@ -71,32 +108,55 @@ async function renderTaskEditDlg(taskId) {
 
 
 async function renderAddTaskDlg(defaultTaskState = "to-do") {
-  if (window.innerWidth < 1025) {
-    window.location.replace('../pages/add-task.html');
-    return;
-  } else {
-    const dlg = document.getElementById("dlg-box");
-    dlg.classList.add("dlg-add-task");
-    dlg.innerHTML = getAddTaskDlgTpl(defaultTaskState);
-
-    await InsertLoader.loadInsertByElement(dlg.querySelector("[data-insert]"));
-    await waitFor(".contact-options");
-    populateAssignmentListFromFirebase({ assignedContacts: [] });
-    await waitFor(".dlg-edit__subtask-list");
-
-    initSubtaskInput();
-    initSubtaskHandlers();
-    initSubtaskIconButtons();
-
-
-    dlg.classList.remove("d-none");
-    document.getElementById('overlay').classList.remove('d-none');
-    setTimeout(() => dlg.classList.add("show"), 10);
-
-    await waitFor('#dlg-box #due-date');
-    initDueDateValidationDelegated(document.getElementById('dlg-box'));
-  }
+  if (shouldRedirectToMobile()) return redirectToAddTaskPage();
+  const dlg = setupAddTaskDialog(defaultTaskState);
+  await loadAddTaskContent(dlg);
+  initializeAddTaskFeatures(dlg);
+  showAddTaskDialog(dlg);
 }
+  
+
+function shouldRedirectToMobile() {
+  return window.innerWidth < 1025;
+}
+
+
+function redirectToAddTaskPage() {
+  window.location.replace('../pages/add-task.html');
+}
+
+
+function setupAddTaskDialog(defaultTaskState) {
+  const dlg = document.getElementById("dlg-box");
+  dlg.classList.add("dlg-add-task");
+  dlg.innerHTML = getAddTaskDlgTpl(defaultTaskState);
+  return dlg;
+}
+
+
+async function loadAddTaskContent(dlg) {
+  await InsertLoader.loadInsertByElement(dlg.querySelector("[data-insert]"));
+  await waitFor(".contact-options");
+  populateAssignmentListFromFirebase({ assignedContacts: [] });
+  await waitFor(".dlg-edit__subtask-list");
+}
+
+
+function initializeAddTaskFeatures(dlg) {
+  initSubtaskInput();
+  initSubtaskHandlers();
+  initSubtaskIconButtons();
+}
+
+
+async function showAddTaskDialog(dlg) {
+  dlg.classList.remove("d-none");
+  document.getElementById('overlay').classList.remove('d-none');
+  setTimeout(() => dlg.classList.add("show"), 10);
+  await waitFor('#due-date');
+  initDueDateValidationDelegated(dlg);
+}
+
 
 
 function loadTasks() {
@@ -131,9 +191,9 @@ function clearColumns() {
 
 function appendTaskToColumn(task) {
   const colId = columnMap[task.taskState];
-  const surroundingTasks = getSurroundingCategories(task);
   if (!colId) return;
   const col = document.getElementById(colId);
+  const surroundingTasks = getSurroundingCategories(task);
   const wrapper = document.createElement("div");
   wrapper.innerHTML = getTasksTemplate(task, surroundingTasks).trim();
   col.appendChild(wrapper.firstElementChild);
@@ -205,20 +265,24 @@ function renderDesktopHead(boardHead) {
 
 
 function setLayout(isSmallScreen) {
-  if (isSmallScreen) { currentLayout = 'mobile'; }
-  else { currentLayout = 'desktop'; }
+  currentLayout = isSmallScreen ? 'mobile' : 'desktop';
 }
 
 
 function getSurroundingCategories(task) {
-  let obj = task.taskState;
+  const state = task.taskState;
   const keys = Object.keys(columnMap);
-  const index = keys.indexOf(obj);
+  const index = keys.indexOf(state);
   const prevKey = keys[index - 1];
   const nextKey = keys[index + 1];
-  const previousTask = prevKey ? prevKey.charAt(0).toUpperCase() + prevKey.slice(1) : "Done";
-  const nextTask = nextKey ? nextKey.charAt(0).toUpperCase() + nextKey.slice(1) : "To-do";
-  return { previousTask, nextTask }
+  const previousTask = prevKey ? capitalize(prevKey) : "Done";
+  const nextTask = nextKey ? capitalize(nextKey) : "To-do";
+  return { previousTask, nextTask };
+}
+
+
+function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 
@@ -233,22 +297,19 @@ function syncValidityClass(el) {
   }
 }
 
-function initDueDateValidationDelegated(scope) {
-  if (!scope) return;
 
+function initDueDateValidationDelegated(scope) {
+  if (!scope || scope.dataset.ddBound === 'true') return;
+  scope.dataset.ddBound = 'true';
   const date = scope.querySelector('#due-date');
   if (date) syncValidityClass(date);
-
-  const onEvent = (event) => {
-    if (!event.target.matches('#due-date')) return;
-    syncValidityClass(event.target);
-  };
-
-  if (scope.dataset.ddBound === 'true') return;
-  scope.dataset.ddBound = 'true';
-
-  scope.addEventListener('input', onEvent, true);
-  scope.addEventListener('change', onEvent, true);
-  scope.addEventListener('blur', onEvent, true);
+  scope.addEventListener('input', onDueDateEvent, true);
+  scope.addEventListener('change', onDueDateEvent, true);
+  scope.addEventListener('blur', onDueDateEvent, true);
 }
 
+
+function onDueDateEvent(event) {
+  if (!event.target.matches('#due-date')) return;
+  syncValidityClass(event.target);
+}
