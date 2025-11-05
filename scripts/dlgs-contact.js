@@ -4,7 +4,7 @@ function renderAddContactDlg() {
 }
 
 
-function renderDeleteContactDlg(){
+function renderDeleteContactDlg() {
     hideContactActionMenu();
     dialog.innerHTML = getDeleteContactDlg();
     dialog.classList.add('delete-contact__dialog');
@@ -71,12 +71,24 @@ async function saveDataEditContactDlg() {
     await saveChangesToDB(multipatch);
     await renderContactList();
     let userName = rawData[STORED_USER_KEY].name;
+    markStoredContactAsSelected(userName);
     let contactInfo = getContactInfofromContactlistandDB(userName);
     setContactInfoIntoCard(contactInfo);
     if (window.innerWidth < 1025) {
         showContact = true;
         handleResizeScreenContacts();
     }
+}
+
+
+function markStoredContactAsSelected(userName) {
+    let nodelist = document.querySelectorAll('.contact-list__item');
+    nodelist.forEach(item => {
+        if (item.querySelector('.contact-name').innerHTML === userName) {
+            item.classList.add('selected');
+            item.querySelector('.contact-name').style.color = 'var(--color-white)';
+        }
+    })
 }
 
 

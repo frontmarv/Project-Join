@@ -217,7 +217,7 @@ select {
 .empty-btn:hover {
   color: var(--color-lightblue);
   outline: 2px solid var(--color-lightblue);
-  border: hidden;
+  border-color: transparent;
   box-shadow: 0px 4px 4px color-mix(in srgb, var(--color-black) 25%, transparent);
 }
 
