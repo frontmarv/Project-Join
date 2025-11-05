@@ -216,7 +216,8 @@
 }
 
 .popup-msg-container {
-  width: 20rem;
+  padding: 1rem 1.5rem;
+  width: fit-content;
   height: 4.5rem;
   position: fixed;
   top: 25%;
@@ -229,6 +230,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  text-wrap: nowrap;
   font-weight: 500;
   font-size: 1rem;
   opacity: 0;
@@ -253,9 +256,6 @@
 }
 
 @media screen and (max-width: 1024px) {
-  .dlg {
-    width: 90vw;
-  }
 
   .scroll-wrapper {
     overflow-y: initial;
@@ -313,5 +313,11 @@
     flex-direction: row;
     padding-bottom: 10px;
     overflow-x: auto;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .dlg {
+    width: 90vw;
   }
 }
