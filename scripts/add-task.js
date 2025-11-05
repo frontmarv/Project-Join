@@ -434,9 +434,3 @@ function validateTaskForm() {
 
   return valid;
 }
-
-
-function setrequired(){
-  let requiredInfo = document.getElementById("required-info");
-  requiredInfo.classList.remove('d-none');
-}
