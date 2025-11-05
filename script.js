@@ -26,18 +26,30 @@ function toggleMenuVisiblity() {
 
 
 function displayDlg() {
-    const dlg = document.getElementById('dlg-box');
-    const overlay = document.getElementById('overlay');
-    dlg.classList.remove('d-none');
-    overlay.classList.remove('d-none');
+  const dlg = document.getElementById('dlg-box');
+  const overlay = document.getElementById('overlay');
+
+  overlay.classList.remove('d-none');
+  dlg.classList.remove('d-none');
+  dlg.classList.remove('show');           // sicherstellen: Startzustand (rechts draußen)
+  void dlg.offsetWidth;                   // Reflow erzwingen (fix fürs erste Öffnen)
+  requestAnimationFrame(() => dlg.classList.add('show')); // dann sliden
 }
 
-
 function hideDlg() {
-    const dlg = document.getElementById('dlg-box');
+  const dlg = document.getElementById('dlg-box');
+  const overlay = document.getElementById('overlay');
+
+  dlg.classList.remove('show');           // slide nach rechts raus
+
+  const done = () => {
     dlg.classList.add('d-none');
     dlg.classList.remove('dlg-add-task');
-    document.getElementById('overlay').classList.add('d-none');
+    overlay.classList.add('d-none');
+  };
+
+  dlg.addEventListener('transitionend', done, { once: true });
+  setTimeout(done, 450); // Fallback, falls 'transitionend' nicht feuert
 }
 
 

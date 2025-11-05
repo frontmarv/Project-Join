@@ -1,7 +1,13 @@
 .dlg-add-task {
   padding-top: 4rem;
-  height: fit-content;
+  min-height: fit-content;
+  height: 60vh;
   width: 50%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.dlg-add-task.show {
+  transform: translate(-50%, -50%);
 }
 
 .task-content__header {
