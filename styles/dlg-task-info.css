@@ -120,12 +120,6 @@
   cursor: pointer;
 }
 
-.separator {
-  display: flex;
-  height: 100%;
-  border: 1px solid var(--color-lightgrey);
-}
-
 .dlg__footer {
   display: flex;
   justify-content: flex-end;

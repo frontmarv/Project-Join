@@ -36,8 +36,7 @@ function filterTasks(query) {
   document.querySelectorAll(".task").forEach((card) =>
     processCardFilter(card, clean)
   );
-
-  toggleTasksAutoHeight(clean.length >= 2);
+  
   updateSearchPlaceholders(clean);
 }
 

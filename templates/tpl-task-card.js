@@ -15,6 +15,13 @@ function getTasksTemplate(task, {previousTask, nextTask}) {
 
       <div class="task-card__header">
         <div class="task-card__header-top">
+          <span class="task-card__due-date ${isOverdue(task.dueDate) ? 'task-card__due-date--overdue' : ''}"
+                data-due-date="${task.dueDate || ''}">
+                Due Date: ${task.dueDate ? formatDate(task.dueDate) : ''}
+          </span>
+        </div>
+
+        <div class="task-card__header-bottom">
           <span class="${view.categoryClass}">
             ${formatCategory(task.category)}
           </span>
@@ -29,13 +36,6 @@ function getTasksTemplate(task, {previousTask, nextTask}) {
             onmousedown="event.stopPropagation();"
             ontouchstart="event.stopPropagation();"
             ondragstart="event.stopPropagation();">
-        </div>
-
-        <div class="task-card__header-bottom">
-          <span class="task-card__due-date ${isOverdue(task.dueDate) ? 'task-card__due-date--overdue' : ''}"
-                data-due-date="${task.dueDate || ''}">
-                Due Date: ${task.dueDate ? formatDate(task.dueDate) : ''}
-          </span>
         </div>
 
         <div class="task-card__menu" onclick="event.stopPropagation()">

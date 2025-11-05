@@ -6,6 +6,12 @@ const columnMap = {
 };
 
 
+const getUserNameById = id => users.find(user => user.id === id)?.name || "Unknown User";
+const getUserPicById = id => users.find(user => user.id === id)?.profilImgColor || null;
+const getUserInitialsById = id =>
+  users.find(user => user.id === id)?.name?.split(" ").map(name => name[0].toUpperCase()).join("") || "";
+
+
 let currentLayout = null;
 window.addEventListener("resize", handleResizeScreenBoard);
 window.addEventListener("load", handleResizeScreenBoard);
@@ -75,7 +81,7 @@ async function renderAddTaskDlg(defaultTaskState = "to-do") {
     initSubtaskIconButtons();
     displayDlg();
 
-    // warten bis der Date-Input im Dialog wirklich da ist
+
 await waitFor('#dlg-box #due-date');
 
 // Validation über Delegation am Dialog-Root initialisieren
@@ -167,19 +173,6 @@ function loadSubtasksIntoForm(task) {
 }
 
 
-const getUserNameById = id => users.find(user => user.id === id)?.name || "Unknown User";
-const getUserPicById = id => users.find(user => user.id === id)?.profilImgColor || null;
-const getUserInitialsById = id =>
-  users.find(user => user.id === id)?.name?.split(" ").map(name => name[0].toUpperCase()).join("") || "";
-
-
-function toggleTasksAutoHeight(enable) {
-  document.querySelectorAll(".tasks").forEach(col => {
-    col.style.height = enable ? "auto" : "calc(100vh - 27rem)";
-  });
-}
-
-
 function handleResizeScreenBoard() {
   isSmallScreen = window.innerWidth < 1025;
   const boardHead = document.getElementById('board-head');
@@ -234,17 +227,14 @@ function syncValidityClass(el) {
 function initDueDateValidationDelegated(scope) {
   if (!scope) return;
 
-  // Startzustand einmalig setzen, falls Feld schon da
-  const d = scope.querySelector('#due-date');
-  if (d) syncValidityClass(d);
+  const date = scope.querySelector('#due-date');
+  if (date) syncValidityClass(date);
 
-  // Delegation: reagiert auch, wenn Dialog-Inhalt neu gerendert wird
-  const onEvent = (e) => {
-    if (!e.target.matches('#due-date')) return;
-    syncValidityClass(e.target);
+  const onEvent = (event) => {
+    if (!event.target.matches('#due-date')) return;
+    syncValidityClass(event.target);
   };
 
-  // doppelte Bindung vermeiden
   if (scope.dataset.ddBound === 'true') return;
   scope.dataset.ddBound = 'true';
 
