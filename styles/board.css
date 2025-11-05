@@ -194,7 +194,9 @@
 .dlg {
   display: flex;
   flex-direction: column;
-  position: absolute;
+  position: fixed;
+  top: 50%;
+  left: 50%;
   align-self: center;
   justify-self: center;
   font-size: 1.25rem;
@@ -206,6 +208,13 @@
   border-radius: 1.875rem;
   box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.16);
   z-index: 1000;
+  transform: translate(250%, -50%);
+  transition: transform 0.3s ease-in-out;
+  will-change: transform;
+}
+
+.dlg.show {
+  transform: translate(-125%, -50%);
 }
 
 @media (max-width: 1440px) {

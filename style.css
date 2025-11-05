@@ -76,8 +76,14 @@
 .overlay {
   position: fixed;
   inset: 0;
+  opacity: 0;
   background: rgba(0, 0, 0, 0.2);
+  transition: opacity 0.35s ease;
   z-index: 100;
+}
+
+.overlay:not(.d-none) {
+  opacity: 1;
 }
 
 body {
