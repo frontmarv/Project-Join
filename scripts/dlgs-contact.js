@@ -4,6 +4,12 @@ function renderAddContactDlg() {
 }
 
 
+function renderDeleteContactDlg(){
+    dialog.innerHTML = getDeleteContactDlg();
+    dialog.classList.add('delete-contact__dialog');
+    showDlgWtihAnimation()
+}
+
 function renderEditContactDlg() {
     dialog.innerHTML = getEditContactDlgTpl();
     document.getElementById("contact-dlg-name-input").value = contactName.innerHTML;
@@ -84,7 +90,7 @@ async function putNewContactToDB() {
         removeAnimationClass();
         renderContactList();
         setContactCardtoInvisible();
-        AddContactSuccessAnimation();
+        AddContactSuccessDlg();
     }
 }
 

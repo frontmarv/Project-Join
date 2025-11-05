@@ -43,7 +43,7 @@ async function getUsersfromFirebase() {
 }
 
 
-async function deleteUser(userkeyToDelete) {
+async function deleteContact(userkeyToDelete) {
     try {
         const response = await fetch(DB_URL + "users/" + userkeyToDelete + ".json", {
             method: "DELETE"
@@ -57,15 +57,16 @@ async function deleteUser(userkeyToDelete) {
 }
 
 
-async function deleteUserFlow() {
+async function deleteContactFlow() {
     getAndStoreUserId(contactName.innerText);
-    await deleteUser(STORED_USER_KEY);
+    await deleteContact(STORED_USER_KEY);
     renderContactList();
     setContactCardtoInvisible();
     if (window.innerWidth < 1025) {
         showContact = false;
         handleResizeScreenContacts();
     }
+    removeAnimationClass();
 }
 
 
@@ -264,7 +265,7 @@ function handleMenuClick(event) {
 }
 
 
-function AddContactSuccessAnimation() {
+function AddContactSuccessDlg() {
     let successDlg = getAddUserSuccessDlg();
     document.body.insertAdjacentHTML('beforeend', successDlg);
     let successDlgElement = document.querySelector('.create-contact-successful');

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../styles/header.css">
     <link rel="stylesheet" href="../styles/navigation.css">
     <link rel="stylesheet" href="../styles/contacts.css">
-    <link rel="stylesheet" href="../styles/dlg-add-contact.css">
+    <link rel="stylesheet" href="../styles/dlg-contact.css">
     <script src="../script.js" defer></script>
     <script src="../scripts/contacts.js" defer></script>
     <script src="../templates/tpl-contacts.js" defer></script>
@@ -100,7 +100,7 @@
                                                 alt="a grey pencil"
                                                 onclick="renderEditContactDlg(); hideContactActionMenu()">
                                             <img class="action__delete" src="../assets/img/delete-with-text.svg"
-                                                alt="a grey trashbin" onclick="deleteUserFlow()">
+                                                alt="a grey trashbin" onclick="renderDeleteContactDlg()">
                                         </div>
                                     </div>
                                 </div>
@@ -129,3 +129,5 @@
 </body>
 
 </html>
+
+

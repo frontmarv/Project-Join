@@ -18,6 +18,21 @@
     transition: all 300ms ease-in-out;
 }
 
+.delete-contact__dialog {
+    width: fit-content;
+    height: fit-content;
+    padding: 3rem;
+}
+
+.delete-contact__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
 .show {
     opacity: 1;
     transform: translate(-50%, -50%);
@@ -153,6 +168,10 @@
 }
 
 @media screen and (max-width: 1024px) {
+    h2 {
+        text-align: center;
+    }
+
     .add-contact__dialog {
         flex-direction: column;
         min-height: max-content;
@@ -230,5 +249,25 @@
 
     .width-div {
         min-width: fit-content;
+    }
+
+    .delete-contact__dialog {
+        flex-direction: initial;
+    }
+
+    .inputfields__button-holder {
+        flex-direction: column-reverse;
+        align-items: center;
+        height: fit-content;
+    }
+
+    .empty-btn {
+        display: inline-flex;
+        gap: 0.75rem;
+    }
+
+    .delete-contact__dialog {
+        width: fit-content;
+        height: fit-content;
     }
 }
