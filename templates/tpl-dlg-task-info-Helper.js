@@ -25,7 +25,8 @@ function renderAssignedUsers(contacts = []) {
     <div id="assigned-user-list">
       ${contacts
       .map(id => {
-        const name = getUserNameById(id);
+        const userName = getUserNameById(id);
+        const name = addTagToLoggedInUser(userName);
         const imgColour = getUserPicById(id);
         const userInitials = getUserInitialsById(id);
         return /*html*/ `
@@ -38,6 +39,7 @@ function renderAssignedUsers(contacts = []) {
     </div>
   `;
 }
+
 
 function getCheckboxImgSrc(isChecked) {
   return /*html*/ `../assets/img/${isChecked ? 'checkbox-checked.svg' : 'checkbox-unchecked.svg'}`;
@@ -60,24 +62,24 @@ function renderSubtasks(subtasks = {}, taskId) {
 
     return /*html*/ `
       <div class="dlg__main__task-subtask"
-           data-subtask-key="${key}"
-           data-task-id="${taskId}"
-           onmousedown="onSubtaskRowMouseDown(event, '${taskId}', '${key}', this)">
+          data-subtask-key="${key}"
+          data-task-id="${taskId}"
+          onmousedown="onSubtaskRowMouseDown(event, '${taskId}', '${key}', this)">
 
         <div class="subtask-wrapper">
           <img class="checkbox"
-               src="${getCheckboxImgSrc(checked)}"
-               data-checked="${checked}"
-               alt="checkbox">
+              src="${getCheckboxImgSrc(checked)}"
+              data-checked="${checked}"
+              alt="checkbox">
           <span class="subtask-text">${st.task}</span>
         </div>
 
         <div class="deletebox-wrapper">
           <div class="separator"></div>
           <img class="subtask-delete-btn"
-               src="../assets/img/delete.svg"
-               alt="delete subtask"
-               onmousedown="onDeleteSubtaskMouseDown(event, '${taskId}', '${key}', this)">
+              src="../assets/img/delete.svg"
+              alt="delete subtask"
+              onmousedown="onDeleteSubtaskMouseDown(event, '${taskId}', '${key}', this)">
         </div>
       </div>
     `;

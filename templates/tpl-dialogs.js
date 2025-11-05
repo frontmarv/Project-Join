@@ -168,7 +168,7 @@ function getAddTaskDlgTpl(defaultTaskState = "to-do") {
 function getAssignmentListUserTpl(user, checked = false) {
   const initials = getUserNameInitials(user.name || '');
   const color = user.profilImgColor;
-
+  const userName = addTagToLoggedInUser(user.name);
   return /*html*/ `
     <li data-user-id="${user.id}" class="${checked ? 'active' : ''}">
       <div class="user-selection-field">
@@ -176,12 +176,12 @@ function getAssignmentListUserTpl(user, checked = false) {
           <circle cx="21" cy="21" r="20" fill="${color}" stroke="white" stroke-width="2" />
           <text x="21" y="23" text-anchor="middle" dominant-baseline="middle" font-size="12" fill="white" font-family="sans-serif">${initials}</text>
         </svg>
-        <span class="username">${user.name}</span>
+        <span class="username">${userName}</span>
       </div>
       <img class="checkbox"
-           src="../assets/img/${checked ? 'checkbox-checked-white.svg' : 'checkbox-unchecked.svg'}"
-           alt="checkbox"
-           data-checked="${checked}">
+          src="../assets/img/${checked ? 'checkbox-checked-white.svg' : 'checkbox-unchecked.svg'}"
+          alt="checkbox"
+          data-checked="${checked}">
     </li>
   `;
 }

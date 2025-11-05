@@ -94,10 +94,10 @@ function renderContactsIntoSections(initialLettersArray, userArray) {
     initialLettersArray.forEach(letter => {
         let section = document.querySelector(`#initial-letter__wrapper-${letter}`);
         let filteredUsers = userArray.filter(user => user.name[0] === letter);
-        filteredUsers.forEach(user => {
-            let userName = checkLoggedInUser(user);
-            let email = user.email;
-            let profilImgColor = user.profilImgColor;
+        filteredUsers.forEach(userId => {
+            let userName = checkLoggedInUser(userId);
+            let email = userId.email;
+            let profilImgColor = userId.profilImgColor;
             let userInitals = getUserNameInitials(userName);
             let userImg = getMediumUserProfilImg(profilImgColor, userInitals);
             let userHTML = getUserContactListItemTpl(userName, email, userImg);
@@ -107,12 +107,12 @@ function renderContactsIntoSections(initialLettersArray, userArray) {
 }
 
 
-function checkLoggedInUser(user) {
-    if (user.name === LOGGED_IN_USER) {
-        let modifiedUserName = user.name + ' (You)';
+function checkLoggedInUser(userId) {
+    if (userId.name === LOGGED_IN_USER) {
+        let modifiedUserName = userId.name + ' (You)';
         return modifiedUserName
     } else {
-        let userName = user.name
+        let userName = userId.name
         return userName
     }
 }

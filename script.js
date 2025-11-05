@@ -112,3 +112,12 @@ function extractActiveUserInfo(users) {
     }
 }
 
+
+function addTagToLoggedInUser(userName) {
+    if (userName === LOGGED_IN_USER) {
+        let modifiedUserName = userName + ' (You)';
+        return modifiedUserName
+    } else {
+        return userName
+    }
+}
