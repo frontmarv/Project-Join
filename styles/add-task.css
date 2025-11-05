@@ -4,6 +4,10 @@
   margin-bottom: 1.5rem;
 }
 
+.required {
+  font-size: 1rem;
+}
+
 .required--after::after {
   content: "*";
   color: var(--color-error);

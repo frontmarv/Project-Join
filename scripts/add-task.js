@@ -14,15 +14,15 @@ async function initAddTask() {
   updateCategoryValidity();
 
   const d = document.getElementById('due-date');
-d.addEventListener('change', () => {
-  if (d.value) {
-    d.classList.add('valid-input');
-    d.classList.remove('invalid-input');
-  } else {
-    d.classList.add('invalid-input');
-    d.classList.remove('valid-input');
-  }
-});
+  d.addEventListener('change', () => {
+    if (d.value) {
+      d.classList.add('valid-input');
+      d.classList.remove('invalid-input');
+    } else {
+      d.classList.add('invalid-input');
+      d.classList.remove('valid-input');
+    }
+  });
 }
 
 
@@ -42,7 +42,7 @@ document.addEventListener("keydown", (e) => {
   // Wenn Enter in einem Input gedrückt wird → NICHT submitten
   if (currentIndex !== -1) {
     e.preventDefault();
-    
+
     const nextFieldId = focusOrder[currentIndex + 1];
     if (nextFieldId) {
       document.getElementById(nextFieldId).focus();
@@ -54,7 +54,7 @@ document.addEventListener("keydown", (e) => {
 // Due date initial invalid style
 window.addEventListener('load', () => {
   const d = document.getElementById('due-date');
-  if (!d) return; 
+  if (!d) return;
   if (!d.value) {
     d.classList.add('input-error');
   }
@@ -144,17 +144,17 @@ document.addEventListener('click', (e) => {
   // 2) Option gewählt
   const opt = e.target.closest('.category-selection .category-options li');
   if (opt) {
-    const currentRoot  = opt.closest('.category-selection');
+    const currentRoot = opt.closest('.category-selection');
     const visibleInput = currentRoot.querySelector('.selector');
-    const proxyInput   = document.getElementById('category-proxy');
-    const hiddenInput  = document.getElementById('category-hidden');
+    const proxyInput = document.getElementById('category-proxy');
+    const hiddenInput = document.getElementById('category-hidden');
 
-    const text  = opt.textContent.trim();
+    const text = opt.textContent.trim();
     const value = opt.dataset.value || text;
 
     if (visibleInput) visibleInput.value = text; // Anzeige
-    if (proxyInput)   proxyInput.value   = value; // Proxy erfüllt required
-    if (hiddenInput)  hiddenInput.value  = value; // Formularwert
+    if (proxyInput) proxyInput.value = value; // Proxy erfüllt required
+    if (hiddenInput) hiddenInput.value = value; // Formularwert
 
     // optional: aria-selected aktualisieren
     currentRoot.querySelectorAll('.category-options [aria-selected="true"]')
@@ -207,7 +207,7 @@ function setupCategoryInvalidHandler() {
 
 
 function updateCategoryValidity() {
-  const root   = document.querySelector('.category-selection');
+  const root = document.querySelector('.category-selection');
   const hidden = document.getElementById('category-hidden');
   if (!root || !hidden) return;
 
@@ -223,7 +223,7 @@ function updateCategoryValidity() {
 window.handleCreateTask = async function handleCreateTask(event) {
   event.preventDefault();
 
-   if (!validateTaskForm()) {
+  if (!validateTaskForm()) {
     // Fokus auf erstes fehlerhaftes Feld
     const firstErrorInput = document.querySelector('.input-error');
     firstErrorInput?.focus();
@@ -236,12 +236,12 @@ window.handleCreateTask = async function handleCreateTask(event) {
   form.reset();
 
   const catVisible = document.querySelector('.category-selection .selector');
-  const catProxy   = document.getElementById('category-proxy');
-  const catHidden  = document.getElementById('category-hidden');
+  const catProxy = document.getElementById('category-proxy');
+  const catHidden = document.getElementById('category-hidden');
 
   if (catVisible) catVisible.value = '';
-  if (catProxy)   catProxy.value   = '';
-  if (catHidden)  catHidden.value  = '';
+  if (catProxy) catProxy.value = '';
+  if (catHidden) catHidden.value = '';
 
   // ✅ HIER einfügen:
   updateCategoryValidity();
@@ -251,7 +251,7 @@ window.handleCreateTask = async function handleCreateTask(event) {
 
 
 // Live-Reset beim Tippen/Ändern
-['title','due-date'].forEach(id => {
+['title', 'due-date'].forEach(id => {
   const el = document.getElementById(id);
   const err = document.getElementById(id === 'title' ? 'title-error' : 'date-error');
   el?.addEventListener('input', () => {
@@ -265,15 +265,15 @@ async function createTask() {
   const taskStateRef = document.getElementById("task-state").value;
 
   const newTask = {
-    title:        document.getElementById("title").value,
-    description:  document.getElementById("description").value,
-    dueDate:      document.getElementById("due-date").value,
+    title: document.getElementById("title").value,
+    description: document.getElementById("description").value,
+    dueDate: document.getElementById("due-date").value,
     assignedContacts: getSelectedAssignmentIds(),
-    category:     getSelectedCategoryText(),   // sichtbarer Text
-    categoryValue:getSelectedCategoryValue(),  // ID/Value (optional)
-    subtasks:     collectSubtasksFromEditDialog(),
-    priority:     chosenPriority,
-    taskState:    taskStateRef
+    category: getSelectedCategoryText(),   // sichtbarer Text
+    categoryValue: getSelectedCategoryValue(),  // ID/Value (optional)
+    subtasks: collectSubtasksFromEditDialog(),
+    priority: chosenPriority,
+    taskState: taskStateRef
   };
 
   const key = await getNextTaskKey();
@@ -305,7 +305,7 @@ function goToBoard() {
 /* ================= Utilities ================= */
 function getSelectedUserIds(selectId = "assigned-to") {
   return Array.from(document.getElementById(selectId).selectedOptions)
-              .map(option => option.value);
+    .map(option => option.value);
 }
 
 
@@ -333,11 +333,11 @@ function clearTask() {
   const form = document.getElementById("task-form");
   form.reset();
   const catVisible = document.querySelector(".category-selection .selector");
-  const catProxy   = document.getElementById("category-proxy");
-  const catHidden  = document.getElementById("category-hidden");
+  const catProxy = document.getElementById("category-proxy");
+  const catHidden = document.getElementById("category-hidden");
   if (catVisible) catVisible.value = "";
-  if (catProxy)   catProxy.value   = "";
-  if (catHidden)  catHidden.value  = "";
+  if (catProxy) catProxy.value = "";
+  if (catHidden) catHidden.value = "";
   resetPriorityButtons();
   updateCategoryValidity();
 }
@@ -347,8 +347,8 @@ function clearTask() {
 function relocateRequiredInfo() {
   isSmallScreen = window.innerWidth < 1025;
   let currentPath = window.location.pathname;
-  let relativePath = "/pages/add-task.html";
-  if (currentPath.endsWith(relativePath)) {
+  let addTaskPath = "/pages/add-task.html";
+  if (currentPath.endsWith(addTaskPath)) {
     toggleFirstInfoBox(isSmallScreen);
     toggleSecondInfoBox(isSmallScreen);
   }
@@ -398,15 +398,15 @@ function clearError(inputEl, errorEl) {
 function validateTaskForm() {
   let valid = true;
 
-  const title      = document.getElementById('title');
-  const titleErr   = document.getElementById('title-error');
+  const title = document.getElementById('title');
+  const titleErr = document.getElementById('title-error');
 
-  const date       = document.getElementById('due-date');
-  const dateErr    = document.getElementById('date-error');
+  const date = document.getElementById('due-date');
+  const dateErr = document.getElementById('date-error');
 
   const catVisible = document.querySelector('.category-selection .selector');
-  const catHidden  = document.getElementById('category-hidden');
-  const catErr     = document.getElementById('category-error');
+  const catHidden = document.getElementById('category-hidden');
+  const catErr = document.getElementById('category-error');
 
   // Title
   if (!title.value.trim()) {
