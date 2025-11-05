@@ -52,63 +52,68 @@ async function saveEditedTask(taskId) {
       if (!list) return {};
 
       const items = Array.from(list.querySelectorAll('li')).filter(li => !li.classList.contains('edit-mode'));
-
       const oldCheckedByText = {};
-      if (oldTaskObj && oldTaskObj.subtasks && typeof oldTaskObj.subtasks === 'object') {
+
+      if (oldTaskObj?.subtasks) {
         Object.values(oldTaskObj.subtasks).forEach(st => {
-          if (st && typeof st.task === 'string') {
-            const key = st.task.trim();
-            if (key) oldCheckedByText[key] = !!st.taskChecked;
-          }
+          if (st?.task) oldCheckedByText[st.task.trim()] = !!st.taskChecked;
         });
       }
 
       const result = {};
       let idx = 0;
-
       items.forEach(li => {
         let text = '';
         const tn = Array.from(li.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
-        if (tn && tn.nodeValue) {
-          text = tn.nodeValue.replace('•', '').trim();
-        } else {
-          text = (li.textContent || '').replace('•', '').trim();
-        }
+        text = tn?.nodeValue?.replace('•', '').trim() || li.textContent.replace('•', '').trim();
         if (!text) return;
-
-        const wasChecked = oldCheckedByText[text] === true;
-        result[`subtask${idx}`] = { task: text, taskChecked: wasChecked };
+        result[`subtask${idx}`] = { task: text, taskChecked: oldCheckedByText[text] || false };
         idx++;
       });
-
       return result;
     }
 
     const subtasks = collectSubtasksPreserveChecked(oldTask);
-    const merged = {...oldTask, title, description, dueDate, ...(priority ? { priority } : {}), assignedContacts, subtasks};
+    const merged = { ...oldTask, title, description, dueDate, ...(priority ? { priority } : {}), assignedContacts, subtasks };
     const { id, ...payload } = merged;
-    const url = `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`;
-    const res = await fetch(url, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+
+    const res = await fetch(
+      `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }
+    );
     if (!res.ok) throw new Error(`Save failed: ${res.status} ${res.statusText}`);
 
     await getData();
     loadTasks();
     updateAllPlaceholders();
 
-    const freshTask = tasks.find(t => t.id === taskId);
-    if (freshTask) {
-      renderTaskInfoDlg(freshTask.id);
-    } else {
-      hideDlg();
-    }
+    renderTaskInfoDlg(taskId);
+
+    showPopupMsgChangesSaved();
 
   } catch (err) {
     console.error('Fehler beim Speichern:', err);
   }
+}
+
+
+function showPopupMsgChangesSaved() {
+  const popup = document.createElement('div');
+  popup.innerHTML = getPopupMsgChangesSavedTpl();
+  document.body.appendChild(popup.firstElementChild);
+
+  const popupEl = document.querySelector('.popup-msg-container');
+
+  requestAnimationFrame(() => popupEl.classList.add('show'));
+
+  setTimeout(() => {
+    popupEl.classList.remove('show');
+    setTimeout(() => popupEl.remove(), 300);
+  }, 1500);
 }
 
 

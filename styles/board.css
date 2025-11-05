@@ -215,6 +215,32 @@
   transform: translate(-50%, -50%);
 }
 
+.popup-msg-container {
+  width: 20rem;
+  height: 4.5rem;
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  border-radius: 1.25rem;
+  background-color: var(--color-maincolor);
+  color: var(--color-white);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 1rem;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  z-index: 2000;
+}
+
+.popup-msg-container.show {
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
 @media (max-width: 1440px) {
   .board__table {
     gap: 0.5rem;

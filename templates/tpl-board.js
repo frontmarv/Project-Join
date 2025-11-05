@@ -43,3 +43,10 @@ function getAddTaskBtnMobile() {
       </div>`
 }
 
+function getPopupMsgChangesSavedTpl() {
+  return /*html*/ `
+    <div class="popup-msg-container">
+      <span>Changes successfully saved</span>
+    </div>
+  `
+}
