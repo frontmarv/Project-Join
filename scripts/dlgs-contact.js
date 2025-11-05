@@ -1,13 +1,14 @@
 function renderAddContactDlg() {
     dialog.innerHTML = getAddContactDlgTpl();
-    showDlgWtihAnimation()
+    showDlgWtihAnimation();
 }
 
 
 function renderDeleteContactDlg(){
+    hideContactActionMenu();
     dialog.innerHTML = getDeleteContactDlg();
     dialog.classList.add('delete-contact__dialog');
-    showDlgWtihAnimation()
+    showDlgWtihAnimation();
 }
 
 function renderEditContactDlg() {
