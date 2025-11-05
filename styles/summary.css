@@ -275,6 +275,10 @@ h3 {
         flex: 1;
     }
 
+    .metrics__box:hover {
+        transform: none;
+    }
+
     #bottom-row {
         justify-content: initial;
     }
