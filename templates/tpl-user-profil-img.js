@@ -1,3 +1,10 @@
+/**
+ * Generates a large SVG profile image with colored background and user initials.
+ * Used for detailed contact view and profile displays.
+ * @param {string} profilImgColor - Hex color code for the circle background
+ * @param {string} userInitals - User's initials to display (typically 1-2 characters)
+ * @returns {string} HTML string containing SVG markup for large profile image
+ */
 function getBigUserProfilImg(profilImgColor, userInitals) {
     return /*html*/ `
         <svg class="svg__wrapper big">
@@ -7,7 +14,13 @@ function getBigUserProfilImg(profilImgColor, userInitals) {
     `
 }
 
-
+/**
+ * Generates a medium SVG profile image with colored background and user initials.
+ * Used for contact list items and compact displays.
+ * @param {string} profilImgColor - Hex color code for the circle background
+ * @param {string} userInitals - User's initials to display (typically 1-2 characters)
+ * @returns {string} HTML string containing SVG markup for medium profile image
+ */
 function getMediumUserProfilImg(profilImgColor, userInitals) {
     return /*html*/ `
         <svg class="svg__wrapper medium">
@@ -17,7 +30,13 @@ function getMediumUserProfilImg(profilImgColor, userInitals) {
     `
 }
 
-
+/**
+ * Generates a small SVG profile image with colored background and user initials.
+ * Used for inline mentions, avatars in lists, and compact UI elements.
+ * @param {string} profilImgColor - Hex color code for the circle background
+ * @param {string} userInitals - User's initials to display (typically 1-2 characters)
+ * @returns {string} HTML string containing SVG markup for small profile image
+ */
 function getSmallUserProfilImg(profilImgColor, userInitals) {
     return /*html*/ `
         <svg class="svg__wrapper">
@@ -27,7 +46,12 @@ function getSmallUserProfilImg(profilImgColor, userInitals) {
     `
 }
 
-
+/**
+ * Generates SVG profile image for the currently logged-in user.
+ * Features a transparent background with main color stroke outline.
+ * @param {string} userInitals - User's initials to display (typically 1-2 characters)
+ * @returns {string} HTML string containing SVG markup for logged-in user profile image
+ */
 function getLoggedInUserImg(userInitals) {
     return /*html*/ `
     <svg class="svg__wrapper loggedIn">

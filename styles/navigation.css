@@ -1,6 +1,6 @@
 :root {
-  --mobile-nav-height: 100px; /* passt zu deiner .nav-menu__btn-container Höhe */
-  --footer-gap: 16px;         /* Luft zwischen Footer und Navbar */
+  --mobile-nav-height: 100px; 
+  --footer-gap: 16px;         
 }
 
 .nav-menu {
@@ -90,7 +90,7 @@ a:focus-visible {
     position: fixed;
     bottom: 0;
     left: 0;
-    right: 0;                  /* damit volle Breite */
+    right: 0;                  
     height: var(--mobile-nav-height);
     z-index: 1000;
   }
@@ -99,7 +99,7 @@ a:focus-visible {
     flex: none;
     flex-direction: row;
     width: 100%;
-    height: 100%;              /* füllt #nav-menu */
+    height: 100%;              
     padding: 0;
     min-height: 0;
     justify-content: center;
@@ -111,7 +111,7 @@ a:focus-visible {
     gap: 0;
     justify-content: space-evenly;
     width: 100%;
-    height: 100%;              /* statt fester 100px optional */
+    height: 100%;              
   }
 
 
