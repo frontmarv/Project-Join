@@ -100,17 +100,6 @@
   hyphens: auto;
 }
 
-.task__description {
-  display: -webkit-box;
-  display: box;
-  -webkit-box-orient: vertical;
-  overflow: auto;
-  box-orient: vertical;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-}
-
 .task__subtasks-and-progressbar-box {
   display: flex;
   justify-content: space-between;
@@ -234,6 +223,7 @@
 
 @media screen and (max-width: 1024px) {
   .task {
+    height: 300px;
     min-width: 230px;
     max-width: 300px;
   }
@@ -307,5 +297,16 @@
 
   .task__assignments svg {
     margin-left: -0.5rem;
+  }
+
+  .task__description {
+    display: -webkit-box;
+    display: box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    box-orient: vertical;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 }

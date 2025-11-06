@@ -5,6 +5,7 @@ function renderSuccessMessage() {
         </dialog>`
 }
 
+
 function renderHeaderSignup() {
     return /*html*/ `
         <div id="header__mobile-signup" class="header__signup mobileview">
@@ -12,4 +13,6 @@ function renderHeaderSignup() {
             <button class="btn filled-btn" onclick="location.href='/pages/sign-up.html'">Signup</button>
         </div>`
 }
+
+
 

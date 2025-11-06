@@ -13,16 +13,6 @@ document.addEventListener('click', function (event) {
 });
 
 
-function getLoggedInUserImg(userInitals) {
-    return /*html*/ `
-    <svg class="svg__wrapper loggedIn">
-        <circle id="colored-circle--loggedIn" fill="transparent" cx="25" cy="25" r="22" stroke="var(--color-maincolor)" stroke-width="3"/>
-        <text id="user-initials" class="user-initials loggedIn" x="25" y="26">${userInitals}</text>
-    </svg>
-    `
-}
-
-
 async function renderUserAvatar() {
     let users = await fetchAllUsers();
     LOGGED_IN_USER = extractActiveUserInfo(users);

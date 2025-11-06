@@ -33,12 +33,12 @@ checkbox.addEventListener("change", () => {
 
 function updatePasswordIcon(event) {
     let passwordIcon = event.target.parentElement.querySelector('img');
-    let type = event.target.type;
+    let inputType = event.target.type;
     if (event.target.value === "") {
         passwordIcon.src = "../assets/img/lock.svg";
     }
     else {
-        if (type === 'text') {
+        if (inputType === 'text') {
             passwordIcon.src = '../assets/img/pw-visible.svg';
         } else { passwordIcon.src = '../assets/img/pw-not-visible.svg'; }
     }
@@ -54,8 +54,8 @@ function handlePasswordInputChange(element) {
 
 function isValidFullName(element) {
     let inputName = element.value;
-    let test = nameInputRegex.test(inputName);
-    return test
+    let testResult = nameInputRegex.test(inputName);
+    return testResult
 }
 
 

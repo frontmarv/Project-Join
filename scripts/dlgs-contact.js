@@ -85,8 +85,7 @@ function markStoredContactAsSelected(userName) {
     let nodelist = document.querySelectorAll('.contact-list__item');
     nodelist.forEach(item => {
         if (item.querySelector('.contact-name').innerHTML === userName) {
-            item.classList.add('selected');
-            item.querySelector('.contact-name').style.color = 'var(--color-white)';
+            styleContactSelected(item);
         }
     })
 }

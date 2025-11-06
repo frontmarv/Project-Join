@@ -133,17 +133,25 @@ function setEventlistenerEveryContact() {
     let contactListItems = document.querySelectorAll('.contact-list__item');
     contactListItems.forEach(item => {
         item.addEventListener('click', () => {
-            contactListItems.forEach(i => {
-                i.classList.remove('selected');
-                i.querySelector('.contact-name').style.color = 'var(--color-black)';
-                i.querySelector('circle').classList.remove('colored-circle__selected');
-            });
-            item.classList.add('selected');
-            let contactName = item.querySelector('.contact-name');
-            contactName.style.color = 'var(--color-white)';
-            item.querySelector('circle').classList.add('colored-circle__selected');
+            contactListItems.forEach(i => styleContactNotSelected(i));
+            styleContactSelected(item);
         })
     })
+}
+
+
+function styleContactNotSelected(i) {
+    i.classList.remove('selected');
+    i.querySelector('.contact-name').style.color = 'var(--color-black)';
+    i.querySelector('circle').classList.remove('colored-circle__selected');
+}
+
+
+function styleContactSelected(item) {
+    item.classList.add('selected');
+    let contactName = item.querySelector('.contact-name');
+    contactName.style.color = 'var(--color-white)';
+    item.querySelector('circle').classList.add('colored-circle__selected');
 }
 
 
@@ -236,9 +244,7 @@ function showContactList() {
     handleResizeScreenContacts();
     let contactListItems = document.querySelectorAll('.contact-list__item');
     contactListItems.forEach(item => {
-        item.classList.remove('selected');
-        let contactName = item.querySelector('.contact-name');
-        contactName.style.color = 'var(--color-black)';
+        styleContactNotSelected(item);
     })
 }
 

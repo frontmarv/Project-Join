@@ -7,6 +7,7 @@ function getBigUserProfilImg(profilImgColor, userInitals) {
     `
 }
 
+
 function getMediumUserProfilImg(profilImgColor, userInitals) {
     return /*html*/ `
         <svg class="svg__wrapper medium">
@@ -15,6 +16,7 @@ function getMediumUserProfilImg(profilImgColor, userInitals) {
         </svg>
     `
 }
+
 
 function getSmallUserProfilImg(profilImgColor, userInitals) {
     return /*html*/ `
@@ -25,4 +27,13 @@ function getSmallUserProfilImg(profilImgColor, userInitals) {
     `
 }
 
+
+function getLoggedInUserImg(userInitals) {
+    return /*html*/ `
+    <svg class="svg__wrapper loggedIn">
+        <circle id="colored-circle--loggedIn" fill="transparent" cx="25" cy="25" r="22" stroke="var(--color-maincolor)" stroke-width="3"/>
+        <text id="user-initials" class="user-initials loggedIn" x="25" y="26">${userInitals}</text>
+    </svg>
+    `
+}
 

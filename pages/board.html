@@ -31,7 +31,8 @@
     <script src="../scripts/drag-and-drop.js" defer></script>
     <script src="../scripts/manage-user-profil.js" defer></script>
     <script src="../scripts/navigation.js" defer></script>
-
+    
+    <script src="../templates/tpl-user-profil-img.js" defer></script>
     <script src="../templates/tpl-dlg-task-info-Helper.js" defer></script>
     <script src="../templates/tpl-board.js" defer></script>
     <script src="../templates/tpl-dialogs.js" defer></script>
@@ -143,14 +144,14 @@
             </div>
         </main>
         <!-- ALERT OVERLAY -->
-<div id="alert-overlay" class="alert-overlay d-none">
-  <div class="alert-box">
-    <h2 id="alert-message">Task added successfully!</h2>
-    <div class="alert-buttons">
-      <button id="alert-ok" onclick="closeAlertOverlay()">Show Tasks</button>
-    </div>
-  </div>
-</div>
+        <div id="alert-overlay" class="alert-overlay d-none">
+            <div class="alert-box">
+                <h2 id="alert-message">Task added successfully!</h2>
+                <div class="alert-buttons">
+                    <button id="alert-ok" onclick="closeAlertOverlay()">Show Tasks</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <overlay id="overlay" class="overlay d-none"></overlay>
