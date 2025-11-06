@@ -4,6 +4,13 @@ const greetingHeader = document.getElementById('greeting-header');
 /** @type {HTMLElement | null} */
 const greetingName = document.getElementById('greeting-name');
 
+let hasShownGreeting = sessionStorage.getItem('greetingShown');
+
+if (!hasShownGreeting && window.innerWidth < 1025) {
+    showGreetingMobile();
+    sessionStorage.setItem('greetingShown', 'true');
+}
+
 /**
  * Counts various task states based on fixed rules.
  * Defined globally since the rules are static and reused multiple times.
@@ -129,4 +136,17 @@ function showUpcomingDeadline(allDeadlines) {
 function formatDate(dateStr) {
     const date = new Date(dateStr);
     return date.toLocaleDateString("de-DE");
+}
+
+function showGreetingMobile() {
+    document.querySelector('.summary-content__left').classList.add('d-none');
+    document.querySelector('.summary-content__right').classList.add('greetingMobile');
+    document.querySelector('.summary-content__right').style.display = "block";
+    setTimeout(() => {
+        document.querySelector('.summary-content__right').classList.remove('greetingMobile');
+    }, 1000);
+    setTimeout(() => {
+        document.querySelector('.summary-content__right').style.display = "none";
+        document.querySelector('.summary-content__left').classList.remove('d-none');
+    }, 1600);
 }
