@@ -1,3 +1,9 @@
+/** @type {HTMLElement | null} */
+const greetingHeader = document.getElementById('greeting-header');
+
+/** @type {HTMLElement | null} */
+const greetingName = document.getElementById('greeting-name');
+
 /**
  * Counts various task states based on fixed rules.
  * Defined globally since the rules are static and reused multiple times.
