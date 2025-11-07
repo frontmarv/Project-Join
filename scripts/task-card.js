@@ -90,8 +90,8 @@ function normalizeAssignedContacts(data) {
 
 function getCategoryClass(category) {
   const map = {
-    "userStory": "task__category",
-    "technicalTask": "task__category2"
+    "User Story": "task__category",
+    "Technical Task": "task__category2"
   };
   return map[category] || "task__category";
 }
