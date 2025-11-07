@@ -2,7 +2,7 @@
 function getTaskInfoDlgTpl(task) {
   return /*html*/ `
     <header class="dlg__header">
-      <span class="dlg__header_task-category">${task.category || 'No category'}</span>
+      <span class="dlg__header_task-category ${getCategoryClass(task.category)}">${formatCategory(task.category) || 'No category'}</span>
       <img
         class="dlg__close-btn"
         src="../assets/img/close-delete-cross.svg"

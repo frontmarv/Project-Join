@@ -22,7 +22,7 @@
   align-items: center;
   width: fit-content;
   color: var(--color-white);
-  background-color: var(--color-11);
+  /*background-color: var(--color-11);*/
   border-radius: 0.5rem;
   padding: 0.25rem 1.5rem;
 }
