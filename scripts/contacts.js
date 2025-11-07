@@ -105,8 +105,10 @@ async function deleteContact(userkeyToDelete) {
  * @returns {Promise<void>}
  */
 async function deleteContactFlow() {
-    getAndStoreUserId(contactName.innerText);
+    let userName = contactName.innerText;
+    getAndStoreUserId(userName);
     await deleteContact(STORED_USER_KEY);
+    if (userName == LOGGED_IN_USER) { logOutUser(); }
     renderContactList();
     setContactCardtoInvisible();
     if (window.innerWidth < 1025) {

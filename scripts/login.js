@@ -1,6 +1,3 @@
-/** Database URL for the Join application */
-const DB_URL = 'https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/';
-
 /** @type {HTMLElement} DOM elements for login form */
 const email = document.getElementById('email');
 const emailWrapper = document.getElementById('email__wrapper');
