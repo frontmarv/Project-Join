@@ -113,6 +113,7 @@ async function renderAddTaskDlg(defaultTaskState = "to-do") {
   const dlg = setupAddTaskDialog(defaultTaskState);
   await loadAddTaskContent(dlg);
   initializeAddTaskFeatures(dlg);
+  dueDateValidation();
   showAddTaskDialog(dlg);
 }
   
