@@ -370,8 +370,8 @@ function toggleSecondInfoBox(isSmallScreen) {
   let rightColumn = document.querySelector(".add-task__right-column");
   if (!rightColumn) return;
   if (isSmallScreen && !document.getElementById("required-mobile")) {
-    let insertHTML = getFieldRequiredInfo?.();
-    if (insertHTML) rightColumn.insertAdjacentHTML("beforeend", insertHTML);
+    let insertHTML = getFieldRequiredInfo();
+    rightColumn.innerHTML += insertHTML;
   } else if (!isSmallScreen && document.getElementById("required-mobile")) {
     document.getElementById("required-mobile").remove();
   }

@@ -4,6 +4,7 @@ function getPlaceholderTpl() {
     `
 }
 
+
 function getSearchPlaceholderTpl() {
   return /*html*/ `
       <div class="no-tasks-placeholder">No results</div>
@@ -28,6 +29,7 @@ function getBoardHeadDesktop() {
         `
 }
 
+
 function getAddTaskBtnMobile() {
   return /*html*/ `
   <div class="board__head--mobile">
@@ -42,6 +44,7 @@ function getAddTaskBtnMobile() {
               alt="icon of an magnifying glass for better descripe of the search field">
       </div>`
 }
+
 
 function getPopupMsgChangesSavedTpl() {
   return /*html*/ `
