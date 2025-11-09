@@ -244,10 +244,6 @@
 
 @media screen and (max-width: 1024px) {
 
-  .scroll-wrapper {
-    overflow-y: initial;
-  }
-
   main {
     width: 100vw;
   }

@@ -54,11 +54,37 @@ function enableSearchBoxClickFocus() {
 }
 
 
-async function renderTaskInfoDlg(taskId) {
-  const task = await loadTaskForInfo(taskId);
+function renderTaskInfoDlg(taskId) {
+  const selectors = ['.dlg__main'];
+  const savedScroll = {};
+  selectors.forEach(select => {
+    const el = document.querySelector(select);
+    if (el) savedScroll[select] = el.scrollTop;
+  });
+
+  const task = tasks.find(t => t.id === taskId);
   if (!task) return;
+
   setupTaskInfoDialog(task);
   displayDlg();
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      Object.entries(savedScroll).forEach(([sel, top]) => {
+        const el = document.querySelector(sel);
+        if (el) el.scrollTop = top;
+      });
+
+      if (window.__lastToggledSubtaskId) {
+        const target = document.querySelector(
+          `[data-subtask-id="${window.__lastToggledSubtaskId}"]`
+        );
+        if (target) {
+          target.scrollIntoView({ block: 'nearest' });
+        }
+      }
+    });
+  });
 }
 
 

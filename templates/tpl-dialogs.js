@@ -27,16 +27,14 @@ function getTaskInfoDlgTpl(task) {
           src="${getPriorityImg(task.priority)}"
           alt="priority icon">
       </div>
-        <div class="scroll-wrapper">
-          <div class="dlg__main__task-assignments">
-            <span class="dlg__main__assignments-title">Assigned to:</span>
-            <div class="task__assignments">${renderAssignedUsers(task.assignedContacts)}</div>
-          </div>
+        <div class="dlg__main__task-assignments">
+          <span class="dlg__main__assignments-title">Assigned to:</span>
+          <div class="task__assignments">${renderAssignedUsers(task.assignedContacts)}</div>
+        </div>
 
-          <div class="dlg__main__task-subtask-box">
-            <span class="dlg__main__task-subtask-title">Subtasks:</span>
-            <div class="subtasks-content">${renderSubtasks(task.subtasks, task.id)}</div>
-          </div>
+        <div class="dlg__main__task-subtask-box">
+          <span class="dlg__main__task-subtask-title">Subtasks:</span>
+          <div class="subtasks-content">${renderSubtasks(task.subtasks, task.id)}</div>
         </div>
     </main>
 

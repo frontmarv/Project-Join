@@ -126,11 +126,6 @@ main {
   height: calc(100vh - 8rem);
 }
 
-.scroll-wrapper {
-  overflow-y: auto;
-  scrollbar-width: thin;
-}
-
 .separator {
   display: flex;
   height: 100%;
