@@ -23,18 +23,18 @@ function isOverdue(dueDate) {
 
 function markOverdueDates() {
   const today = new Date().setHours(0, 0, 0, 0);
-  document.querySelectorAll('.task').forEach(taskEl => {
-    const state = taskEl.closest('.tasks')?.id || '';
-    const dateEl = taskEl.querySelector('.task-card__due-date');
-    const dateStr = dateEl?.dataset.dueDate;
-    if (!dateEl || !dateStr) return;
-    const due = new Date(dateStr).setHours(0, 0, 0, 0);
+  document.querySelectorAll('.task').forEach(taskCard => {
+    const state = taskCard.closest('.tasks')?.id || '';
+    const taskCardDate = taskCard.querySelector('.task-card__due-date');
+    const dateStr = taskCardDate?.dataset.dueDate;
+    if (!taskCardDate || !dateStr) return;
+    const dueDate = new Date(dateStr).setHours(0, 0, 0, 0);
     if (state.includes('done')) {
-      dateEl.classList.remove('task-card__due-date--overdue');
+      taskCardDate.classList.remove('task-card__due-date--overdue');
       return;
     }
-    if (due <= today) dateEl.classList.add('task-card__due-date--overdue');
-    else dateEl.classList.remove('task-card__due-date--overdue');
+    if (dueDate <= today) taskCardDate.classList.add('task-card__due-date--overdue');
+    else taskCardDate.classList.remove('task-card__due-date--overdue');
   });
 }
 
@@ -47,12 +47,12 @@ function getSubtaskStats(task) {
 }
 
 function getAssignedUsersHtml(assigned) {
-  const ids = normalizeAssignedContacts(assigned);
+  const assUser = normalizeAssignedContacts(assigned);
   const MAX = 5;
-  const visible = ids.slice(0, MAX);
-  const remain = Math.max(0, ids.length - MAX);
+  const visible = assUser.slice(0, MAX);
+  const remain = Math.max(0, assUser.length - MAX);
   const avatars = visible.map(id => {
-    const user = users.find(u => u.id === id);
+    const user = users.find(user => user.id === id);
     return user ? getAssignedUserInCardTpl(user) : "";
   });
   if (remain > 0) avatars.push(getMoreUsersBadgeTpl(remain));
