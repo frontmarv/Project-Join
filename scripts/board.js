@@ -32,6 +32,7 @@ window.addEventListener("load", handleResizeScreenBoard);
 async function initBoard() {
   await getData();
   loadTasks();
+  initDragAndDrop();
   markOverdueDates();
   updateAllPlaceholders();
   initSearch();
@@ -112,6 +113,7 @@ async function renderAddTaskDlg(defaultTaskState = "to-do") {
   const dlg = setupAddTaskDialog(defaultTaskState);
   await loadAddTaskContent(dlg);
   initializeAddTaskFeatures(dlg);
+  dueDateValidation();
   showAddTaskDialog(dlg);
 }
   

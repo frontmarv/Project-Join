@@ -1,23 +1,21 @@
+
 document.addEventListener("click", (event) => {
-  document.querySelectorAll('.task-card__menu').forEach(element => {
-    if (!element.contains(event.target)) {
-      element.style.display = "none";
-    }
+  if (event.target.closest('.task-card__menu')) return;
+  if (event.target.closest('.task-card__menu-icon')) return;
+  document.querySelectorAll('.task-card__menu').forEach(menu => {
+    menu.style.display = "none";
   });
 });
 
-function getTasksTemplate(task, {previousTask, nextTask}) {
+function getTasksTemplate(task, { previousTask, nextTask }) {
   const view = buildTaskViewModel(task);
   return /*html*/ `
-    <div class="task" draggable="true"
-        ondragstart="startDragging('${task.id}')"
-        onclick="renderTaskInfoDlg('${task.id}')">
-
+    <div class="task" data-task-id="${task.id}">
       <div class="task-card__header">
         <div class="task-card__header-top">
           <span class="task-card__due-date ${isOverdue(task.dueDate) ? 'task-card__due-date--overdue' : ''}"
                 data-due-date="${task.dueDate || ''}">
-                Due Date: ${task.dueDate ? formatDate(task.dueDate) : ''}
+            Due Date: ${task.dueDate ? formatDate(task.dueDate) : ''}
           </span>
         </div>
 
@@ -25,28 +23,23 @@ function getTasksTemplate(task, {previousTask, nextTask}) {
           <span class="${view.categoryClass}">
             ${formatCategory(task.category)}
           </span>
+
           <img class="task-card__menu-icon"
-            src="../assets/img/drag&drop-mobile.svg"
-            alt=""
-            draggable="false"
-            onclick="toggleCardMenu(event, (this))"
-            onmouseover="event.target.closest('.task').draggable = false"
-            onmouseout="event.target.closest('.task').draggable = true"
-            onpointerdown="event.stopPropagation();"
-            onmousedown="event.stopPropagation();"
-            ontouchstart="event.stopPropagation();"
-            ondragstart="event.stopPropagation();">
+               src="../assets/img/drag&drop-mobile.svg"
+               alt="Open Task Menu"
+               draggable="false"
+               data-task-id="${task.id}">
         </div>
 
         <div class="task-card__menu" onclick="event.stopPropagation()">
           <p class="task-card__menu__header">Move to</p>
           <p class="task-card__menu__move"
-            onclick="manualMoveTaskToNewColmn('${task.id}', '${previousTask}')">
-            <img src="../assets/img/arrow_upward.svg"><span>${previousTask}</span>
+             onclick="manualMoveTaskToNewColmn('${task.id}', '${previousTask}')">
+            <img src="../assets/img/arrow_upward.svg" alt=""><span>${previousTask}</span>
           </p>
           <p class="task-card__menu__move"
-            onclick="manualMoveTaskToNewColmn('${task.id}', '${nextTask}')">
-            <img src="../assets/img/arrow_downward.svg"><span>${nextTask}</span>
+             onclick="manualMoveTaskToNewColmn('${task.id}', '${nextTask}')">
+            <img src="../assets/img/arrow_downward.svg" alt=""><span>${nextTask}</span>
           </p>
         </div>
       </div>
@@ -69,6 +62,7 @@ function getTasksTemplate(task, {previousTask, nextTask}) {
     </div>
   `;
 }
+
 
 function getProgressTpl(percent, done, total) {
   const label = total === 1 ? "Subtask done" : "Subtasks done";
@@ -102,12 +96,3 @@ function getMoreUsersBadgeTpl(count) {
     </svg>
   `;
 }
-
-
-function toggleCardMenu(event, element) {
-  event.stopPropagation();
-  event.preventDefault();
-  element.parentElement.parentElement.querySelector('.task-card__menu').style.display = "flex";
-}
-
-
