@@ -22,13 +22,13 @@
     <script src="../script.js" defer></script>
     <script src="../scripts/task-card.js" defer></script>
     <script src="../scripts/add-task.js" defer></script>
+    <script src="../scripts/drag-and-drop.js" defer></script>
     <script src="../scripts/board.js" defer></script>
     <script src="../scripts/search-task.js" defer></script>
     <script src="../scripts/load-inserts.js" defer></script>
     <script src="../scripts/dlg-edit-task-assignment.js" defer></script>
     <script src="../scripts/dlg-add-task-subtask-handling.js" defer></script>
     <script src="../scripts/dlg-edit-task.js" defer></script>
-    <script src="../scripts/drag-and-drop.js" defer></script>
     <script src="../scripts/manage-user-profil.js" defer></script>
     <script src="../scripts/navigation.js" defer></script>
     
@@ -107,7 +107,7 @@
                                 <img class="add-task-to-btn" src="../assets/img/add-btn-border.svg"
                                     alt="add task to 'to do'" onclick="renderAddTaskDlg('to-do')">
                             </span>
-                            <div id="to-do-tasks" class="tasks" ondrop="moveTo(event)" ondragover="allowDrop(event)">
+                            <div id="to-do-tasks" class="tasks">
                             </div>
                         </div>
 
@@ -117,8 +117,7 @@
                                 <img class="add-task-to-btn" src="../assets/img/add-btn-border.svg"
                                     alt="add task to 'in progress'" onclick="renderAddTaskDlg('in-progress')">
                             </span>
-                            <div id="in-progress-tasks" class="tasks" ondrop="moveTo(event)"
-                                ondragover="allowDrop(event)"></div>
+                            <div id="in-progress-tasks" class="tasks"></div>
                         </div>
 
                         <div id="await-feedback-container" class="board__table__column">
@@ -127,15 +126,14 @@
                                 <img class="add-task-to-btn" src="../assets/img/add-btn-border.svg"
                                     alt="add task to 'await feedback'" onclick="renderAddTaskDlg('await-feedback')">
                             </span>
-                            <div id="await-feedback-tasks" class="tasks" ondrop="moveTo(event)"
-                                ondragover="allowDrop(event)"></div>
+                            <div id="await-feedback-tasks" class="tasks"></div>
                         </div>
 
                         <div id="done-container" class="board__table__column">
                             <span class="board__table__column__title">
                                 <h2>Done</h2>
                             </span>
-                            <div id="done-tasks" class="tasks" ondrop="moveTo(event)" ondragover="allowDrop(event)">
+                            <div id="done-tasks" class="tasks">
                             </div>
                         </div>
 

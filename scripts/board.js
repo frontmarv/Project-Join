@@ -32,6 +32,7 @@ window.addEventListener("load", handleResizeScreenBoard);
 async function initBoard() {
   await getData();
   loadTasks();
+  initDragAndDrop();
   markOverdueDates();
   updateAllPlaceholders();
   initSearch();
