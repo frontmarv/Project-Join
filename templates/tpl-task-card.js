@@ -10,7 +10,7 @@ document.addEventListener("click", (event) => {
 function getTasksTemplate(task, { previousTask, nextTask }) {
   const view = buildTaskViewModel(task);
   return /*html*/ `
-    <div class="task" data-task-id="${task.id}" draggable="true">
+    <div class="task" data-task-id="${task.id}">
       <div class="task-card__header">
         <div class="task-card__header-top">
           <span class="task-card__due-date ${isOverdue(task.dueDate) ? 'task-card__due-date--overdue' : ''}"

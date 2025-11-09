@@ -5,56 +5,66 @@ let offsetX = 0;
 let offsetY = 0;
 let isDragging = false;
 let clickedTask = null;
+let lastHoverCol = null;
+
 
 function initDragAndDrop() {
   document.addEventListener("pointerdown", onPointerDown);
 }
 
-function onPointerDown(e) {
-  if (e.button !== 0) return; // nur linker Klick
-  if (e.target.closest(".task-card__menu-icon")) return; // Menü klick ignorieren
 
-  const task = e.target.closest(".task");
+function onPointerDown(event) {
+  if (event.button !== 0) return;
+  if (event.target.closest(".task-card__menu-icon")) return;
+  const task = event.target.closest(".task");
   if (!task) return;
-
   clickedTask = task;
-
-  const rect = task.getBoundingClientRect();
-  offsetX = e.clientX - rect.left;
-  offsetY = e.clientY - rect.top;
-
+  setPointerOffsets(event, task);
   startCol = task.closest(".tasks");
-
   document.addEventListener("pointermove", onPointerMove, { passive: false });
   document.addEventListener("pointerup", onPointerUp, { passive: false });
-
-  e.preventDefault();
+  event.preventDefault();
 }
 
-function onPointerMove(e) {
-  if (!clickedTask) return;
 
-  // Drag startet direkt bei Bewegung mit gedrückter Taste
+function setPointerOffsets(event, task) {
+  const rect = task.getBoundingClientRect();
+  offsetX = event.clientX - rect.left;
+  offsetY = event.clientY - rect.top;
+}
+
+
+function onPointerMove(event) {
+  if (!clickedTask) return;
   if (!isDragging) {
-    startDragging(e, clickedTask);
+    startDragging(clickedTask, event);
     isDragging = true;
   }
-
-  onDragging(e);
+  updateDraggingPosition(event);
 }
 
-function startDragging(e, taskEl) {
-  draggedTask = taskEl;
 
-  const rect = draggedTask.getBoundingClientRect();
+function startDragging(taskCard, event) {
+  draggedTask = taskCard;
+  createPlaceholder(taskCard);
+  styleDraggedTask(taskCard);
+  try { draggedTask.setPointerCapture(event.pointerId); } catch {}
+}
 
+
+function createPlaceholder(taskCard) {
+  const taskPosition = taskCard.getBoundingClientRect();
   placeholder = document.createElement("div");
   placeholder.className = "task task--placeholder";
-  placeholder.style.width = `${rect.width}px`;
-  placeholder.style.height = `${rect.height}px`;
-  draggedTask.parentNode.insertBefore(placeholder, draggedTask);
+  placeholder.style.width = `${taskPosition.width}px`;
+  placeholder.style.height = `${taskPosition.height}px`;
+  taskCard.parentNode.insertBefore(placeholder, taskCard);
+}
 
-  Object.assign(draggedTask.style, {
+
+function styleDraggedTask(taskCard) {
+  const rect = taskCard.getBoundingClientRect();
+  Object.assign(taskCard.style, {
     position: "fixed",
     left: `${rect.left}px`,
     top: `${rect.top}px`,
@@ -63,87 +73,103 @@ function startDragging(e, taskEl) {
     zIndex: "10000",
     pointerEvents: "none"
   });
-
-  draggedTask.classList.add("dragging");
-
-  try { draggedTask.setPointerCapture(e.pointerId); } catch {}
+  taskCard.classList.add("dragging");
+  taskCard.style.transform = "rotate(2deg) scale(1.02)";
 }
 
-function onDragging(e) {
-  if (!draggedTask) return;
-  draggedTask.style.left = `${e.clientX - offsetX}px`;
-  draggedTask.style.top = `${e.clientY - offsetY}px`;
 
-  const under = document.elementFromPoint(e.clientX, e.clientY);
-  const col = under?.closest(".tasks");
-  if (col && placeholder && !col.contains(placeholder)) {
+function updateDraggingPosition(event) {
+  draggedTask.style.left = `${event.clientX - offsetX}px`;
+  draggedTask.style.top = `${event.clientY - offsetY}px`;
+  updateHoverColumn(event);
+}
+
+
+function updateHoverColumn(event) {
+  const underPointer = document.elementFromPoint(event.clientX, event.clientY);
+  const col = underPointer?.closest('.tasks') || null;
+  if (col !== lastHoverCol) handleColumnChange(col);
+}
+
+
+function handleColumnChange(col) {
+  if (col) handleNewHoverColumn(col);
+  if (lastHoverCol && lastHoverCol !== col) {
+    showNoTasksPlaceholderIfEmpty(lastHoverCol);
+  }
+  lastHoverCol = col;
+}
+
+
+function handleNewHoverColumn(col) {
+  hideNoTasksPlaceholder(col);
+  if (placeholder && !col.contains(placeholder)) {
     col.appendChild(placeholder);
   }
 }
 
-async function onPointerUp(e) {
+
+async function onPointerUp(event) {
   document.removeEventListener("pointermove", onPointerMove);
   document.removeEventListener("pointerup", onPointerUp);
-
-  // ✅ Kein Drag → Info öffnen
   if (!isDragging && clickedTask) {
     const id = clickedTask.getAttribute("data-task-id");
     if (id) renderTaskInfoDlg(id);
   }
-
-  // ✅ Drag aktiv war → fallen lassen
-  if (isDragging) await stopDragging(e);
-
-  // Reset
-  clickedTask = null;
-  isDragging = false;
+  if (isDragging) await stopDragging(event);
+  resetDragState();
 }
 
-async function stopDragging(e) {
-  if (!draggedTask) return;
 
+function resetDragState() {
+  clickedTask = null;
+  isDragging = false;
+  lastHoverCol = null;
+}
+
+
+async function stopDragging(event) {
+  if (!draggedTask) return;
   const id = draggedTask.getAttribute("data-task-id");
   const dropCol = placeholder?.closest(".tasks") || startCol;
-
   const newState = dropCol ? mapColumnIdToTaskState(dropCol.id) : null;
   const oldState = startCol ? mapColumnIdToTaskState(startCol.id) : null;
-
-  draggedTask.classList.remove("dragging");
-  Object.assign(draggedTask.style, {
-    position: "",
-    left: "",
-    top: "",
-    width: "",
-    height: "",
-    zIndex: "",
-    pointerEvents: ""
-  });
-
-  // Karte an Placeholder-Position einsetzen
-  if (placeholder && placeholder.parentNode) {
-    placeholder.parentNode.insertBefore(draggedTask, placeholder);
-  }
-
-  placeholder?.remove();
-  placeholder = null;
-
-  try { draggedTask.releasePointerCapture(e.pointerId); } catch {}
-
-  // Nur speichern, wenn Spalte geändert:
+  finalizeDraggedTaskStyle(event);
+  moveTaskToPlaceholder();
   if (id && newState && oldState && newState !== oldState) {
     await updateTaskState(id, newState);
     await refreshBoard();
   }
-
   draggedTask = null;
   startCol = null;
 }
+
+
+function finalizeDraggedTaskStyle(event) {
+  draggedTask.classList.remove("dragging");
+  draggedTask.style.transform = "";
+  Object.assign(draggedTask.style, {
+    position: "", left: "", top: "", width: "", height: "", zIndex: "", pointerEvents: ""
+  });
+  try { draggedTask.releasePointerCapture(event.pointerId); } catch {}
+}
+
+
+function moveTaskToPlaceholder() {
+  if (placeholder && placeholder.parentNode) {
+    placeholder.parentNode.insertBefore(draggedTask, placeholder);
+  }
+  placeholder?.remove();
+  placeholder = null;
+}
+
 
 async function manualMoveTaskToNewColmn(TaskId, newStateUpperCase) {
   const newState = newStateUpperCase.charAt(0).toLowerCase() + newStateUpperCase.slice(1);
   await updateTaskState(TaskId, newState);
   await refreshBoard();
 }
+
 
 function mapColumnIdToTaskState(id) {
   return {
@@ -154,6 +180,7 @@ function mapColumnIdToTaskState(id) {
   }[id] || null;
 }
 
+
 async function updateTaskState(id, state) {
   await fetch(`https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${id}.json`, {
     method: "PATCH",
@@ -162,8 +189,39 @@ async function updateTaskState(id, state) {
   });
 }
 
+
 async function refreshBoard() {
   await getData();
   loadTasks();
   updateAllPlaceholders();
+}
+
+
+function hideNoTasksPlaceholder(col) {
+  const placeholder = col?.querySelector('.no-tasks-placeholder');
+  if (placeholder) placeholder.style.display = 'none';
+}
+
+
+function showNoTasksPlaceholderIfEmpty(col) {
+  if (!col) return;
+  const hasRealTask = col.querySelector('.task:not(.task--placeholder):not(.dragging)');
+  if (hasRealTask) {
+    const existing = col.querySelector('.no-tasks-placeholder');
+    if (existing) existing.style.display = 'none';
+    return;
+  }
+  ensureNoTasksPlaceholder(col);
+}
+
+
+function ensureNoTasksPlaceholder(col) {
+  let placeholder = col.querySelector('.no-tasks-placeholder');
+  if (!placeholder) {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = getPlaceholderTpl();
+    placeholder = wrap.firstElementChild;
+    col.appendChild(placeholder);
+  }
+  placeholder.style.display = 'flex';
 }

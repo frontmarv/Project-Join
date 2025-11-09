@@ -94,22 +94,17 @@ function getSubtaskProgressPercent(task) {
   return (checked / total) * 100;
 }
 
-/* Karte klicken = Info-Dialog öffnen (außer auf Menü-Icon) */
-document.addEventListener("click", (event) => {
-  // Wenn aktuell eine Karte gezogen wird → kein Dialog öffnen
-  if (window.onDragging) return;
 
-  // Wenn Menü-Icon angeklickt wurde → auch nicht öffnen
+document.addEventListener("click", (event) => {
+  if (isDragging) return;
   if (event.target.closest(".task-card__menu-icon")) return;
 
   const taskEl = event.target.closest(".task");
-  if (!taskEl) return;
-
-  const taskId = taskEl.getAttribute("data-task-id");
-  if (taskId) renderTaskInfoDlg(taskId);
+  const id = taskEl?.getAttribute("data-task-id");
+  if (id) renderTaskInfoDlg(id);
 });
 
-/* Menü-Icon klick = Menü öffnen (vorher andere schließen) */
+
 document.addEventListener("click", (event) => {
   const btn = event.target.closest(".task-card__menu-icon");
   if (!btn) return;
