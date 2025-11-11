@@ -63,9 +63,9 @@ function getBoardHeadDesktop() {
 
       <select id="task-sort-select" class="board__sort-select">
         <option value="default">Sort by: Default</option>
-        <option value="dueDate">Due Date</option>
-        <option value="priority">Priority</option>
-        <option value="title">Title (A–Z)</option>
+        <option value="dueDate">Sort by: Due Date</option>
+        <option value="priority">Sort by: Priority</option>
+        <option value="title">Sort by: Title (A–Z)</option>
       </select>
       
       <span id="add-task-btn" class="add-task-btn filled-btn" onclick="renderAddTaskDlg()">
@@ -110,7 +110,7 @@ function getAddTaskBtnMobile() {
     </div>
 
     <select id="task-sort-select" class="board__sort-select">
-      <option value="default">Sort by: Default</option>
+      <option value="default">Default</option>
       <option value="dueDate">Due Date</option>
       <option value="priority">Priority</option>
       <option value="title">Title (A–Z)</option>
