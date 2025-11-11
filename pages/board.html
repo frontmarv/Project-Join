@@ -91,23 +91,25 @@
                 <section id="board" class="board-content content-wrapper">
                     <div id="board-head" class="board__head">
                         <h1>Board</h1>
-                        <div class="task-search-and-add">
-                            <div class="board__head-searchbox-wrapper">
-                                <div class="board__head__searchbox">
-                                    <input id="search-tasks" type="search" placeholder="Find Task">
-                                    <img class="search-btn" src="../assets/img/search.svg" alt="Search icon">
+                        <div class="task-search-and-add-box">
+                            <div class="board__head__middle-box">
+                                <div class="board__head-searchbox-wrapper">
+                                    <div class="board__head__searchbox">
+                                        <input id="search-tasks" type="search" placeholder="Find Task">
+                                        <img class="search-btn" src="../assets/img/search.svg" alt="Search icon">
+                                    </div>
+                                    <div id="search-mode-indicator" class="search-mode-indicator d-none">
+                                        🔍 Read Only (Drag & Drop disabled)
+                                    </div>
                                 </div>
-                                <div id="search-mode-indicator" class="search-mode-indicator d-none">
-                                    🔍 Read Only (Drag & Drop disabled)
-                                </div>
-                            </div>
 
-                            <select id="task-sort-select" class="board__sort-select">
-                                <option value="default">Sort by: Default</option>
-                                <option value="dueDate">Sort by: Due Date</option>
-                                <option value="priority">Sort by: Priority</option>
-                                <option value="title">Sort by: Title (A–Z)</option>
-                            </select>
+                                <select id="task-sort-select" class="board__sort-select">
+                                    <option value="default">Sort by: Default</option>
+                                    <option value="dueDate">Sort by: Due Date</option>
+                                    <option value="priority">Sort by: Priority</option>
+                                    <option value="title">Sort by: Title (A–Z)</option>
+                                </select>
+                            </div>
                             
                             <div id="add-task-btn" class="add-task-btn filled-btn" onclick="renderAddTaskDlg()">
                                 <span class="add-task-btn__text">Add Task</span>
