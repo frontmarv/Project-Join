@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>contacts.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#CACHE_KEY">CACHE_KEY</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#CACHE_TTL_MS">CACHE_TTL_MS</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#DRAG_THRESHOLD">DRAG_THRESHOLD</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#InsertLoader">InsertLoader</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#addContactSuccessDlg">addContactSuccessDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#addSubtaskOnEnter">addSubtaskOnEnter</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#afterTaskSave">afterTaskSave</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#animationDlg">animationDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#appendTaskToColumn">appendTaskToColumn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#appendTitleErrorMessage">appendTitleErrorMessage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#applyHighlights">applyHighlights</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#applyTitleErrorStyles">applyTitleErrorStyles</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#attachDragListeners">attachDragListeners</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#attemptLogin">attemptLogin</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindAssignmentListEvents">bindAssignmentListEvents</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindCheckboxClickHandler">bindCheckboxClickHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindCheckboxHoverHandlers">bindCheckboxHoverHandlers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindDropdownClickHandler">bindDropdownClickHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindDropdownInputHandler">bindDropdownInputHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindEditIconClicks">bindEditIconClicks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindEmailInputHandler">bindEmailInputHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindLiveRequiredClear">bindLiveRequiredClear</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindOutsideClickHandler">bindOutsideClickHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindSortDropdownChange">bindSortDropdownChange</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#bindSubtaskDblclick">bindSubtaskDblclick</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#buildNewTask">buildNewTask</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#buildSubtaskObject">buildSubtaskObject</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#buildSubtaskResult">buildSubtaskResult</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#buildTaskViewModel">buildTaskViewModel</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#buildUpdatedTaskObject">buildUpdatedTaskObject</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#cancelSubtaskEdit">cancelSubtaskEdit</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#capitalize">capitalize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#capitalizeInitials">capitalizeInitials</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#capturePointer">capturePointer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#changePriorityBtn">changePriorityBtn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#checkCardMatch">checkCardMatch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#checkForLogin">checkForLogin</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#checkLoggedInUser">checkLoggedInUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#cleanName">cleanName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#clearColumns">clearColumns</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#clearError">clearError</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#clearLoginError">clearLoginError</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#clearSearchOnEsc">clearSearchOnEsc</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#clearSubtaskInput">clearSubtaskInput</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#clearTask">clearTask</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#closeAlertOverlay">closeAlertOverlay</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#closeAllCategories">closeAllCategories</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#collectDataAddContactDlg">collectDataAddContactDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#collectSubtasksFromEditDialog">collectSubtasksFromEditDialog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#collectSubtasksPreserveChecked">collectSubtasksPreserveChecked</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#columnMap">columnMap</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#compareByDueDate">compareByDueDate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#compareByPriority">compareByPriority</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#compareByTitle">compareByTitle</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#confirmSubtaskEdit">confirmSubtaskEdit</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#countRules">countRules</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#countToDos">countToDos</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#countingLoop">countingLoop</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createDataObject">createDataObject</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createDataObjectAddContact">createDataObjectAddContact</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createPlaceholder">createPlaceholder</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createTask">createTask</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#currentSortMode">currentSortMode</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#databaseURL">databaseURL</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#deleteContact">deleteContact</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#deleteContactFlow">deleteContactFlow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#deleteSubtask">deleteSubtask</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#deleteTask">deleteTask</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#dialog">dialog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#disableSignUpBtn">disableSignUpBtn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#displayContactActionMenu">displayContactActionMenu</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#dueDateValidation">dueDateValidation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#editContactSuccessDlg">editContactSuccessDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#email">email</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#enableSearchBoxClickFocus">enableSearchBoxClickFocus</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#enableSignUpBtn">enableSignUpBtn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#ensureNoTasksPlaceholder">ensureNoTasksPlaceholder</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#ensureValidSortMode">ensureValidSortMode</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#escapeRegExp">escapeRegExp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#evaluateFormValidity">evaluateFormValidity</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#extractSelectedIds">extractSelectedIds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#fetchData">fetchData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#fetchTlds">fetchTlds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#fillEditFormWithTaskData">fillEditFormWithTaskData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#filterContacts">filterContacts</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#filterTasks">filterTasks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#finalizeCategorySelection">finalizeCategorySelection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#finalizeDraggedTaskStyle">finalizeDraggedTaskStyle</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#focusFirstError">focusFirstError</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#focusSearchInput">focusSearchInput</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#formState">formState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#formatCategory">formatCategory</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#formatDate">formatDate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#generateUserId">generateUserId</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getActivePriorityBtn">getActivePriorityBtn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getAssignedIds">getAssignedIds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getAssignedUsersHtml">getAssignedUsersHtml</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getAssignedUsersListTpl">getAssignedUsersListTpl</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getCachedTlds">getCachedTlds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getCategoryClass">getCategoryClass</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getCheckboxImgSrc">getCheckboxImgSrc</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getCheckedSubtaskCount">getCheckedSubtaskCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getContactInfofromContactlistandDB">getContactInfofromContactlistandDB</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getData">getData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getDeadlineDates">getDeadlineDates</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getDragContextData">getDragContextData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getImageSelectedPriorityBtn">getImageSelectedPriorityBtn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getInitialLetters">getInitialLetters</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getLabelAndValue">getLabelAndValue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getListItemUserId">getListItemUserId</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getNextTaskKey">getNextTaskKey</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getNoUsersAssignedTpl">getNoUsersAssignedTpl</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getPriorityIcon">getPriorityIcon</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getPriorityImg">getPriorityImg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getPutRequestConfig">getPutRequestConfig</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getRandomColor">getRandomColor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getSelectedAssignmentIds">getSelectedAssignmentIds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getSelectedCategoryText">getSelectedCategoryText</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getSelectedPriorityFromEditDialog">getSelectedPriorityFromEditDialog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getSubtaskProgressPercent">getSubtaskProgressPercent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getSubtaskStats">getSubtaskStats</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getSubtaskUrl">getSubtaskUrl</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getSurroundingCategories">getSurroundingCategories</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getTotalSubtaskCount">getTotalSubtaskCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getUserAvatarSvg">getUserAvatarSvg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getUserInitialsById">getUserInitialsById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getUserNameById">getUserNameById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getUserNameInitials">getUserNameInitials</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getUserPicById">getUserPicById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getUsersfromFirebase">getUsersfromFirebase</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getValueById">getValueById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#goToBoard">goToBoard</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#greetingHeader">greetingHeader</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#greetingName">greetingName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#guestLogin">guestLogin</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleCancelBtnClick">handleCancelBtnClick</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleColumnChange">handleColumnChange</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleConfirmBtnClick">handleConfirmBtnClick</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleContent">handleContent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleEmailValidation">handleEmailValidation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleHelp">handleHelp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleLogo">handleLogo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleMenuClick">handleMenuClick</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleNameValidation">handleNameValidation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleNewHoverColumn">handleNewHoverColumn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handlePasswordInputChange">handlePasswordInputChange</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handlePlaceholderDisplay">handlePlaceholderDisplay</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleResizeScreen">handleResizeScreen</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleResizeScreenContacts">handleResizeScreenContacts</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleSubtaskClick">handleSubtaskClick</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleSubtaskConfirm">handleSubtaskConfirm</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleSubtaskDelete">handleSubtaskDelete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleSubtaskEdit">handleSubtaskEdit</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleSubtaskEditKeydown">handleSubtaskEditKeydown</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleSubtaskInputKeydown">handleSubtaskInputKeydown</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleTaskClick">handleTaskClick</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#handleTaskStateChange">handleTaskStateChange</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#hasShownWelcomeAnimation">hasShownWelcomeAnimation</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#headerAdded">headerAdded</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#helpAdded">helpAdded</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#hideContactActionMenu">hideContactActionMenu</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#hideExistingPlaceholder">hideExistingPlaceholder</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#hideNoTasksPlaceholder">hideNoTasksPlaceholder</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#hidePopupElement">hidePopupElement</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#highlightText">highlightText</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initAddTask">initAddTask</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initBoard">initBoard</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initCheckboxHandlers">initCheckboxHandlers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initContactAssign">initContactAssign</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initDragAndDrop">initDragAndDrop</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initDropdownHandlers">initDropdownHandlers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initDueDateValidationDelegated">initDueDateValidationDelegated</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initEmailValidation">initEmailValidation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initSearch">initSearch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initSorting">initSorting</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initSubtaskHandlers">initSubtaskHandlers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initSubtaskIconButtons">initSubtaskIconButtons</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initSubtaskInput">initSubtaskInput</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initSummary">initSummary</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initializeAddTaskFeatures">initializeAddTaskFeatures</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initializeContactRefs">initializeContactRefs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initializeTaskEditFeatures">initializeTaskEditFeatures</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#isListItemSelected">isListItemSelected</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#isOverdue">isOverdue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#isValidDragStart">isValidDragStart</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#isValidEmail">isValidEmail</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#isValidFullName">isValidFullName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#isValidSubtaskData">isValidSubtaskData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#loadAddTaskContent">loadAddTaskContent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#loadSubtasksIntoForm">loadSubtasksIntoForm</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#loadTasks">loadTasks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#loadTlds">loadTlds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#logOutUser">logOutUser</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#logoAdded">logoAdded</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#logoutAllUsers">logoutAllUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#manualMoveTaskToNewColmn">manualMoveTaskToNewColmn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#mapColumnIdToTaskState">mapColumnIdToTaskState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#mapOldSubtasksChecked">mapOldSubtasksChecked</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#markOverdueDates">markOverdueDates</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#markStoredContactAsSelected">markStoredContactAsSelected</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#moveTaskToPlaceholder">moveTaskToPlaceholder</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#nameInput">nameInput</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#nameInputRegex">nameInputRegex</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#normalizeAssignedContacts">normalizeAssignedContacts</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#normalizeContactList">normalizeContactList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#onDeleteSubtaskMouseDown">onDeleteSubtaskMouseDown</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#onDueDateEvent">onDueDateEvent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#onPointerCancel">onPointerCancel</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#onPointerDown">onPointerDown</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#onPointerMove">onPointerMove</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#onPointerUp">onPointerUp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#onSubtaskRowMouseDown">onSubtaskRowMouseDown</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#patchLoadTasks">patchLoadTasks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#persistUpdatedTask">persistUpdatedTask</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#populateAssignmentListFromFirebase">populateAssignmentListFromFirebase</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#processCardFilter">processCardFilter</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#pushDataToDB">pushDataToDB</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#putNewContactToDB">putNewContactToDB</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#redirectToAddTaskPage">redirectToAddTaskPage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#redirectToLoginAfterDelay">redirectToLoginAfterDelay</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#refreshAfterSubtaskDelete">refreshAfterSubtaskDelete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#refreshAssignedUserContainer">refreshAssignedUserContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#refreshBoard">refreshBoard</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#refreshTaskInfo">refreshTaskInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#relocateRequiredInfo">relocateRequiredInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#removeAnimationClass">removeAnimationClass</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#removeDragListeners">removeDragListeners</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderAddContactDlg">renderAddContactDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderAddTaskDlg">renderAddTaskDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderAssignedUserItem">renderAssignedUserItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderAssignedUsers">renderAssignedUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderAssignmentList">renderAssignmentList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderContactList">renderContactList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderContactsIntoSections">renderContactsIntoSections</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderDeleteContactDlg">renderDeleteContactDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderEditContactDlg">renderEditContactDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderInitialLettersSections">renderInitialLettersSections</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderSubtaskItem">renderSubtaskItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderSubtasks">renderSubtasks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderTaskEditDlg">renderTaskEditDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderTaskInfoDlg">renderTaskInfoDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#renderUserAvatar">renderUserAvatar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#replaceSubtaskWithEditTpl">replaceSubtaskWithEditTpl</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetCardVisibility">resetCardVisibility</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetContactListClearsallactivecontactsin#contact-options.Removes%2560.active%2560,resets%2560data-checked%2560,andupdatesthecheckboxicon.">resetContactListClears all active contacts in #contact-options.Removes `.active`, resets `data-checked`, and updates the checkbox icon.</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetCreatedTaskForm">resetCreatedTaskForm</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetDragReferences">resetDragReferences</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetDragState">resetDragState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetEditIcons">resetEditIcons</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetEmailValidationUI">resetEmailValidationUI</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetHighlight">resetHighlight</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetPriorityButtons">resetPriorityButtons</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetPwStyles">resetPwStyles</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resetTitleInputErrors">resetTitleInputErrors</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#restoreDefaultPlaceholders">restoreDefaultPlaceholders</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#restoreScrollPositions">restoreScrollPositions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#saveDataEditContactDlg">saveDataEditContactDlg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#saveEditedTask">saveEditedTask</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#saveScrollPositions">saveScrollPositions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#saveTaskToFirebase">saveTaskToFirebase</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#saveTldsToCache">saveTldsToCache</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#scrollToLastToggledSubtask">scrollToLastToggledSubtask</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#selectCategoryOption">selectCategoryOption</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#sendSignupForm">sendSignupForm</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setCatExpanded">setCatExpanded</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setCategoryInputs">setCategoryInputs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setClickSuppression">setClickSuppression</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setContactCardtoInvisible">setContactCardtoInvisible</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setContactCardtoVisible">setContactCardtoVisible</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setContactInfoIntoCard">setContactInfoIntoCard</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setEventlistenerEveryContact">setEventlistenerEveryContact</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setGreetingHeader">setGreetingHeader</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setGreetingName">setGreetingName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setMultipatch">setMultipatch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setPasswordVisibility">setPasswordVisibility</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setPointerOffsets">setPointerOffsets</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setPwError">setPwError</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setPwSuccess">setPwSuccess</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setWrapperColor">setWrapperColor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setupAddTaskDialog">setupAddTaskDialog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setupCategoryInvalidHandler">setupCategoryInvalidHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setupTaskEditDialog">setupTaskEditDialog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#setupTaskInfoDialog">setupTaskInfoDialog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#shouldRedirectToMobile">shouldRedirectToMobile</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showAddTaskDialog">showAddTaskDialog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showAddUserIconMoblie">showAddUserIconMoblie</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showAlertOverlay">showAlertOverlay</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showAndAutoRemovePopup">showAndAutoRemovePopup</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#showContact">showContact</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showContactDetailsinCard">showContactDetailsinCard</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showContactList">showContactList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showContactMobile">showContactMobile</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showDlgWtihAnimation">showDlgWtihAnimation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showError">showError</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showGreetingMobile">showGreetingMobile</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showLoginError">showLoginError</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showNoTasksPlaceholderIfEmpty">showNoTasksPlaceholderIfEmpty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showPopupMsgChangesSaved">showPopupMsgChangesSaved</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showSearchPlaceholder">showSearchPlaceholder</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showSuccessfulSignUpMessage">showSuccessfulSignUpMessage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showTitleError">showTitleError</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#showUpcomingDeadline">showUpcomingDeadline</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#sortByCurrentMode">sortByCurrentMode</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#sortSubtasks">sortSubtasks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#sortTasks">sortTasks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#startDrag">startDrag</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#startSubtaskEdit">startSubtaskEdit</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#stopDragging">stopDragging</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#styleContactNotSelected">styleContactNotSelected</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#styleContactSelected">styleContactSelected</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#styleDraggedTask">styleDraggedTask</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#suppressClickAfterDrag">suppressClickAfterDrag</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#suppressClicksUntil">suppressClicksUntil</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#syncDropdownWithSortMode">syncDropdownWithSortMode</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#syncValidityClass">syncValidityClass</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#tasks">tasks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#temporarilyLockSubtaskActions">temporarilyLockSubtaskActions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#toggleCategory">toggleCategory</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#toggleCheckboxState">toggleCheckboxState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#toggleDropdown">toggleDropdown</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#toggleFirstInfoBox">toggleFirstInfoBox</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#togglePasswordIcon">togglePasswordIcon</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#togglePasswordVisibility">togglePasswordVisibility</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#toggleSecondInfoBox">toggleSecondInfoBox</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#toggleSubtaskChecked">toggleSubtaskChecked</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateAllPlaceholders">updateAllPlaceholders</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateAriaSelection">updateAriaSelection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateCategoryValidity">updateCategoryValidity</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateCheckboxUI">updateCheckboxUI</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateCheckboxVisual">updateCheckboxVisual</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateColumnPlaceholder">updateColumnPlaceholder</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateDraggingPosition">updateDraggingPosition</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateEmailValidationUI">updateEmailValidationUI</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateHoverColumn">updateHoverColumn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateOverdueState">updateOverdueState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updatePasswordIcon">updatePasswordIcon</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updatePasswordLockIcon">updatePasswordLockIcon</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateSearchModeIndicator">updateSearchModeIndicator</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateSearchPlaceholders">updateSearchPlaceholders</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateSubtaskInFirebase">updateSubtaskInFirebase</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateTaskCursorState">updateTaskCursorState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateTaskInDatabase">updateTaskInDatabase</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateTaskState">updateTaskState</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#userArrayGlobal">userArrayGlobal</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#users">users</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validateAndSaveData">validateAndSaveData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validateAssignmentElements">validateAssignmentElements</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validateCategory">validateCategory</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validateContactRefs">validateContactRefs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validateDate">validateDate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validateInputAddContact">validateInputAddContact</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validateLoginInputs">validateLoginInputs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validatePasswordMatch">validatePasswordMatch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validateTaskForm">validateTaskForm</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#validateTitle">validateTitle</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#verifyPassword">verifyPassword</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#waitFor">waitFor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#welcomeScreenAnimation">welcomeScreenAnimation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#welcomeScreenAnimationDesktop">welcomeScreenAnimationDesktop</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#welcomeScreenAnimationMobile">welcomeScreenAnimationMobile</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#welcomeScreenNoAnimation">welcomeScreenNoAnimation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#wrongInputPulseAnimation">wrongInputPulseAnimation</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">contacts.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** 
+ * DOM elements for contact management interface.
+ * @type {HTMLElement}
+ */
+const dialog = document.getElementById('dlg-box');
+const contactList = document.querySelector('.contact-list');
+const contactInfoCard = document.querySelector('.content-right__contact-info-card');
+let contactName = document.getElementById('contact-name');
+let contactMail = document.getElementById('contact-email');
+let contactPhone = document.getElementById('contact-phone');
+let contactProfilImg = document.querySelector('.header__contact-profil-img');
+
+
+/**
+ * Tracks whether a contact is currently being shown on mobile view.
+ * @type {boolean}
+ */
+let showContact = false;
+
+
+/**
+ * Global array storing all user/contact data.
+ * @type {Array&lt;Object>}
+ */
+let userArrayGlobal = [];
+
+
+/**
+ * Event handler for window resize.
+ * Adjusts contact layout for different screen sizes.
+ * @listens {Event} resize
+ */
+window.addEventListener("resize", handleResizeScreenContacts);
+
+
+/**
+ * Event handler for page load.
+ * Initializes contact layout based on initial screen size.
+ * @listens {Event} load
+ */
+window.addEventListener("load", handleResizeScreenContacts);
+
+
+/**
+ * Event handler for DOM content loaded.
+ * Preloads hover state images to prevent flickering during interactions.
+ * @listens {Event} DOMContentLoaded
+ */
+window.addEventListener("DOMContentLoaded", () => {
+    const hoverImages = [
+        "../assets/img/arrow-left-blue-hover.svg",
+        "../assets/img/contacts-add-user-active.svg",
+        "../assets/img/contacts-options-active.svg",
+        "../assets/img/edit-with-text-hover.svg",
+        "../assets/img/delete-with-text-hover.svg"
+    ];
+    hoverImages.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+});
+
+
+/**
+ * Fetches all users from Firebase database.
+ * Updates global user array and raw data storage.
+ * @async
+ * @returns {Promise&lt;Array&lt;Object>>} Array of user objects
+ * @throws {Error} If the HTTP request fails
+ */
+async function getUsersfromFirebase() {
+    try {
+        const response = await fetch(DB_URL + "users/" + ".json");
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        const data = await response.json();
+        const userArray = Object.values(data);
+        userArrayGlobal = userArray;
+        rawData = data;
+        return userArray;
+    } catch (error) {
+        console.error("Error fetching data:", error.message);
+    }
+}
+
+
+/**
+ * Deletes a contact from the Firebase database.
+ * @async
+ * @param {string} userkeyToDelete - The unique key of the user to delete
+ * @returns {Promise&lt;void>}
+ * @throws {Error} If the delete operation fails
+ */
+async function deleteContact(userkeyToDelete) {
+    try {
+        const response = await fetch(DB_URL + "users/" + userkeyToDelete + ".json", {
+            method: "DELETE"
+        });
+        if (userkeyToDelete = LOGGED_IN_USER) {
+            LOGGED_IN_USER = undefined;
+            logOutUser();
+        }
+        if (!response.ok) {
+            throw new Error(`Fehler beim Löschen: ${response.status}`);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+/**
+ * Executes the complete contact deletion workflow.
+ * Deletes contact, updates UI, and handles responsive layout adjustments.
+ * @async
+ * @returns {Promise&lt;void>}
+ */
+async function deleteContactFlow() {
+    let userName = contactName.innerText;
+    getAndStoreUserId(userName);
+    await deleteContact(STORED_USER_KEY);
+    if (userName == LOGGED_IN_USER) { logOutUser(); }
+    renderContactList();
+    setContactCardtoInvisible();
+    if (window.innerWidth &lt; 1025) {
+        showContact = false;
+        handleResizeScreenContacts();
+    }
+    removeAnimationClass();
+}
+
+
+/**
+ * Extracts and returns unique initial letters from user names.
+ * Sorts letters alphabetically and removes duplicates.
+ * @param {Array&lt;Object>} array - Array of user objects
+ * @param {string} array[].name - User's name
+ * @returns {Array&lt;string>} Sorted array of unique initial letters
+ */
+function getInitialLetters(array) {
+    const initialLetters = [];
+    for (let index = 0; index &lt; array.length; index++) {
+        const userNameInitialLetter = array[index].name[0];
+        initialLetters.push(userNameInitialLetter);
+    }
+    initialLetters.sort();
+    const uniqueLetters = [...new Set(initialLetters)];
+    return uniqueLetters;
+}
+
+
+/**
+ * Renders HTML sections for each initial letter.
+ * Creates alphabetical section headers for contact grouping.
+ * @param {Array&lt;string>} initialLettersArray - Array of unique initial letters
+ * @returns {string} Concatenated HTML string of all section templates
+ */
+function renderInitialLettersSections(initialLettersArray) {
+    let initialLetterSections = "";
+    initialLettersArray.forEach(letter => {
+        initialLetterSections += getUserInitialLetterSectionTpl(letter);
+    });
+    return initialLetterSections;
+}
+
+
+/**
+ * Renders contacts into their respective alphabetical sections.
+ * Filters users by initial letter and populates section with contact items.
+ * @param {Array&lt;string>} initialLettersArray - Array of unique initial letters
+ * @param {Array&lt;Object>} userArray - Array of user objects to render
+ * @returns {void}
+ */
+function renderContactsIntoSections(initialLettersArray, userArray) {
+    initialLettersArray.forEach(letter => {
+        const section = document.querySelector(`#initial-letter__wrapper-${letter}`);
+        const filteredUsers = userArray.filter(user => user.name[0] === letter);
+        filteredUsers.forEach(userId => {
+            const userName = checkLoggedInUser(userId);
+            const email = userId.email;
+            const profilImgColor = userId.profilImgColor;
+            const userInitals = getUserNameInitials(userName);
+            const userImg = getMediumUserProfilImg(profilImgColor, userInitals);
+            const userHTML = getUserContactListItemTpl(userName, email, userImg);
+            section.insertAdjacentHTML("beforeend", userHTML);
+        });
+    });
+}
+
+
+/**
+ * Checks if user is the logged-in user and appends "(You)" indicator.
+ * @param {Object} userId - User object to check
+ * @param {string} userId.name - User's name
+ * @returns {string} Modified user name with "(You)" suffix if logged in, otherwise original name
+ */
+function checkLoggedInUser(userId) {
+    if (userId.name === LOGGED_IN_USER) {
+        const modifiedUserName = userId.name + ' (You)';
+        return modifiedUserName;
+    } else {
+        const userName = userId.name;
+        return userName;
+    }
+}
+
+
+/**
+ * Renders the complete contact list with alphabetical sections.
+ * Fetches users, clears existing list, and populates with grouped contacts.
+ * @async
+ * @returns {Promise&lt;void>}
+ */
+async function renderContactList() {
+    const userArray = await getUsersfromFirebase();
+    contactList.innerHTML = "";
+    const initialLettersArray = getInitialLetters(userArray);
+    contactList.innerHTML += renderInitialLettersSections(initialLettersArray);
+    renderContactsIntoSections(initialLettersArray, userArray);
+    setEventlistenerEveryContact();
+}
+
+
+/**
+ * Attaches click event listeners to all contact list items.
+ * Handles contact selection and deselection styling.
+ * @returns {void}
+ */
+function setEventlistenerEveryContact() {
+    const contactListItems = document.querySelectorAll('.contact-list__item');
+    contactListItems.forEach(item => {
+        item.addEventListener('click', () => {
+            contactListItems.forEach(i => styleContactNotSelected(i));
+            styleContactSelected(item);
+        });
+    });
+}
+
+
+/**
+ * Removes selected styling from a contact list item.
+ * Resets text color and profile circle styling.
+ * @param {HTMLElement} i - Contact list item element to deselect
+ * @returns {void}
+ */
+function styleContactNotSelected(i) {
+    i.classList.remove('selected');
+    i.querySelector('.contact-name').style.color = 'var(--color-black)';
+    i.querySelector('circle').classList.remove('colored-circle__selected');
+}
+
+
+/**
+ * Applies selected styling to a contact list item.
+ * Changes text color and profile circle styling.
+ * @param {HTMLElement} item - Contact list item element to select
+ * @returns {void}
+ */
+function styleContactSelected(item) {
+    item.classList.add('selected');
+    const contactName = item.querySelector('.contact-name');
+    contactName.style.color = 'var(--color-white)';
+    item.querySelector('circle').classList.add('colored-circle__selected');
+}
+
+
+/**
+ * Makes the contact information card visible.
+ * Removes invisible class and sets visibility style.
+ * @returns {void}
+ */
+function setContactCardtoVisible() {
+    contactInfoCard.classList.remove('invisible');
+    contactInfoCard.style.visibility = 'visible';
+}
+
+
+/**
+ * Hides the contact information card.
+ * Adds invisible class to hide card from view.
+ * @returns {void}
+ */
+function setContactCardtoInvisible() {
+    contactInfoCard.classList.add('invisible');
+}
+
+
+/**
+ * Displays selected contact's details in the information card.
+ * Retrieves contact data and populates card fields.
+ * @param {HTMLElement} selectedContact - Selected contact list item element
+ * @returns {void}
+ */
+function showContactDetailsinCard(selectedContact) {
+    const userName = selectedContact.querySelector('.contact-name').innerHTML;
+    getAndStoreUserId(userName);
+    const contactInfo = getContactInfofromContactlistandDB(userName);
+    setContactInfoIntoCard(contactInfo);
+    setContactCardtoVisible();
+}
+
+
+/**
+ * Removes "(You)" suffix from user name.
+ * Cleans up display name for data operations.
+ * @param {string} userName - User name potentially containing "(You)" suffix
+ * @returns {string} Cleaned user name without suffix
+ */
+function cleanName(userName) {
+    return userName.replace(/\s*\(You\)\s*$/, '');
+}
+
+
+/**
+ * Retrieves contact information from global user array.
+ * Finds user by name and extracts relevant contact details.
+ * @param {string} userName - Name of the contact (may include "(You)" suffix)
+ * @returns {Object} Contact information object
+ * @returns {string} return.cleanUserName - Contact's name without suffix
+ * @returns {string} return.email - Contact's email address
+ * @returns {string} return.phone - Contact's phone number
+ * @returns {string} return.profilImgColor - Profile image color hex code
+ */
+function getContactInfofromContactlistandDB(userName) {
+    const cleanUserName = cleanName(userName);
+    const selectedUser = userArrayGlobal.find(user => user.name === cleanUserName);
+    const email = selectedUser.email;
+    const phone = selectedUser.phone;
+    const profilImgColor = selectedUser.profilImgColor;
+    return { cleanUserName, email, phone, profilImgColor };
+}
+
+
+/**
+ * Populates contact information card with contact details.
+ * Updates name, email, phone, and profile image in the card.
+ * @param {Object} contactInfo - Contact information object
+ * @param {string} contactInfo.cleanUserName - Contact's name
+ * @param {string} contactInfo.email - Contact's email address
+ * @param {string} contactInfo.phone - Contact's phone number
+ * @param {string} contactInfo.profilImgColor - Profile image color hex code
+ * @returns {void}
+ */
+function setContactInfoIntoCard({ cleanUserName, email, phone, profilImgColor }) {
+    contactName.innerText = cleanUserName;
+    contactMail.innerText = email;
+    contactPhone.innerText = phone;
+    const userInitals = getUserNameInitials(cleanUserName);
+    contactProfilImg.innerHTML = getBigUserProfilImg(profilImgColor, userInitals);
+}
+
+
+/**
+ * Handles screen resize events for contacts page.
+ * Determines if screen is small and adjusts layout accordingly.
+ * @returns {void}
+ */
+function handleResizeScreenContacts() {
+    const isSmallScreen = window.innerWidth &lt; 1025;
+    handleContent(isSmallScreen);
+}
+
+
+/**
+ * Manages content visibility based on screen size and contact view state.
+ * Shows/hides contact list and detail views for responsive layout.
+ * @param {boolean} isSmallScreen - True if screen width is below 1025px
+ * @returns {void}
+ */
+function handleContent(isSmallScreen) {
+    if (isSmallScreen &amp;&amp; !showContact) {
+        document.querySelector('.content-left').style.display = 'flex';
+        document.querySelector('.content-right').style.display = 'none';
+        showAddUserIconMoblie();
+        showContact = false;
+    } else if (isSmallScreen &amp;&amp; showContact) {
+        document.querySelector('.content-left').style.display = 'none';
+        document.querySelector('.content-right').style.display = 'flex';
+        showContact = true;
+    } else {
+        document.querySelector('.content-right').style.display = 'flex';
+        document.querySelector('.content-left').style.display = 'flex';
+    }
+}
+
+
+/**
+ * Displays contact details view on mobile devices.
+ * Hides contact list and shows detail view with options icon.
+ * @returns {void}
+ */
+function showContactMobile() {
+    if (isSmallScreen) {
+        document.querySelector('.content-left').style.display = 'none';
+        document.querySelector('.content-right').style.display = 'flex';
+        document.querySelector('.add-user-icon').style.display = 'none';
+        document.querySelector('.contacts-options-icon').style.display = 'flex';
+        showContact = true;
+    }
+}
+
+
+/**
+ * Shows add user icon and hides contact options icon on mobile.
+ * Used when returning to contact list view.
+ * @returns {void}
+ */
+function showAddUserIconMoblie() {
+    document.querySelector('.add-user-icon').style.display = 'flex';
+    document.querySelector('.contacts-options-icon').style.display = 'none';
+}
+
+
+/**
+ * Returns to contact list view from contact detail view.
+ * Deselects all contacts and adjusts responsive layout.
+ * @returns {void}
+ */
+function showContactList() {
+    showContact = false;
+    handleResizeScreenContacts();
+    const contactListItems = document.querySelectorAll('.contact-list__item');
+    contactListItems.forEach(item => {
+        styleContactNotSelected(item);
+    });
+}
+
+
+/**
+ * Displays the contact action menu (edit/delete).
+ * Makes menu visible and sets up outside click handler after brief delay.
+ * @returns {void}
+ */
+function displayContactActionMenu() {
+    document.querySelector('.manage-contact__actions').classList.remove('invisible');
+    setTimeout(() => {
+        document.addEventListener("click", handleMenuClick);
+    }, 400);
+}
+
+
+/**
+ * Hides the contact action menu.
+ * Removes menu from view and cleans up click event listener.
+ * @returns {void}
+ */
+function hideContactActionMenu() {
+    document.querySelector('.manage-contact__actions').classList.add('invisible');
+    document.removeEventListener("click", handleMenuClick);
+}
+
+
+/**
+ * Handles clicks outside the contact action menu to close it.
+ * Only active on small screens to prevent accidental closures.
+ * @param {MouseEvent} event - Click event object
+ * @returns {void}
+ */
+function handleMenuClick(event) {
+    const menu = document.querySelector('.manage-contact__actions');
+    if (isSmallScreen &amp;&amp; !menu.contains(event.target)) {
+        hideContactActionMenu();
+    }
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Nov 12 2025 00:05:14 GMT+0100 (Mitteleuropäische Normalzeit) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
