@@ -1,16 +1,31 @@
 {
   "source": {
-    "include": ["scripts"],
+    "include": ["js", "README.md"],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"
   },
+
   "opts": {
     "destination": "docs",
     "recurse": true,
-    "template": "node_modules/minami"
+    "template": "node_modules/minami",
+    "encoding": "utf8"
   },
+
+  "plugins": [],
   "templates": {
     "cleverLinks": true,
     "monospaceLinks": true
+  },
+
+  "tags": {
+    "allowUnknownTags": true
+  },
+
+  "project": {
+    "name": "Join – Kanban App",
+    "version": "1.0.0",
+    "description": "Eine moderne Kanban-Board Anwendung mit Drag & Drop, Subtasks und Firebase Sync.",
+    "author": "Marvin Lenhart, Sebastian Hedwig, Sascha Keßler"
   }
 }
