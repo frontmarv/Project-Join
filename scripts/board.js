@@ -48,11 +48,6 @@ const getUserInitialsById = id => {
 };
 
 
-let currentLayout = null;
-window.addEventListener("resize", handleResizeScreenBoard);
-window.addEventListener("load", handleResizeScreenBoard);
-
-
 // ======================================================
 // 🔹 INITIALIZATION
 // ======================================================
@@ -203,6 +198,7 @@ async function renderAddTaskDlg(defaultTaskState = "to-do") {
   await loadAddTaskContent(dlg);
   initializeAddTaskFeatures(dlg);
   dueDateValidation();
+  bindLiveRequiredClear('title', 'title-error');
   showAddTaskDialog(dlg);
 }
 

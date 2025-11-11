@@ -129,7 +129,6 @@ select:focus-visible,
 button:focus-visible,
 a:focus-visible {
   outline: none;
-  /* entfernt Standardrahmen */
   border: 1px solid var(--color-lightblue) !important;
 }
 
@@ -152,7 +151,6 @@ a:focus-visible {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  /* halbtransparentes Schwarz */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -279,32 +277,29 @@ a:focus-visible {
 
 }
 
-/* Container ist der Positionierungs-Anker */
+
 .category-selection {
   position: relative;
   user-select: none;
   font-size: 1.5rem;
-  /* steuert auch Placeholder-Größe */
 }
 
-/* Input übernimmt die gleiche Schriftgröße wie der Container */
+
 .selector {
   font-size: inherit;
   width: 100%;
   box-sizing: border-box;
 }
 
-/* Placeholder exakt gleiche Größe */
+
 .selector::placeholder {
   font-size: inherit;
 }
 
-/* Dropdown-Liste */
 .category-options {
   display: none;
   position: absolute;
   top: 100%;
-  /* direkt am Input */
   left: 0;
   width: 100%;
   max-height: 12.5rem;
@@ -312,12 +307,10 @@ a:focus-visible {
 
   background: #fff;
   border: none;
-  /* ✅ kein Rahmen */
   border-radius: 0 0 0.5rem 0.5rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
   list-style: none;
   margin: 0;
-  /* ✅ KEIN Abstand */
   padding: 0;
   z-index: 9999;
 }
@@ -325,10 +318,8 @@ a:focus-visible {
 .category-options::-webkit-scrollbar {
   width: 0;
   height: 0;
-  /* WebKit */
 }
 
-/* Listeneinträge */
 .category-options li {
   padding: 0.5rem 0.75rem;
   cursor: pointer;
@@ -340,24 +331,20 @@ a:focus-visible {
   background: #f5f5f5;
 }
 
-/* Hilfsklasse zum Öffnen */
 .category-selection.open .category-options {
   display: flex;
   flex-direction: column;
 }
 
-/* Default = ROT (ungültig) */
 .category-selection .selector {
   border: 1px solid var(--color-error);
   transition: border-color .15s ease;
 }
 
-/* Fokus = BLAU */
 .category-selection .selector:focus {
   border-color: var(--color-lightblue);
 }
 
-/* Nach Auswahl (gültig) → BLAU */
 .category-selection.valid .selector {
   border-color: var(--color-lightblue);
 }
@@ -365,19 +352,15 @@ a:focus-visible {
 .category-proxy {
   position: absolute;
   inset: 0;
-  /* deckt das sichtbare Feld ab */
   width: 100%;
   height: 100%;
   opacity: 0;
-  /* unsichtbar */
   pointer-events: none;
-  /* nicht klickbar */
 }
 
 .field-error {
   color: var(--color-error);
   font-size: 0.875rem;
-  /* 14px */
   line-height: 1.2;
   margin-top: 0.25rem;
   display: none;
@@ -393,7 +376,6 @@ a:focus-visible {
 
 .input-error:focus {
   border: 1px solid var(--color-lightblue) !important;
-  /* wie gewohnt */
 }
 
 .valid-input {
