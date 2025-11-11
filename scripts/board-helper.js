@@ -143,7 +143,6 @@ function scrollToLastToggledSubtask() {
  */
 let currentSortMode = "dueDate";
 
-
 /**
  * Initializes the sorting dropdown in the board header.
  * - Sets the dropdown to reflect the current sort mode.
@@ -151,13 +150,15 @@ let currentSortMode = "dueDate";
  */
 function initSorting() {
   const select = document.getElementById("task-sort-select");
+
+  // Synchronize dropdown with the current sort mode (dueDate by default)
   if (select) select.value = currentSortMode;
 
   document.addEventListener("change", event => {
     const select = event.target.closest("#task-sort-select");
     if (!select) return;
     currentSortMode = select.value;
-    loadTasks();
+    loadTasks(); // re-render with new sort
   });
 }
 
@@ -165,12 +166,15 @@ function initSorting() {
 /**
  * Returns a sorted copy of the provided task list based on the
  * currently active sort mode (default, due date, priority, title).
+ * Falls back to "dueDate" if mode is "default".
  * @param {Array<Object>} taskList - List of task objects to sort.
  * @returns {Array<Object>} Sorted array of tasks.
  */
 function sortTasks(taskList) {
   const sorted = [...taskList];
-  switch (currentSortMode) {
+  const mode = currentSortMode === "default" ? "dueDate" : currentSortMode;
+
+  switch (mode) {
     case "dueDate":
       return sorted.sort(compareByDueDate);
     case "priority":

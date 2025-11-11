@@ -36,7 +36,7 @@ function getTaskInfoDlgTpl(task) {
 
     <main class="dlg__main">
       <span class="dlg__main__task-title">${task.title || 'Untitled Task'}</span>
-      <span class="dlg__main__task-description">${task.description || 'No description provided.'}</span>
+      <span class="dlg__main__task-description">${task.description || 'No description provided'}</span>
 
       <div class="dlg__main__task__due-date">
         <span class="dlg__main__task__due-date-span">Due date:</span>
