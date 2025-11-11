@@ -1,8 +1,8 @@
 // ======================================================
-// 🔹 KONSTANTEN & BASIS
+// 🔹 CONSTANTS & BASE
 // ======================================================
 
-/** Mapping von Task-Status zu den jeweiligen Spalten-IDs im DOM */
+/** Maps task states to their corresponding column IDs in the DOM. */
 const columnMap = {
   'to-do': 'to-do-tasks',
   'in-progress': 'in-progress-tasks',
@@ -10,35 +10,39 @@ const columnMap = {
   'done': 'done-tasks',
 };
 
+
 /**
- * Gibt den Namen eines Users anhand seiner ID zurück.
- * @param {string} id - User-ID.
- * @returns {string} Benutzername oder "Unknown User".
+ * Returns a user's name based on their ID.
+ * @param {string} id - User ID.
+ * @returns {string} Username or "Unknown User".
  */
 const getUserNameById = id => {
   const user = users.find(user => user.id === id);
   return user?.name || "Unknown User";
 };
 
+
 /**
- * Gibt die Profilfarbe eines Users anhand seiner ID zurück.
- * @param {string} id - User-ID.
- * @returns {string|null} Profilfarbe oder null.
+ * Returns the user's profile color based on their ID.
+ * @param {string} id - User ID.
+ * @returns {string|null} Profile color or null.
  */
 const getUserPicById = id => {
   const user = users.find(user => user.id === id);
   return user?.profilImgColor || null;
 };
 
+
 /**
- * Gibt die Initialen eines Users anhand seines Namens zurück.
- * @param {string} id - User-ID.
- * @returns {string} Initialen, z. B. "AB".
+ * Returns a user's initials based on their full name.
+ * @param {string} id - User ID.
+ * @returns {string} Initials, e.g., "AB".
  */
 const getUserInitialsById = id => {
   const user = users.find(user => user.id === id);
   return user?.name?.split(" ").map(name => name[0].toUpperCase()).join("") || "";
 };
+
 
 let currentLayout = null;
 window.addEventListener("resize", handleResizeScreenBoard);
@@ -46,10 +50,10 @@ window.addEventListener("load", handleResizeScreenBoard);
 
 
 // ======================================================
-// 🔹 INITIALISIERUNG
+// 🔹 INITIALIZATION
 // ======================================================
 
-/** Initialisiert das Board inkl. Daten, Aufgaben, Suche & Drag-and-Drop. */
+/** Initializes the board including data, tasks, search, and drag-and-drop. */
 async function initBoard() {
   await getData();
   loadTasks();
@@ -60,7 +64,8 @@ async function initBoard() {
   enableSearchBoxClickFocus();
 }
 
-/** Aktiviert Klick-Fokus für alle Suchboxen im Board-Header. */
+
+/** Enables click-to-focus for all search boxes in the board header. */
 function enableSearchBoxClickFocus() {
   document.addEventListener('click', event => {
     const box = event.target.closest('.board__head__searchbox');
@@ -69,9 +74,10 @@ function enableSearchBoxClickFocus() {
   });
 }
 
+
 /**
- * Fokussiert das Inputfeld in einer Suchbox.
- * @param {HTMLElement} box - Container der Suchbox.
+ * Focuses the input field inside a search box.
+ * @param {HTMLElement} box - The search box container.
  */
 function focusSearchInput(box) {
   const input = box.querySelector('input');
@@ -87,8 +93,8 @@ function focusSearchInput(box) {
 // ======================================================
 
 /**
- * Öffnet den Task-Info-Dialog für die übergebene Task-ID.
- * @param {string} taskId - ID des Tasks.
+ * Opens the task info dialog for the specified task ID.
+ * @param {string} taskId - Task ID.
  */
 async function renderTaskInfoDlg(taskId) {
   await getData();
@@ -101,10 +107,11 @@ async function renderTaskInfoDlg(taskId) {
   requestAnimationFrame(() => restoreScrollPositions(savedScroll));
 }
 
+
 /**
- * Erstellt den Task-Info-Dialog.
- * @param {object} task - Task-Objekt.
- * @returns {HTMLElement} Das Dialogelement.
+ * Creates the task info dialog.
+ * @param {object} task - Task object.
+ * @returns {HTMLElement} The dialog element.
  */
 function setupTaskInfoDialog(task) {
   const dlgBox = document.getElementById("dlg-box");
@@ -119,8 +126,8 @@ function setupTaskInfoDialog(task) {
 // ======================================================
 
 /**
- * Öffnet den Bearbeitungs-Dialog für einen Task.
- * @param {string} taskId - ID des Tasks.
+ * Opens the edit dialog for a specific task.
+ * @param {string} taskId - Task ID.
  */
 async function renderTaskEditDlg(taskId) {
   await getData();
@@ -132,10 +139,11 @@ async function renderTaskEditDlg(taskId) {
   initializeTaskEditFeatures(task);
 }
 
+
 /**
- * Erstellt das HTML für den Task-Edit-Dialog.
- * @param {object} task - Task-Objekt.
- * @returns {HTMLElement} Das Dialogelement.
+ * Creates the HTML content for the task edit dialog.
+ * @param {object} task - Task object.
+ * @returns {HTMLElement} The dialog element.
  */
 function setupTaskEditDialog(task) {
   const dlgBox = document.getElementById("dlg-box");
@@ -144,9 +152,10 @@ function setupTaskEditDialog(task) {
   return dlgBox;
 }
 
+
 /**
- * Initialisiert alle Features im Edit-Dialog (Subtasks, Assignment etc.).
- * @param {object} task - Task-Objekt.
+ * Initializes all features in the edit dialog (subtasks, assignment, etc.).
+ * @param {object} task - Task object.
  */
 function initializeTaskEditFeatures(task) {
   initSubtaskInput();
@@ -162,8 +171,8 @@ function initializeTaskEditFeatures(task) {
 // ======================================================
 
 /**
- * Öffnet den Add-Task-Dialog oder leitet auf Mobile-Seite weiter.
- * @param {string} [defaultTaskState="to-do"] - Standard-Taskstatus.
+ * Opens the Add Task dialog or redirects to the mobile page.
+ * @param {string} [defaultTaskState="to-do"] - Default task state.
  */
 async function renderAddTaskDlg(defaultTaskState = "to-do") {
   if (shouldRedirectToMobile()) return redirectToAddTaskPage();
@@ -174,20 +183,23 @@ async function renderAddTaskDlg(defaultTaskState = "to-do") {
   showAddTaskDialog(dlg);
 }
 
-/** Prüft, ob auf Mobile weitergeleitet werden soll. */
+
+/** Checks if the user should be redirected to the mobile Add Task page. */
 function shouldRedirectToMobile() {
   return window.innerWidth < 1025;
 }
 
-/** Leitet auf die Mobile-Add-Task-Seite weiter. */
+
+/** Redirects the user to the mobile Add Task page. */
 function redirectToAddTaskPage() {
   window.location.replace('../pages/add-task.html');
 }
 
+
 /**
- * Erstellt den Add-Task-Dialog.
- * @param {string} defaultTaskState - Initialer Taskstatus.
- * @returns {HTMLElement} Das Dialogelement.
+ * Creates the Add Task dialog element.
+ * @param {string} defaultTaskState - Initial task state.
+ * @returns {HTMLElement} The dialog element.
  */
 function setupAddTaskDialog(defaultTaskState) {
   const dlg = document.getElementById("dlg-box");
@@ -196,9 +208,10 @@ function setupAddTaskDialog(defaultTaskState) {
   return dlg;
 }
 
+
 /**
- * Lädt Inhalte & Daten (Assignments, Subtasks) in den Add-Task-Dialog.
- * @param {HTMLElement} dlg - Dialogelement.
+ * Loads all required content and data (assignments, subtasks) into the Add Task dialog.
+ * @param {HTMLElement} dlg - The dialog element.
  */
 async function loadAddTaskContent(dlg) {
   await InsertLoader.loadInsertByElement(dlg.querySelector("[data-insert]"));
@@ -207,9 +220,10 @@ async function loadAddTaskContent(dlg) {
   await waitFor(".dlg-edit__subtask-list");
 }
 
+
 /**
- * Initialisiert Eingaben und Icons im Add-Task-Dialog.
- * @param {HTMLElement} dlg - Dialogelement.
+ * Initializes input fields and icon buttons in the Add Task dialog.
+ * @param {HTMLElement} dlg - The dialog element.
  */
 function initializeAddTaskFeatures(dlg) {
   initSubtaskInput();
@@ -217,9 +231,10 @@ function initializeAddTaskFeatures(dlg) {
   initSubtaskIconButtons();
 }
 
+
 /**
- * Zeigt den Add-Task-Dialog an und initialisiert Fälligkeitsvalidierung.
- * @param {HTMLElement} dlg - Dialogelement.
+ * Displays the Add Task dialog and initializes due date validation.
+ * @param {HTMLElement} dlg - The dialog element.
  */
 async function showAddTaskDialog(dlg) {
   dlg.classList.remove("d-none");
@@ -234,7 +249,7 @@ async function showAddTaskDialog(dlg) {
 // 🔹 TASK / BOARD MANAGEMENT
 // ======================================================
 
-/** Lädt alle Tasks in die jeweiligen Spalten. */
+/** Loads all tasks into their respective columns. */
 function loadTasks() {
   clearColumns();
   tasks.forEach(task => appendTaskToColumn(task));
@@ -242,34 +257,37 @@ function loadTasks() {
   markOverdueDates();
 }
 
+
 /**
- * Löscht einen Task in der Datenbank und aktualisiert das Board.
- * @param {string} taskId - ID des Tasks.
+ * Deletes a task from the database and updates the board.
+ * @param {string} taskId - Task ID.
  */
 async function deleteTask(taskId) {
   try {
     const url = `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`;
     const response = await fetch(url, { method: "DELETE" });
-    if (!response.ok) throw new Error(`Fehler: ${response.status}`);
+    if (!response.ok) throw new Error(`Error: ${response.status}`);
     await getData();
     loadTasks();
     updateAllPlaceholders();
     hideDlg();
   } catch (error) {
-    console.error("Fehler beim Löschen:", error);
+    console.error("Error deleting task:", error);
   }
 }
 
-/** Leert alle Task-Spalten. */
+
+/** Clears all task columns. */
 function clearColumns() {
   Object.values(columnMap).forEach(id => {
     document.getElementById(id).innerHTML = "";
   });
 }
 
+
 /**
- * Fügt einen Task der entsprechenden Spalte hinzu.
- * @param {object} task - Task-Objekt.
+ * Appends a task card to the appropriate column.
+ * @param {object} task - Task object.
  */
 function appendTaskToColumn(task) {
   const colId = columnMap[task.taskState];
@@ -281,14 +299,16 @@ function appendTaskToColumn(task) {
   col.appendChild(wrapper.firstElementChild);
 }
 
-/** Aktualisiert alle Placeholder-Texte in leeren Spalten. */
+
+/** Updates all placeholder texts in empty columns. */
 function updateAllPlaceholders() {
   Object.values(columnMap).forEach(updateColumnPlaceholder);
 }
 
+
 /**
- * Zeigt oder entfernt den Placeholder in einer bestimmten Spalte.
- * @param {string} columnId - ID der Spalte.
+ * Shows or removes the placeholder in a specific column.
+ * @param {string} columnId - Column ID.
  */
 function updateColumnPlaceholder(columnId) {
   const col = document.getElementById(columnId);
@@ -302,9 +322,10 @@ function updateColumnPlaceholder(columnId) {
   }
 }
 
+
 /**
- * Füllt das Formular im Edit-Dialog mit den Task-Daten.
- * @param {object} task - Task-Objekt.
+ * Populates the edit dialog form with task data.
+ * @param {object} task - Task object.
  */
 function fillEditFormWithTaskData(task) {
   document.getElementById("title-input").value = task.title || "";
@@ -315,9 +336,10 @@ function fillEditFormWithTaskData(task) {
   loadSubtasksIntoForm(task);
 }
 
+
 /**
- * Lädt Subtasks in die Edit-Ansicht.
- * @param {object} task - Task-Objekt mit Subtasks.
+ * Loads subtasks into the edit dialog view.
+ * @param {object} task - Task object with subtasks.
  */
 function loadSubtasksIntoForm(task) {
   const ul = document.querySelector(".dlg-edit__subtask-list");
@@ -337,7 +359,7 @@ function loadSubtasksIntoForm(task) {
 // 🔹 LAYOUT / RESPONSIVE
 // ======================================================
 
-/** Handhabt Layoutwechsel zwischen Desktop und Mobile. */
+/** Handles layout switching between desktop and mobile views. */
 function handleResizeScreenBoard() {
   const isSmallScreen = window.innerWidth < 1025;
   const boardHead = document.getElementById('board-head');
@@ -349,25 +371,28 @@ function handleResizeScreenBoard() {
   }
 }
 
+
 /**
- * Rendert die Mobile-Version des Headers.
- * @param {HTMLElement} boardHead - Header-Container.
+ * Renders the mobile version of the board header.
+ * @param {HTMLElement} boardHead - Header container element.
  */
 function renderMobileHead(boardHead) {
   boardHead.innerHTML = getAddTaskBtnMobile();
 }
 
+
 /**
- * Rendert die Desktop-Version des Headers.
- * @param {HTMLElement} boardHead - Header-Container.
+ * Renders the desktop version of the board header.
+ * @param {HTMLElement} boardHead - Header container element.
  */
 function renderDesktopHead(boardHead) {
   boardHead.innerHTML = getBoardHeadDesktop();
 }
 
+
 /**
- * Setzt den aktuellen Layout-Modus.
- * @param {boolean} isSmallScreen - true, wenn Mobile-Ansicht aktiv ist.
+ * Sets the current layout mode.
+ * @param {boolean} isSmallScreen - True if mobile view is active.
  */
 function setLayout(isSmallScreen) {
   currentLayout = isSmallScreen ? 'mobile' : 'desktop';

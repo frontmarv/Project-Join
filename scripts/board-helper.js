@@ -1,11 +1,11 @@
 // ======================================================
-// 🔹 HELPER-FUNKTIONEN (ALLGEMEIN)
+// 🔹 HELPER FUNCTIONS (GENERAL)
 // ======================================================
 
 /**
- * Gibt benachbarte Task-Kategorien zurück (für Navigation).
- * @param {object} task - Task-Objekt.
- * @returns {{previousTask: string, nextTask: string}}
+ * Returns the surrounding task categories (for navigation between states).
+ * @param {object} task - Task object.
+ * @returns {{previousTask: string, nextTask: string}} Object with the previous and next task states.
  */
 function getSurroundingCategories(task) {
   const state = task.taskState;
@@ -18,18 +18,20 @@ function getSurroundingCategories(task) {
   return { previousTask, nextTask };
 }
 
+
 /**
- * Wandelt den ersten Buchstaben eines Strings in einen Großbuchstaben um.
- * @param {string} text - Eingabetext.
- * @returns {string} Kapitalisierter Text.
+ * Capitalizes the first letter of a given string.
+ * @param {string} text - Input text.
+ * @returns {string} Capitalized text.
  */
 function capitalize(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+
 /**
- * Prüft Eingabefelder und weist entsprechende CSS-Klassen zu.
- * @param {HTMLInputElement} inputElement - Eingabefeld.
+ * Validates an input element and toggles CSS classes accordingly.
+ * @param {HTMLInputElement} inputElement - Input element to validate.
  */
 function syncValidityClass(inputElement) {
   if (!inputElement) return;
@@ -42,9 +44,10 @@ function syncValidityClass(inputElement) {
   }
 }
 
+
 /**
- * Initialisiert Delegation für Datumseingabe-Validierung.
- * @param {HTMLElement} scope - Container-Element (z. B. Dialog).
+ * Initializes delegated validation for date input fields.
+ * @param {HTMLElement} scope - Container element (e.g., dialog).
  */
 function initDueDateValidationDelegated(scope) {
   if (!scope || scope.dataset.ddBound === 'true') return;
@@ -56,19 +59,21 @@ function initDueDateValidationDelegated(scope) {
   scope.addEventListener('blur', onDueDateEvent, true);
 }
 
+
 /**
- * Event-Handler für Datumseingabe-Validierung.
- * @param {Event} event - Eingabeereignis.
+ * Event handler for date input validation.
+ * @param {Event} event - Input event.
  */
 function onDueDateEvent(event) {
   if (!event.target.matches('#due-date')) return;
   syncValidityClass(event.target);
 }
 
+
 /**
- * Speichert Scrollpositionen ausgewählter Elemente.
- * @param {string[]} selectors - Array mit CSS-Selektoren.
- * @returns {Object<string, number>} Gespeicherte Scrollwerte.
+ * Saves the scroll positions of given elements.
+ * @param {string[]} selectors - Array of CSS selectors.
+ * @returns {Object<string, number>} Stored scroll positions.
  */
 function saveScrollPositions(selectors) {
   const savedScroll = {};
@@ -79,9 +84,10 @@ function saveScrollPositions(selectors) {
   return savedScroll;
 }
 
+
 /**
- * Stellt Scrollpositionen wieder her und scrollt ggf. zu Subtask.
- * @param {Object<string, number>} savedScroll - Gespeicherte Scrollwerte.
+ * Restores previously saved scroll positions and scrolls to the last toggled subtask if available.
+ * @param {Object<string, number>} savedScroll - Stored scroll positions.
  */
 function restoreScrollPositions(savedScroll) {
   requestAnimationFrame(() => {
@@ -93,7 +99,8 @@ function restoreScrollPositions(savedScroll) {
   });
 }
 
-/** Scrollt zum zuletzt umgeschalteten Subtask, falls vorhanden. */
+
+/** Scrolls to the last toggled subtask if one exists. */
 function scrollToLastToggledSubtask() {
   if (!window.__lastToggledSubtaskId) return;
   const target = document.querySelector(
