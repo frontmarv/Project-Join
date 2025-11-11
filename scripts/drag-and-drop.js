@@ -152,44 +152,6 @@ function updateDraggingPosition(event) {
 
 
 // ======================================================
-// 🔹 PLACEHOLDER & VISUALS
-// ======================================================
-
-/**
- * Creates a visual placeholder in the original task position.
- * @param {HTMLElement} taskCard - Task element being dragged.
- */
-function createPlaceholder(taskCard) {
-  const rect = taskCard.getBoundingClientRect();
-  placeholder = document.createElement("div");
-  placeholder.className = "task task--placeholder";
-  placeholder.style.width = `${rect.width}px`;
-  placeholder.style.height = `${rect.height}px`;
-  taskCard.parentNode.insertBefore(placeholder, taskCard);
-}
-
-
-/**
- * Applies temporary visual styles to the dragged task card.
- * @param {HTMLElement} taskCard - The dragged task element.
- */
-function styleDraggedTask(taskCard) {
-  const rect = taskCard.getBoundingClientRect();
-  Object.assign(taskCard.style, {
-    position: "fixed",
-    left: `${rect.left}px`,
-    top: `${rect.top}px`,
-    width: `${rect.width}px`,
-    height: `${rect.height}px`,
-    zIndex: "10000",
-    pointerEvents: "none"
-  });
-  taskCard.classList.add("dragging");
-  taskCard.style.transform = "rotate(2deg) scale(1.02)";
-}
-
-
-// ======================================================
 // 🔹 COLUMN HOVER LOGIC
 // ======================================================
 
@@ -354,7 +316,6 @@ function moveTaskToPlaceholder() {
 }
 
 
-
 // ======================================================
 // 🔹 MANUAL MOVE / FIREBASE UPDATE
 // ======================================================
@@ -405,58 +366,6 @@ async function refreshBoard() {
   await getData();
   loadTasks();
   updateAllPlaceholders();
-}
-
-
-// ======================================================
-// 🔹 PLACEHOLDER MANAGEMENT (EMPTY COLUMNS)
-// ======================================================
-
-/**
- * Hides the "No tasks" placeholder inside a given column.
- * @param {HTMLElement} col - Column element.
- */
-function hideNoTasksPlaceholder(col) {
-  const placeholder = col?.querySelector('.no-tasks-placeholder');
-  if (placeholder) placeholder.style.display = 'none';
-}
-
-
-/**
- * Ensures placeholders reappear in empty columns after drag.
- * @param {HTMLElement} col - Column element.
- */
-function showNoTasksPlaceholderIfEmpty(col) {
-  if (!col) return;
-  const hasTask = col.querySelector('.task:not(.task--placeholder):not(.dragging)');
-  if (hasTask) return hideExistingPlaceholder(col);
-  ensureNoTasksPlaceholder(col);
-}
-
-
-/**
- * Hides an existing placeholder element.
- * @param {HTMLElement} col - Column element.
- */
-function hideExistingPlaceholder(col) {
-  const existing = col.querySelector('.no-tasks-placeholder');
-  if (existing) existing.style.display = 'none';
-}
-
-
-/**
- * Creates and displays a "No tasks" placeholder if missing.
- * @param {HTMLElement} col - Column element.
- */
-function ensureNoTasksPlaceholder(col) {
-  let placeholder = col.querySelector('.no-tasks-placeholder');
-  if (!placeholder) {
-    const wrap = document.createElement('div');
-    wrap.innerHTML = getPlaceholderTpl();
-    placeholder = wrap.firstElementChild;
-    col.appendChild(placeholder);
-  }
-  placeholder.style.display = 'flex';
 }
 
 
