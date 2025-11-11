@@ -229,14 +229,6 @@ function handleTaskClick(task) {
 }
 
 
-/** Resets all temporary drag-related state variables. */
-function resetDragState() {
-  clickedTask = null;
-  isDragging = false;
-  lastHoverCol = null;
-}
-
-
 // ======================================================
 // 🔹 DRAG STOP / STATE UPDATE
 // ======================================================
