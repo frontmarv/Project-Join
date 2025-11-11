@@ -7,16 +7,29 @@ let placeholder = null;
 let startCol = null;
 let offsetX = 0;
 let offsetY = 0;
-let isDragging = false;
 let clickedTask = null;
 let lastHoverCol = null;
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+const DRAG_THRESHOLD = 5;
 
 
 // ======================================================
 // 🔹 INITIALIZATION
 // ======================================================
 
-/** Initializes drag and drop event listeners. */
+/** Initializes global pointerdown listener for drag and drop functionality. */
+function initDragAndDrop() {
+  document.addEventListener("pointerdown", onPointerDown);
+}
+
+
+// ======================================================
+// 🔹 INITIALIZATION
+// ======================================================
+
+/** Initializes global pointerdown listener for drag and drop functionality. */
 function initDragAndDrop() {
   document.addEventListener("pointerdown", onPointerDown);
 }
@@ -27,8 +40,8 @@ function initDragAndDrop() {
 // ======================================================
 
 /**
- * Handles pointer down event and prepares drag start.
- * @param {PointerEvent} event - Pointer event.
+ * Handles pointer down event and prepares for a possible drag start.
+ * @param {PointerEvent} event - Pointer event triggered on mouse/touch press.
  */
 function onPointerDown(event) {
   if (!isValidDragStart(event)) return;
@@ -36,6 +49,8 @@ function onPointerDown(event) {
   if (!task) return;
 
   clickedTask = task;
+  dragStartX = event.clientX;
+  dragStartY = event.clientY;
   setPointerOffsets(event, task);
   startCol = task.closest(".tasks");
   attachDragListeners();
@@ -44,7 +59,11 @@ function onPointerDown(event) {
 }
 
 
-/** Validates if drag can start based on target and search state. */
+/**
+ * Validates whether drag can start depending on event target and search state.
+ * @param {PointerEvent} event - Pointer down event.
+ * @returns {boolean} True if drag is allowed, otherwise false.
+ */
 function isValidDragStart(event) {
   if (event.button !== 0) return false;
   if (event.target.closest(".task-card__menu-icon")) return false;
@@ -53,14 +72,18 @@ function isValidDragStart(event) {
 }
 
 
-/** Attaches pointermove and pointerup listeners for dragging. */
+/** Attaches pointermove and pointerup event listeners for active drag handling. */
 function attachDragListeners() {
   document.addEventListener("pointermove", onPointerMove, { passive: false });
   document.addEventListener("pointerup", onPointerUp, { passive: false });
 }
 
 
-/** Calculates offset between pointer position and task card. */
+/**
+ * Calculates pointer offset relative to the dragged task.
+ * @param {PointerEvent} event - Pointer event.
+ * @param {HTMLElement} task - Task card element.
+ */
 function setPointerOffsets(event, task) {
   const taskRect = task.getBoundingClientRect();
   offsetX = event.clientX - taskRect.left;
@@ -73,8 +96,8 @@ function setPointerOffsets(event, task) {
 // ======================================================
 
 /**
- * Handles pointer move event during drag.
- * @param {PointerEvent} event - Pointer event.
+ * Handles pointer movement during drag operation.
+ * @param {PointerEvent} event - Pointer move event.
  */
 function onPointerMove(event) {
   if (!clickedTask) return;
@@ -83,7 +106,11 @@ function onPointerMove(event) {
 }
 
 
-/** Starts dragging logic and creates placeholder. */
+/**
+ * Starts drag operation by styling the dragged task and creating a placeholder.
+ * @param {HTMLElement} taskCard - Task card element being dragged.
+ * @param {PointerEvent} event - Pointer event.
+ */
 function startDrag(taskCard, event) {
   draggedTask = taskCard;
   createPlaceholder(taskCard);
@@ -93,7 +120,11 @@ function startDrag(taskCard, event) {
 }
 
 
-/** Safely captures pointer to avoid losing drag control. */
+/**
+ * Captures pointer to maintain drag control across browser contexts.
+ * @param {HTMLElement} taskCard - Task card element.
+ * @param {PointerEvent} event - Pointer event.
+ */
 function capturePointer(taskCard, event) {
   try {
     taskCard.setPointerCapture(event.pointerId);
@@ -101,7 +132,10 @@ function capturePointer(taskCard, event) {
 }
 
 
-/** Updates the current dragged element’s position. */
+/**
+ * Updates the position of the dragged task based on current pointer location.
+ * @param {PointerEvent} event - Pointer event.
+ */
 function updateDraggingPosition(event) {
   draggedTask.style.left = `${event.clientX - offsetX}px`;
   draggedTask.style.top = `${event.clientY - offsetY}px`;
@@ -113,7 +147,10 @@ function updateDraggingPosition(event) {
 // 🔹 PLACEHOLDER & VISUALS
 // ======================================================
 
-/** Creates a placeholder in the original task-card position. */
+/**
+ * Creates a visual placeholder in the task's original position.
+ * @param {HTMLElement} taskCard - Task element being dragged.
+ */
 function createPlaceholder(taskCard) {
   const cardPosition = taskCard.getBoundingClientRect();
   placeholder = document.createElement("div");
@@ -124,7 +161,10 @@ function createPlaceholder(taskCard) {
 }
 
 
-/** Applies visual styling to the dragged task-card. */
+/**
+ * Applies styling and transformation to visually represent the dragged task.
+ * @param {HTMLElement} taskCard - Task card being dragged.
+ */
 function styleDraggedTask(taskCard) {
   const cardPosition = taskCard.getBoundingClientRect();
   Object.assign(taskCard.style, {
@@ -145,7 +185,10 @@ function styleDraggedTask(taskCard) {
 // 🔹 COLUMN HOVER LOGIC
 // ======================================================
 
-/** Updates which column is currently hovered by the dragged task. */
+/**
+ * Updates the currently hovered column under the dragged task.
+ * @param {PointerEvent} event - Pointer event.
+ */
 function updateHoverColumn(event) {
   const underPointer = document.elementFromPoint(event.clientX, event.clientY);
   const col = underPointer?.closest(".tasks") || null;
@@ -153,7 +196,10 @@ function updateHoverColumn(event) {
 }
 
 
-/** Handles transition between hovered columns. */
+/**
+ * Handles the transition between previously and newly hovered columns.
+ * @param {HTMLElement|null} col - Newly hovered column.
+ */
 function handleColumnChange(col) {
   if (col) handleNewHoverColumn(col);
   if (lastHoverCol && lastHoverCol !== col) showNoTasksPlaceholderIfEmpty(lastHoverCol);
@@ -161,7 +207,10 @@ function handleColumnChange(col) {
 }
 
 
-/** Handles entering a new hover column. */
+/**
+ * Handles entry into a new hover column and updates placeholders.
+ * @param {HTMLElement} col - Column element.
+ */
 function handleNewHoverColumn(col) {
   hideNoTasksPlaceholder(col);
   if (placeholder && !col.contains(placeholder)) col.appendChild(placeholder);
@@ -173,32 +222,42 @@ function handleNewHoverColumn(col) {
 // ======================================================
 
 /**
- * Handles pointer release event (drop or click).
+ * Handles pointer release event — determines if it was a click or drop.
  * @param {PointerEvent} event - Pointer event.
  */
 async function onPointerUp(event) {
   removeDragListeners();
-  if (!isDragging && clickedTask) return handleTaskClick(clickedTask);
+
+  const movedDistance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
+  const wasClick = movedDistance < DRAG_THRESHOLD;
+
+  if (wasClick && clickedTask && !isDragging) {
+    handleTaskClick(clickedTask);
+  }
+
   if (isDragging) await stopDragging(event);
   resetDragState();
 }
 
 
-/** Removes pointermove and pointerup listeners. */
+/** Removes active drag listeners after release. */
 function removeDragListeners() {
   document.removeEventListener("pointermove", onPointerMove);
   document.removeEventListener("pointerup", onPointerUp);
 }
 
 
-/** Handles click on task when not dragging. */
+/**
+ * Handles simple click on a task (when not dragging).
+ * @param {HTMLElement} task - Task card element.
+ */
 function handleTaskClick(task) {
   const id = task.getAttribute("data-task-id");
   if (id) renderTaskInfoDlg(id);
 }
 
 
-/** Resets all drag-related state variables. */
+/** Resets all drag-related global state variables. */
 function resetDragState() {
   clickedTask = null;
   isDragging = false;
@@ -211,7 +270,7 @@ function resetDragState() {
 // ======================================================
 
 /**
- * Handles drag stop logic: determines new column, updates state, and cleans up.
+ * Finalizes drag operation — determines new column, updates state, and cleans up.
  * @param {PointerEvent} event - Pointer event.
  */
 async function stopDragging(event) {
@@ -227,7 +286,7 @@ async function stopDragging(event) {
 
 
 /**
- * Collects current drag context information (IDs and states).
+ * Collects drag context info such as IDs and state transitions.
  * @returns {{id: string|null, newState: string|null, oldState: string|null}}
  */
 function getDragContextData() {
@@ -240,10 +299,10 @@ function getDragContextData() {
 
 
 /**
- * Updates task state in Firebase if column has changed.
+ * Updates task state in Firebase when the column has changed.
  * @param {string|null} id - Task ID.
- * @param {string|null} newState - New column state.
- * @param {string|null} oldState - Original column state.
+ * @param {string|null} newState - Target state.
+ * @param {string|null} oldState - Original state.
  */
 async function handleTaskStateChange(id, newState, oldState) {
   const shouldUpdate = id && newState && oldState && newState !== oldState;
@@ -253,14 +312,17 @@ async function handleTaskStateChange(id, newState, oldState) {
 }
 
 
-/** Resets references after dragging has stopped. */
+/** Clears drag references after completion. */
 function resetDragReferences() {
   draggedTask = null;
   startCol = null;
 }
 
 
-/** Removes dragging visuals and resets inline styles. */
+/**
+ * Removes temporary drag styling and restores original element layout.
+ * @param {PointerEvent} event - Pointer event.
+ */
 function finalizeDraggedTaskStyle(event) {
   draggedTask.classList.remove("dragging");
   draggedTask.style.transform = "";
@@ -272,7 +334,7 @@ function finalizeDraggedTaskStyle(event) {
 }
 
 
-/** Inserts task into placeholder position and cleans up. */
+/** Moves task element to the placeholder’s position and cleans up DOM. */
 function moveTaskToPlaceholder() {
   if (placeholder && placeholder.parentNode)
     placeholder.parentNode.insertBefore(draggedTask, placeholder);
@@ -287,8 +349,8 @@ function moveTaskToPlaceholder() {
 // ======================================================
 
 /**
- * Moves a task manually to a new column (used in info view).
- * @param {string} TaskId - The task ID.
+ * Moves a task manually into a new column (used in task info dialog).
+ * @param {string} TaskId - Task ID.
  * @param {string} newStateUpperCase - Target state (capitalized).
  */
 async function manualMoveTaskToNewColmn(TaskId, newStateUpperCase) {
@@ -299,9 +361,9 @@ async function manualMoveTaskToNewColmn(TaskId, newStateUpperCase) {
 
 
 /**
- * Maps column DOM ID to task state key.
+ * Maps column DOM ID to its respective task state key.
  * @param {string} id - Column DOM ID.
- * @returns {string|null} Task state key.
+ * @returns {string|null} Corresponding task state.
  */
 function mapColumnIdToTaskState(id) {
   return {
@@ -316,7 +378,7 @@ function mapColumnIdToTaskState(id) {
 /**
  * Updates a task’s state in Firebase.
  * @param {string} id - Task ID.
- * @param {string} state - New state.
+ * @param {string} state - New task state.
  */
 async function updateTaskState(id, state) {
   await fetch(`https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${id}.json`, {
@@ -327,7 +389,7 @@ async function updateTaskState(id, state) {
 }
 
 
-/** Reloads board data and refreshes placeholders. */
+/** Refreshes the board after a task update by reloading data and placeholders. */
 async function refreshBoard() {
   await getData();
   loadTasks();
@@ -340,7 +402,7 @@ async function refreshBoard() {
 // ======================================================
 
 /**
- * Hides the "no tasks" placeholder in a column.
+ * Hides the "no tasks" placeholder inside a column.
  * @param {HTMLElement} col - Column element.
  */
 function hideNoTasksPlaceholder(col) {
@@ -350,7 +412,7 @@ function hideNoTasksPlaceholder(col) {
 
 
 /**
- * Displays a placeholder in empty columns after drag.
+ * Shows a "no tasks" placeholder in an empty column after drag end.
  * @param {HTMLElement} col - Column element.
  */
 function showNoTasksPlaceholderIfEmpty(col) {
@@ -361,14 +423,20 @@ function showNoTasksPlaceholderIfEmpty(col) {
 }
 
 
-/** Hides an existing placeholder in a column. */
+/**
+ * Hides an existing placeholder in a given column.
+ * @param {HTMLElement} col - Column element.
+ */
 function hideExistingPlaceholder(col) {
   const existing = col.querySelector('.no-tasks-placeholder');
   if (existing) existing.style.display = 'none';
 }
 
 
-/** Ensures that a visible "no tasks" placeholder exists. */
+/**
+ * Ensures that a visible placeholder element exists for empty columns.
+ * @param {HTMLElement} col - Column element.
+ */
 function ensureNoTasksPlaceholder(col) {
   let placeholder = col.querySelector('.no-tasks-placeholder');
   if (!placeholder) {
@@ -379,3 +447,13 @@ function ensureNoTasksPlaceholder(col) {
   }
   placeholder.style.display = 'flex';
 }
+
+
+// ======================================================
+// 🔹 WINDOW BLUR HANDLER
+// ======================================================
+
+/** Resets drag state when the window loses focus (e.g., user switches tabs). */
+window.addEventListener("blur", () => {
+  if (isDragging) resetDragState();
+});
