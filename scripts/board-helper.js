@@ -136,13 +136,22 @@ function scrollToLastToggledSubtask() {
 // 🔹 SORTING HELPERS
 // ======================================================
 
-let currentSortMode = "default";
+/**
+ * Defines the current sorting mode for tasks.
+ * Default is set to "dueDate" so tasks are initially sorted by due date.
+ * @type {"default" | "dueDate" | "priority" | "title"}
+ */
+let currentSortMode = "dueDate";
 
 /**
  * Initializes the sorting dropdown in the board header.
- * Re-renders all tasks whenever the selected sorting mode changes.
+ * - Sets the dropdown to reflect the current sort mode.
+ * - Listens for user changes and reloads tasks accordingly.
  */
 function initSorting() {
+  const select = document.getElementById("task-sort-select");
+  if (select) select.value = currentSortMode;
+
   document.addEventListener("change", event => {
     const select = event.target.closest("#task-sort-select");
     if (!select) return;
