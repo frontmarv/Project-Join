@@ -143,6 +143,7 @@ function scrollToLastToggledSubtask() {
  */
 let currentSortMode = "dueDate";
 
+
 /**
  * Initializes the sorting dropdown in the board header.
  * - Sets the dropdown to reflect the current sort mode.
