@@ -229,3 +229,38 @@ function createDataObjectAddContact(addUserName, addEmail, addPhone) {
 }
 
 
+/**
+ * Displays a success message dialog after adding a contact.
+ * Shows animated dialog for 1.5 seconds then removes it.
+ * @returns {void}
+ */
+function addContactSuccessDlg() {
+    const successDlg = getAddUserSuccessDlg();
+    animationDlg(successDlg);
+}
+
+/**
+ * Displays a success message dialog after editing a contact.
+ * Shows animated dialog for 1.5 seconds then removes it.
+ * @returns {void}
+ */
+function editContactSuccessDlg() {
+    const successDlg = getEditContactSuccessDlg();
+    animationDlg(successDlg);
+}
+
+/**
+ * Animates a success dialog into view and removes it after delay.
+ * Inserts dialog into DOM, fades it in, then fades out and removes after 1.5 seconds.
+ * @param {string} successDlg - HTML string containing the success dialog markup
+ * @returns {void}
+ */
+function animationDlg(successDlg) {
+    document.body.insertAdjacentHTML('beforeend', successDlg);
+    const successDlgElement = document.querySelector('.create-contact-successful');
+    requestAnimationFrame(() => successDlgElement.classList.remove('invisible'));
+    setTimeout(() => {
+        successDlgElement.classList.add('invisible');
+        setTimeout(() => successDlgElement.remove(), 300);
+    }, 1500);
+}
