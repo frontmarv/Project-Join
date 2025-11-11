@@ -48,11 +48,6 @@ const getUserInitialsById = id => {
 };
 
 
-let currentLayout = null;
-window.addEventListener("resize", handleResizeScreenBoard);
-window.addEventListener("load", handleResizeScreenBoard);
-
-
 // ======================================================
 // 🔹 INITIALIZATION
 // ======================================================
