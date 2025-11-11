@@ -1,4 +1,13 @@
 // ======================================================
+// 🔹 DRAG AND DROP LOGIC (with Firefox click suppression)
+// ======================================================
+// Handles all drag-and-drop interactions on the board,
+// including pointer tracking, column updates, visual feedback,
+// and suppressing synthetic clicks immediately after a drop.
+// ======================================================
+
+
+// ======================================================
 // 🔹 GLOBAL STATE
 // ======================================================
 
@@ -14,6 +23,8 @@ let dragStartX = 0;
 let dragStartY = 0;
 let dragStartTime = 0;
 let wasDroppedInSameColumn = false;
+
+/** Distance threshold (in px) to treat pointer movement as a drag. */
 const DRAG_THRESHOLD = 5;
 
 
@@ -22,10 +33,15 @@ const DRAG_THRESHOLD = 5;
 // ======================================================
 
 /**
- * Initializes drag-and-drop event listeners for task cards.
+ * Initializes drag-and-drop and global click suppression.
+ * Sets up pointer event listeners and a global click suppressor.
  */
 function initDragAndDrop() {
   document.addEventListener("pointerdown", onPointerDown);
+  // Capture-phase click suppressor (runs before any bubble handlers)
+  document.addEventListener("click", suppressClickAfterDrag, true);
+  // Failsafe: reset drag if pointer is canceled by the browser
+  document.addEventListener("pointercancel", onPointerCancel, { passive: true });
 }
 
 
@@ -49,7 +65,6 @@ function onPointerDown(event) {
   setPointerOffsets(event, task);
   startCol = task.closest(".tasks");
   attachDragListeners();
-
   event.preventDefault();
 }
 
@@ -153,42 +168,6 @@ function updateDraggingPosition(event) {
 
 
 // ======================================================
-// 🔹 COLUMN HOVER LOGIC
-// ======================================================
-
-/**
- * Updates the currently hovered column based on pointer position.
- * @param {PointerEvent} event - Pointer event.
- */
-function updateHoverColumn(event) {
-  const underPointer = document.elementFromPoint(event.clientX, event.clientY);
-  const col = underPointer?.closest(".tasks") || null;
-  if (col !== lastHoverCol) handleColumnChange(col);
-}
-
-
-/**
- * Handles transition between hovered columns.
- * @param {HTMLElement|null} col - The newly hovered column.
- */
-function handleColumnChange(col) {
-  if (col) handleNewHoverColumn(col);
-  if (lastHoverCol && lastHoverCol !== col) showNoTasksPlaceholderIfEmpty(lastHoverCol);
-  lastHoverCol = col;
-}
-
-
-/**
- * Handles entering a new hover column.
- * @param {HTMLElement} col - The hovered column.
- */
-function handleNewHoverColumn(col) {
-  hideNoTasksPlaceholder(col);
-  if (placeholder && !col.contains(placeholder)) col.appendChild(placeholder);
-}
-
-
-// ======================================================
 // 🔹 POINTER UP (DROP HANDLING)
 // ======================================================
 
@@ -198,12 +177,16 @@ function handleNewHoverColumn(col) {
  */
 async function onPointerUp(event) {
   removeDragListeners();
+
   const movedDistance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
   const wasClick = movedDistance < DRAG_THRESHOLD && event.timeStamp - dragStartTime < 500;
 
+  // If dragging was active → process drop first
   if (isDragging) {
     await stopDragging(event);
   }
+
+  // Only trigger click if it was not a drag or recent drop
   if (wasClick && clickedTask && !isDragging && !wasDroppedInSameColumn) {
     handleTaskClick(clickedTask);
   }
@@ -216,6 +199,15 @@ async function onPointerUp(event) {
 function removeDragListeners() {
   document.removeEventListener("pointermove", onPointerMove);
   document.removeEventListener("pointerup", onPointerUp);
+}
+
+
+/**
+ * Handles pointer cancellation (browser interrupted the gesture).
+ * @param {PointerEvent} _event - Pointer event.
+ */
+function onPointerCancel(_event) {
+  resetDragState();
 }
 
 
@@ -235,13 +227,17 @@ function handleTaskClick(task) {
 
 /**
  * Finalizes the drag operation and updates Firebase if necessary.
+ * Also schedules global click suppression for a short window,
+ * preventing synthetic clicks (Firefox) after a drop.
  * @param {PointerEvent} event - Pointer event.
  */
 async function stopDragging(event) {
   if (!draggedTask) return;
 
-  const { id, newState, oldState } = getDragContextData();
+  // Schedule click suppression for 300ms
+  setClickSuppression(300);
 
+  const { id, newState, oldState } = getDragContextData();
   wasDroppedInSameColumn = newState === oldState;
 
   finalizeDraggedTaskStyle(event);
@@ -249,15 +245,6 @@ async function stopDragging(event) {
 
   await handleTaskStateChange(id, newState, oldState);
   resetDragReferences();
-}
-
-
-/** Resets all temporary drag-related state variables. */
-function resetDragState() {
-  clickedTask = null;
-  isDragging = false;
-  lastHoverCol = null;
-  wasDroppedInSameColumn = false;
 }
 
 
@@ -304,8 +291,13 @@ function finalizeDraggedTaskStyle(event) {
   draggedTask.classList.remove("dragging");
   draggedTask.style.transform = "";
   Object.assign(draggedTask.style, {
-    position: "", left: "", top: "", width: "", height: "",
-    zIndex: "", pointerEvents: ""
+    position: "",
+    left: "",
+    top: "",
+    width: "",
+    height: "",
+    zIndex: "",
+    pointerEvents: ""
   });
   try {
     draggedTask.releasePointerCapture(event.pointerId);
@@ -321,6 +313,22 @@ function moveTaskToPlaceholder() {
   placeholder?.remove();
   placeholder = null;
 }
+
+
+// ======================================================
+// 🔹 STATE RESET & FAILSAFE
+// ======================================================
+
+/** Resets all temporary drag-related state variables. */
+function resetDragState() {
+  clickedTask = null;
+  isDragging = false;
+  lastHoverCol = null;
+  wasDroppedInSameColumn = false;
+}
+
+/** Cancels drag state when window loses focus (failsafe). */
+window.addEventListener("blur", resetDragState);
 
 
 // ======================================================
@@ -374,13 +382,3 @@ async function refreshBoard() {
   loadTasks();
   updateAllPlaceholders();
 }
-
-
-// ======================================================
-// 🔹 FAILSAFE HANDLING
-// ======================================================
-
-/** Cancels drag state when window loses focus (failsafe). */
-window.addEventListener("blur", () => {
-  if (isDragging) resetDragState();
-});
