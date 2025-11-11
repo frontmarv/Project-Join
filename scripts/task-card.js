@@ -13,6 +13,9 @@
 /**
  * Builds a view model for rendering a task card.
  * @param {Object} task - The task object.
+ * @param {string} task.category - Task category.
+ * @param {Array|string|Object} task.assignedContacts - Assigned users.
+ * @param {string} task.priority - Task priority level.
  * @returns {Object} View model with formatted task data.
  */
 function buildTaskViewModel(task) {
@@ -27,9 +30,9 @@ function buildTaskViewModel(task) {
 
 
 /**
- * Formats a date string to German locale.
+ * Formats a date string using German locale.
  * @param {string} dateStr - Date string to format.
- * @returns {string} Formatted date or empty string.
+ * @returns {string} Formatted date or an empty string.
  */
 function formatDate(dateStr) {
   const date = new Date(dateStr);
@@ -43,8 +46,8 @@ function formatDate(dateStr) {
 
 
 /**
- * Checks if a task due date is overdue.
- * @param {string} dueDate - The task's due date.
+ * Checks if a given due date is overdue (today or earlier).
+ * @param {string} dueDate - The task’s due date string.
  * @returns {boolean} True if overdue, otherwise false.
  */
 function isOverdue(dueDate) {
@@ -60,8 +63,8 @@ function isOverdue(dueDate) {
 // ======================================================
 
 /**
- * Iterates all task cards and marks overdue dates.
- * Removes overdue class for completed tasks.
+ * Iterates over all task cards and marks overdue ones.
+ * Removes overdue style for tasks in “done” state.
  */
 function markOverdueDates() {
   const today = new Date().setHours(0, 0, 0, 0);
@@ -76,11 +79,11 @@ function markOverdueDates() {
 
 
 /**
- * Adds or removes the overdue class on a task's due date element.
- * @param {HTMLElement} taskCardDate - Element displaying the due date.
- * @param {string} state - Column/task state (e.g., "to-do", "done").
- * @param {string} dateStr - The due date string from dataset.
- * @param {number} today - Current normalized timestamp (00:00).
+ * Adds or removes the overdue class from a due date element.
+ * @param {HTMLElement} taskCardDate - The date element of the card.
+ * @param {string} state - The column/task state (e.g. “done”).
+ * @param {string} dateStr - The due date string.
+ * @param {number} today - The normalized timestamp (midnight today).
  */
 function updateOverdueState(taskCardDate, state, dateStr, today) {
   const dueDate = new Date(dateStr).setHours(0, 0, 0, 0);
@@ -98,9 +101,9 @@ function updateOverdueState(taskCardDate, state, dateStr, today) {
 // ======================================================
 
 /**
- * Returns subtask statistics for a given task.
- * @param {Object} task - Task object.
- * @returns {{total: number, done: number, percent: number}} Subtask stats.
+ * Returns subtask statistics (total, done, percent).
+ * @param {Object} task - The task object containing subtasks.
+ * @returns {{total:number, done:number, percent:number}} Subtask stats.
  */
 function getSubtaskStats(task) {
   return {
@@ -112,9 +115,9 @@ function getSubtaskStats(task) {
 
 
 /**
- * Counts the total number of subtasks.
- * @param {Object} task - Task object.
- * @returns {number} Total subtask count.
+ * Counts all subtasks within a task.
+ * @param {Object} task - The task object.
+ * @returns {number} Number of subtasks.
  */
 function getTotalSubtaskCount(task) {
   if (!task?.subtasks || typeof task.subtasks !== "object") return 0;
@@ -123,21 +126,20 @@ function getTotalSubtaskCount(task) {
 
 
 /**
- * Counts completed subtasks.
- * @param {Object} task - Task object.
- * @returns {number} Checked subtask count.
+ * Counts all checked (completed) subtasks.
+ * @param {Object} task - The task object.
+ * @returns {number} Number of completed subtasks.
  */
 function getCheckedSubtaskCount(task) {
   if (!task?.subtasks || typeof task.subtasks !== "object") return 0;
-  return Object.values(task.subtasks)
-    .filter(st => st && st.taskChecked === true).length;
+  return Object.values(task.subtasks).filter(st => st?.taskChecked === true).length;
 }
 
 
 /**
- * Calculates completion percentage of subtasks.
- * @param {Object} task - Task object.
- * @returns {number} Percentage of completed subtasks.
+ * Calculates the percentage of completed subtasks.
+ * @param {Object} task - The task object.
+ * @returns {number} Completion percentage (0–100).
  */
 function getSubtaskProgressPercent(task) {
   const total = getTotalSubtaskCount(task);
@@ -152,9 +154,9 @@ function getSubtaskProgressPercent(task) {
 // ======================================================
 
 /**
- * Generates assigned user avatars HTML for task cards.
+ * Builds HTML for assigned user avatars on task cards.
  * @param {Array|Object} assigned - Assigned contact data.
- * @returns {string} HTML markup for avatars.
+ * @returns {string} HTML string for assigned users.
  */
 function getAssignedUsersHtml(assigned) {
   const assUser = normalizeAssignedContacts(assigned);
@@ -171,9 +173,9 @@ function getAssignedUsersHtml(assigned) {
 
 
 /**
- * Normalizes assigned contact data into an array.
- * @param {any} data - Assigned contact data.
- * @returns {string[]} Array of user IDs.
+ * Normalizes assigned user data into a flat ID array.
+ * @param {Array|Object|any} data - Raw assigned user data.
+ * @returns {string[]} Normalized user ID array.
  */
 function normalizeAssignedContacts(data) {
   if (Array.isArray(data)) return data;
@@ -187,20 +189,23 @@ function normalizeAssignedContacts(data) {
 // ======================================================
 
 /**
- * Returns the CSS class for a given task category.
- * @param {string} category - Task category.
- * @returns {string} CSS class for category styling.
+ * Returns the CSS class corresponding to the task category.
+ * @param {string} category - Task category name.
+ * @returns {string} CSS class name.
  */
 function getCategoryClass(category) {
-  const map = { "User Story": "task__category", "Technical Task": "task__category2" };
+  const map = {
+    "User Story": "task__category",
+    "Technical Task": "task__category2"
+  };
   return map[category] || "task__category";
 }
 
 
 /**
- * Returns the file path of the priority icon.
- * @param {string} priority - Task priority level.
- * @returns {string} Path to priority icon file.
+ * Returns the correct priority icon path for a given level.
+ * @param {string} priority - Task priority (“urgent”, “medium”, “low”).
+ * @returns {string} File path to the icon image.
  */
 function getPriorityIcon(priority) {
   const base = "../assets/img/priority-";
@@ -215,8 +220,8 @@ function getPriorityIcon(priority) {
 // ======================================================
 
 /**
- * Opens the task info dialog when clicking on a task card.
- * Ignores clicks on menu icons or during drag operations.
+ * Opens the task info dialog when clicking a task card.
+ * Prevents opening during drag or when clicking menu icons.
  * @param {MouseEvent} event - Click event.
  */
 document.addEventListener("click", (event) => {
@@ -229,17 +234,33 @@ document.addEventListener("click", (event) => {
 
 
 /**
- * Opens the context menu for a task card.
- * Ensures only one menu is visible at a time.
+ * Opens the context menu for a specific task card.
+ * Hides all other open menus.
  * @param {MouseEvent} event - Click event.
  */
 document.addEventListener("click", (event) => {
   const btn = event.target.closest(".task-card__menu-icon");
   if (!btn) return;
   event.preventDefault();
+
   document.querySelectorAll(".task-card__menu")
     .forEach(menu => (menu.style.display = "none"));
+
   const menu = btn.closest(".task-card__header")
     ?.querySelector(".task-card__menu");
+
   if (menu) menu.style.display = "flex";
+});
+
+
+/**
+ * Closes all task card context menus when clicking outside.
+ * @param {MouseEvent} event - Click event.
+ */
+document.addEventListener("click", (event) => {
+  if (event.target.closest(".task-card__menu")) return;
+  if (event.target.closest(".task-card__menu-icon")) return;
+
+  document.querySelectorAll(".task-card__menu")
+    .forEach(menu => (menu.style.display = "none"));
 });

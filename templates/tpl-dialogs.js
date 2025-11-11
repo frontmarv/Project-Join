@@ -1,4 +1,28 @@
+// ======================================================
+// 🔹 DIALOG TEMPLATES
+// ======================================================
+// Contains all HTML template generators for task dialogs,
+// including task info, edit, add, and subtask elements.
+// ======================================================
 
+
+// ======================================================
+// 🔹 TASK INFO DIALOG
+// ======================================================
+
+/**
+ * Returns HTML markup for the task info dialog.
+ * @param {Object} task - Task object containing task data.
+ * @param {string} task.id - Unique task ID.
+ * @param {string} [task.title] - Task title.
+ * @param {string} [task.description] - Task description.
+ * @param {string} [task.category] - Task category.
+ * @param {string} [task.dueDate] - Due date of the task.
+ * @param {string} [task.priority] - Task priority (urgent, medium, low).
+ * @param {Array|string|Object} [task.assignedContacts] - Assigned contacts.
+ * @param {Object} [task.subtasks] - Subtask data.
+ * @returns {string} HTML markup for the task info dialog.
+ */
 function getTaskInfoDlgTpl(task) {
   return /*html*/ `
     <header class="dlg__header">
@@ -56,6 +80,17 @@ function getTaskInfoDlgTpl(task) {
   `;
 }
 
+
+// ======================================================
+// 🔹 TASK EDIT DIALOG
+// ======================================================
+
+/**
+ * Returns HTML markup for the task edit dialog.
+ * @param {Object} task - Task object containing editable task data.
+ * @param {string} task.id - Unique task ID.
+ * @returns {string} HTML markup for the task edit dialog.
+ */
 function getTaskEditDlgTpl(task) {
   return /*html*/ `
         <header class="dlg-edit__header">
@@ -126,11 +161,20 @@ function getTaskEditDlgTpl(task) {
         <footer class="dlg-edit__footer">
             <div class="dlg-edit__footer__discard-btn filled-btn" onclick="renderTaskInfoDlg('${task.id}')">Discard</div>
             <div class="dlg-edit__footer__save-btn filled-btn" onclick="saveEditedTask('${task.id}')">SAVE</div>
-
-        </footer>`
+        </footer>`;
 }
 
-function getSubtaskTpl(value = '') {
+
+// ======================================================
+// 🔹 SUBTASK ELEMENTS
+// ======================================================
+
+/**
+ * Returns HTML for a standard subtask list item.
+ * @param {string} [value=""] - The text of the subtask.
+ * @returns {string} HTML markup for a subtask element.
+ */
+function getSubtaskTpl(value = "") {
   return /*html*/ `
     <li class="dlg-edit__main__subtask">• ${value}
       <div class="subtask-edit-box">
@@ -141,7 +185,13 @@ function getSubtaskTpl(value = '') {
     </li>`;
 }
 
-function getEditSubtaskTpl(value = '') {
+
+/**
+ * Returns HTML for an editable subtask input field.
+ * @param {string} [value=""] - Initial subtask text.
+ * @returns {string} HTML markup for the editable subtask.
+ */
+function getEditSubtaskTpl(value = "") {
   return /*html*/ `
     <li class="dlg-edit__main__subtask edit-mode">
       <input type="text" class="dlg-edit__input-text edit-input" value="${value}" />
@@ -150,9 +200,19 @@ function getEditSubtaskTpl(value = '') {
         <div class="separator"></div>
         <img class="subtask-edit-box__confirm-img" src="../assets/img/check.svg" alt="Confirm Edit">
       </div>
-    </li>`
+    </li>`;
 }
 
+
+// ======================================================
+// 🔹 ADD TASK DIALOG
+// ======================================================
+
+/**
+ * Returns HTML for the add-task dialog.
+ * @param {string} [defaultTaskState="to-do"] - Default state for the new task.
+ * @returns {string} HTML markup for the add-task dialog.
+ */
 function getAddTaskDlgTpl(defaultTaskState = "to-do") {
   return /*html*/ `
         <header class="dlg-edit__header dlg-add-task-header">
@@ -160,15 +220,29 @@ function getAddTaskDlgTpl(defaultTaskState = "to-do") {
         </header>
         <input type="hidden" id="task-state" value="${defaultTaskState}">
         <div data-insert="add-task-insert.html"></div>
-    `
+    `;
 }
 
+
+// ======================================================
+// 🔹 ASSIGNMENT TEMPLATES
+// ======================================================
+
+/**
+ * Returns HTML for a single user in the assignment list.
+ * @param {Object} user - User object.
+ * @param {string} user.id - User ID.
+ * @param {string} user.name - Full name of the user.
+ * @param {string} user.profilImgColor - Background color for avatar.
+ * @param {boolean} [checked=false] - Whether the user is currently assigned.
+ * @returns {string} HTML markup for a user in the assignment list.
+ */
 function getAssignmentListUserTpl(user, checked = false) {
-  const initials = getUserNameInitials(user.name || '');
+  const initials = getUserNameInitials(user.name || "");
   const color = user.profilImgColor;
   const userName = addTagToLoggedInUser(user.name);
   return /*html*/ `
-    <li data-user-id="${user.id}" class="${checked ? 'active' : ''}">
+    <li data-user-id="${user.id}" class="${checked ? "active" : ""}">
       <div class="user-selection-field">
         <svg width="32" height="32" viewBox="0 0 42 42" aria-hidden="true" focusable="false">
           <circle cx="21" cy="21" r="20" fill="${color}" stroke="white" stroke-width="2" />
@@ -177,15 +251,23 @@ function getAssignmentListUserTpl(user, checked = false) {
         <span class="username">${userName}</span>
       </div>
       <img class="checkbox"
-          src="../assets/img/${checked ? 'checkbox-checked-white.svg' : 'checkbox-unchecked.svg'}"
+          src="../assets/img/${checked ? "checkbox-checked-white.svg" : "checkbox-unchecked.svg"}"
           alt="checkbox"
           data-checked="${checked}">
     </li>
   `;
 }
 
+
+/**
+ * Returns an SVG avatar for an assigned user.
+ * @param {Object} user - User object.
+ * @param {string} user.name - Full name of the user.
+ * @param {string} user.profilImgColor - Background color for avatar.
+ * @returns {string} SVG markup for the user's avatar.
+ */
 function getAssignedUserSvgTpl(user) {
-  const initials = getUserNameInitials(user.name || '');
+  const initials = getUserNameInitials(user.name || "");
   const color = user.profilImgColor;
   return /*html*/ `
     <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true" focusable="false">
