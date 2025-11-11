@@ -7,6 +7,27 @@
 
 let subtaskActionLock = false;
 
+// ======================================================
+// 🔹 USER HELPER FUNCTIONS
+// ======================================================
+
+/**
+ * Returns the initials (e.g., "AB") of a user based on their user ID.
+ * Looks up the user in the global `users` array.
+ * @param {string} userId - The unique ID of the user.
+ * @returns {string} The uppercase initials of the user, or "?" if not found.
+ */
+function getUserInitialsById(userId) {
+  const user = users?.find(u => u.id === userId);
+  if (!user || !user.name) return "?";
+
+  return user.name
+    .split(" ")
+    .filter(Boolean)
+    .map(n => n[0].toUpperCase())
+    .join("");
+}
+
 
 // ======================================================
 // 🔹 PRIORITY HANDLING

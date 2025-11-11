@@ -147,23 +147,15 @@ function setMinDueDate() {
  * @throws {Error} If no user key is stored or the HTTP request fails.
  */
 async function saveChangesToDB(multipatch) {
-    try {
-        let user = STORED_USER_KEY;
-        if (!user) {
-            throw new Error('No user key found');
-        }
-        let response = await fetch(DB_URL + "users/" + user + ".json", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(multipatch)
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-    } catch (error) {
-        console.error('Error saving to database:', error.message);
-        throw error;
-    }
+  if (!STORED_USER_KEY) throw new Error('No user key found');
+
+  const res = await fetch(`${DB_URL}users/${STORED_USER_KEY}.json`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(multipatch)
+  });
+
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
 
 
