@@ -348,9 +348,11 @@ function clearTask() {
   const catVisible = document.querySelector(".category-selection .selector");
   const catProxy = document.getElementById("category-proxy");
   const catHidden = document.getElementById("category-hidden");
+  const subList = document.getElementById('subtask-list');
   if (catVisible) catVisible.value = "";
   if (catProxy) catProxy.value = "";
   if (catHidden) catHidden.value = "";
+  if (subList) subList.innerHTML = "";
   resetPriorityButtons();
   updateCategoryValidity();
 }
