@@ -380,5 +380,6 @@
   }
   .board__sort-select {
     width: 50%;
+    margin: 0;
   }
 }
