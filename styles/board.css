@@ -296,6 +296,11 @@
     justify-content: flex-start;
   }
 
+  .search-mode-indicator {
+    align-self: unset;
+    text-align: unset;
+  }
+
   .board__table {
     grid-template-columns: repeat(1, 1fr);
     padding-bottom: 30px;
