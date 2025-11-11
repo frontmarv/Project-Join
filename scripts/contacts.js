@@ -439,8 +439,19 @@ function handleMenuClick(event) {
  * Shows animated dialog for 1.5 seconds then removes it.
  * @returns {void}
  */
-function AddContactSuccessDlg() {
+function addContactSuccessDlg() {
     const successDlg = getAddUserSuccessDlg();
+    animationDlg(successDlg)
+}
+
+
+function editContactSuccessDlg() {
+    const successDlg = getEditContactSuccessDlg();
+    animationDlg(successDlg)
+}
+
+
+function animationDlg(successDlg) {
     document.body.insertAdjacentHTML('beforeend', successDlg);
     const successDlgElement = document.querySelector('.create-contact-successful');
     requestAnimationFrame(() => successDlgElement.classList.remove('invisible'));
@@ -449,5 +460,3 @@ function AddContactSuccessDlg() {
         setTimeout(() => successDlgElement.remove(), 300);
     }, 1500);
 }
-
-

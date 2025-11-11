@@ -62,6 +62,7 @@ function removeAnimationClass() {
     }, 300);
 }
 
+
 /**
  * Creates a data patch object from contact form inputs.
  * Extracts values from name, email, and phone input fields.
@@ -94,6 +95,7 @@ function validateAndSaveData() {
         return;
     } else {
         saveDataEditContactDlg();
+        editContactSuccessDlg();
     }
 }
 
@@ -150,7 +152,7 @@ async function putNewContactToDB() {
         removeAnimationClass();
         renderContactList();
         setContactCardtoInvisible();
-        AddContactSuccessDlg();
+        addContactSuccessDlg();
     }
 }
 

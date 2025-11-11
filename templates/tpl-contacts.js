@@ -168,3 +168,10 @@ function getDeleteContactDlg() {
 }
 
 
+
+function getEditContactSuccessDlg() {
+    return /*html*/ `
+        <div id="dlg-box" class="create-contact-successful invisible">
+                Contact edit successful
+        </div>`
+}
