@@ -33,8 +33,8 @@ if (!hasShownWelcomeAnimation) {
 window.addEventListener("DOMContentLoaded", () => {
     /** @type {string[]} List of logo image paths to preload. */
     let animationImages = [
-        "../assets/img/logo-black.png",
-        "../assets/img/logo-white.png"
+        "./assets/img/logo-black.png",
+        "./assets/img/logo-white.png"
     ];
 
     animationImages.forEach(src => {
