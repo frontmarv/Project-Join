@@ -13,6 +13,7 @@
 
 .board__head__middle-box {
   display: flex;
+  flex-direction: row-reverse;
 }
 
 .board__head-searchbox-wrapper {
@@ -28,7 +29,6 @@
   border-radius: 0.5rem;
   border: 1px solid var(--color-lightgrey);
   padding: 0.5rem;
-  margin-left: 0.5rem;
 }
 
 .board__head__searchbox:focus-within {
