@@ -90,6 +90,10 @@ async function deleteContact(userkeyToDelete) {
         const response = await fetch(DB_URL + "users/" + userkeyToDelete + ".json", {
             method: "DELETE"
         });
+        if (userkeyToDelete = LOGGED_IN_USER) {
+            LOGGED_IN_USER = undefined;
+            logOutUser();
+        }
         if (!response.ok) {
             throw new Error(`Fehler beim Löschen: ${response.status}`);
         }
