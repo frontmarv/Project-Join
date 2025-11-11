@@ -195,6 +195,7 @@ async function attemptLogin() {
         getAndStoreUserId(existingUser.name);
         let multipatch = { "loggedIn": true };
         await saveChangesToDB(multipatch);
+        sessionStorage.setItem('loggedIn', 'user')
         window.location.replace("./pages/summary.html");
     }
 }
@@ -224,6 +225,7 @@ async function guestLogin() {
     } catch (error) {
         console.error("Error applying multipatch to all users:", error);
     }
+    sessionStorage.setItem('loggedIn', 'guest')
     window.location.replace("./pages/summary.html");
 }
 
