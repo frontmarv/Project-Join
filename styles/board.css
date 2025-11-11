@@ -152,6 +152,7 @@
   padding: 0.375rem 0.5rem;
   border: 1px solid var(--color-lightgrey);
   border-radius: 0.5rem;
+  background-color: var(--color-white);
   color: var(--color-lightgrey);
   font-size: 0.875rem;
   cursor: pointer;
