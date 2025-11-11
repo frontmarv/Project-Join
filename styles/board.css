@@ -20,6 +20,7 @@
   border-radius: 0.5rem;
   border: 1px solid var(--color-lightgrey);
   padding: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 .board__head__searchbox:focus-within {
@@ -37,7 +38,7 @@
 .board__head__searchbox img {
   height: 2rem;
   border-left: 0.15rem solid var(--color-lightgrey);
-  padding: 0 0.6rem 0 1rem;
+  padding: 0 0.6rem;
   cursor: pointer;
 }
 
@@ -71,7 +72,7 @@
 }
 
 .task-search-and-add {
-  width: 60%;
+  width: 80%;
   display: flex;
   justify-content: space-evenly;
 }
@@ -135,6 +136,16 @@
 .add-task-to-btn:active {
   content: url(../assets/img/add-btn-border-active.svg);
   cursor: pointer;
+}
+
+.board__sort-select {
+  padding: 6px 8px;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 8px;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 0 0.5rem;
 }
 
 .board__table {

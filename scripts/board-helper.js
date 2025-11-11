@@ -1,10 +1,19 @@
 // ======================================================
-// 🔹 HELPER FUNCTIONS (GENERAL)
+// 🔹 BOARD HELPER FUNCTIONS
+// ======================================================
+// Contains reusable utility functions for board rendering,
+// sorting, validation, layout handling, and scroll restoration.
+// ======================================================
+
+
+// ======================================================
+// 🔹 CATEGORY & TEXT HELPERS
 // ======================================================
 
 /**
- * Returns the surrounding task categories (for navigation between states).
- * @param {object} task - Task object.
+ * Returns the surrounding task categories for navigation between states.
+ * Used to determine which task state comes before or after the current one.
+ * @param {Object} task - The task object.
  * @returns {{previousTask: string, nextTask: string}} Object with the previous and next task states.
  */
 function getSurroundingCategories(task) {
@@ -29,9 +38,15 @@ function capitalize(text) {
 }
 
 
+// ======================================================
+// 🔹 VALIDATION HELPERS
+// ======================================================
+
 /**
- * Validates an input element and toggles CSS classes accordingly.
+ * Validates an input element and toggles validity-related CSS classes.
+ * Adds `.valid-input` when filled and `.input-error` when empty.
  * @param {HTMLInputElement} inputElement - Input element to validate.
+ * @returns {void}
  */
 function syncValidityClass(inputElement) {
   if (!inputElement) return;
@@ -47,6 +62,7 @@ function syncValidityClass(inputElement) {
 
 /**
  * Initializes delegated validation for date input fields.
+ * Ensures validation is applied dynamically within the given DOM scope.
  * @param {HTMLElement} scope - Container element (e.g., dialog).
  */
 function initDueDateValidationDelegated(scope) {
@@ -61,8 +77,8 @@ function initDueDateValidationDelegated(scope) {
 
 
 /**
- * Event handler for date input validation.
- * @param {Event} event - Input event.
+ * Event handler for due-date input validation.
+ * @param {Event} event - Input/change/blur event object.
  */
 function onDueDateEvent(event) {
   if (!event.target.matches('#due-date')) return;
@@ -70,10 +86,14 @@ function onDueDateEvent(event) {
 }
 
 
+// ======================================================
+// 🔹 SCROLL POSITION HELPERS
+// ======================================================
+
 /**
- * Saves the scroll positions of given elements.
+ * Saves the current scrollTop positions of given elements.
  * @param {string[]} selectors - Array of CSS selectors.
- * @returns {Object<string, number>} Stored scroll positions.
+ * @returns {Record<string, number>} Object mapping selectors to scroll positions.
  */
 function saveScrollPositions(selectors) {
   const savedScroll = {};
@@ -86,8 +106,9 @@ function saveScrollPositions(selectors) {
 
 
 /**
- * Restores previously saved scroll positions and scrolls to the last toggled subtask if available.
- * @param {Object<string, number>} savedScroll - Stored scroll positions.
+ * Restores saved scroll positions for given elements and
+ * scrolls to the last toggled subtask if one exists.
+ * @param {Record<string, number>} savedScroll - Object containing saved scroll positions.
  */
 function restoreScrollPositions(savedScroll) {
   requestAnimationFrame(() => {
@@ -100,11 +121,137 @@ function restoreScrollPositions(savedScroll) {
 }
 
 
-/** Scrolls to the last toggled subtask if one exists. */
+/**
+ * Scrolls the view to the last toggled subtask (if recorded).
+ * Used after reopening dialogs to restore context.
+ */
 function scrollToLastToggledSubtask() {
   if (!window.__lastToggledSubtaskId) return;
-  const target = document.querySelector(
-    `[data-subtask-id="${window.__lastToggledSubtaskId}"]`
-  );
+  const target = document.querySelector(`[data-subtask-id="${window.__lastToggledSubtaskId}"]`);
   if (target) target.scrollIntoView({ block: 'nearest' });
+}
+
+
+// ======================================================
+// 🔹 SORTING HELPERS
+// ======================================================
+
+let currentSortMode = "default";
+
+/**
+ * Initializes the sorting dropdown in the board header.
+ * Re-renders all tasks whenever the selected sorting mode changes.
+ */
+function initSorting() {
+  document.addEventListener("change", event => {
+    const select = event.target.closest("#task-sort-select");
+    if (!select) return;
+    currentSortMode = select.value;
+    loadTasks();
+  });
+}
+
+
+/**
+ * Returns a sorted copy of the provided task list based on the
+ * currently active sort mode (default, due date, priority, title).
+ * @param {Array<Object>} taskList - List of task objects to sort.
+ * @returns {Array<Object>} Sorted array of tasks.
+ */
+function sortTasks(taskList) {
+  const sorted = [...taskList];
+  switch (currentSortMode) {
+    case "dueDate":
+      return sorted.sort(compareByDueDate);
+    case "priority":
+      return sorted.sort(compareByPriority);
+    case "title":
+      return sorted.sort(compareByTitle);
+    default:
+      return sorted;
+  }
+}
+
+
+/**
+ * Comparison function for sorting tasks by due date (earliest first).
+ * @param {Object} a - Task A.
+ * @param {Object} b - Task B.
+ * @returns {number} Sorting order result.
+ */
+function compareByDueDate(a, b) {
+  const dateA = new Date(a.dueDate || Infinity);
+  const dateB = new Date(b.dueDate || Infinity);
+  return dateA - dateB;
+}
+
+
+/**
+ * Comparison function for sorting tasks by priority.
+ * Order: urgent → medium → low.
+ * @param {Object} a - Task A.
+ * @param {Object} b - Task B.
+ * @returns {number} Sorting order result.
+ */
+function compareByPriority(a, b) {
+  const order = { urgent: 1, medium: 2, low: 3 };
+  return (order[a.priority] || 99) - (order[b.priority] || 99);
+}
+
+
+/**
+ * Comparison function for sorting tasks alphabetically by title (A–Z).
+ * @param {Object} a - Task A.
+ * @param {Object} b - Task B.
+ * @returns {number} Sorting order result.
+ */
+function compareByTitle(a, b) {
+  return (a.title || "").localeCompare(b.title || "");
+}
+
+
+// ======================================================
+// 🔹 LAYOUT / RESPONSIVE
+// ======================================================
+
+/**
+ * Switches the board layout between desktop and mobile versions
+ * depending on the current screen width.
+ */
+function handleResizeScreenBoard() {
+  const isSmallScreen = window.innerWidth < 1025;
+  const boardHead = document.getElementById('board-head');
+  setLayout(isSmallScreen);
+  if (currentLayout === 'mobile') {
+    renderMobileHead(boardHead);
+  } else if (currentLayout === 'desktop') {
+    renderDesktopHead(boardHead);
+  }
+}
+
+
+/**
+ * Renders the mobile version of the board header.
+ * @param {HTMLElement} boardHead - Header container element.
+ */
+function renderMobileHead(boardHead) {
+  boardHead.innerHTML = getAddTaskBtnMobile();
+}
+
+
+/**
+ * Renders the desktop version of the board header.
+ * @param {HTMLElement} boardHead - Header container element.
+ */
+function renderDesktopHead(boardHead) {
+  boardHead.innerHTML = getBoardHeadDesktop();
+}
+
+
+/**
+ * Updates the global layout mode flag (mobile or desktop).
+ * @param {boolean} isSmallScreen - True if the current screen width is below 1025px.
+ */
+function setLayout(isSmallScreen) {
+  currentLayout = isSmallScreen ? 'mobile' : 'desktop';
 }
