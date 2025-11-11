@@ -38,14 +38,23 @@ const getUserPicById = id => {
 
 
 /**
- * Returns the initials of a user based on their full name.
- * @param {string} id - The user’s unique identifier.
- * @returns {string} Initials derived from the user's name, e.g., "AB".
+ * Returns the initials of a given user name (e.g., "Max Mustermann" → "MM").
+ * Safely handles invalid or missing input.
+ * @param {string} [userName=""] - The full name of the user.
+ * @returns {string} User initials, or "?" if not available.
  */
-const getUserInitialsById = id => {
-  const user = users.find(user => user.id === id);
-  return user?.name?.split(" ").map(name => name[0].toUpperCase()).join("") || "";
-};
+function getUserNameInitials(userName = "") {
+  if (typeof userName !== "string" || !userName.trim()) {
+    return "?";
+  }
+
+  return userName
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(word => word[0].toUpperCase())
+    .join("") || "?";
+}
 
 
 // ======================================================

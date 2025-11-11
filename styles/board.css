@@ -11,16 +11,24 @@
   margin-bottom: 3rem;
 }
 
+.board__head__middle-box {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.board__head-searchbox-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .board__head__searchbox {
   background-color: #ffffff;
   display: inline flex;
   align-items: center;
   height: 3rem;
-  width: 50%;
   border-radius: 0.5rem;
   border: 1px solid var(--color-lightgrey);
   padding: 0.5rem;
-  margin-left: 0.5rem;
 }
 
 .board__head__searchbox:focus-within {
@@ -71,7 +79,7 @@
   border: none !important;
 }
 
-.task-search-and-add {
+.task-search-and-add-box {
   width: 80%;
   display: flex;
   justify-content: space-evenly;
@@ -139,10 +147,13 @@
 }
 
 .board__sort-select {
+  height: 3rem;
+  min-width: 10rem;
   padding: 0.375rem 0.5rem;
   border: 1px solid var(--color-lightgrey);
   border-radius: 0.5rem;
-  background-color: white;
+  background-color: var(--color-white);
+  color: var(--color-lightgrey);
   font-size: 0.875rem;
   cursor: pointer;
   margin: 0 0.5rem;
@@ -272,6 +283,10 @@
   .add-task-btn {
     font-size: 1.2rem;
   }
+
+  .board__head__searchbox img {
+    padding: 0 0.5rem;
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -280,12 +295,22 @@
     width: 100vw;
   }
 
-  .task-search-and-add {
+  .task-search-and-add-box {
     width: 100%;
   }
 
   .board__head__searchbox {
-    min-width: 300px;
+    min-width: 260px;
+  }
+
+  .add-task-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .add-task-btn__text {
+    display: none;
   }
 
   .board-content {
@@ -296,6 +321,7 @@
   }
 
   .board__head {
+    position: relative;
     margin: 40px 0px 24px 0px;
     gap: 20px;
     flex-direction: column;
@@ -309,7 +335,7 @@
     align-items: center;
   }
 
-  .task-search-and-add {
+  .task-search-and-add-box {
     justify-content: flex-start;
   }
 
@@ -344,5 +370,15 @@
 @media screen and (max-width: 600px) {
   .dlg {
     width: 90vw;
+  }
+}
+
+@media screen and (max-width: 500px)  {
+  .board__head__middle-box {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .board__sort-select {
+    width: 50%;
   }
 }

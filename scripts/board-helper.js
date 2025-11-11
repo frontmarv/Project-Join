@@ -139,50 +139,82 @@ function scrollToLastToggledSubtask() {
 /**
  * Defines the current sorting mode for tasks.
  * Default is set to "dueDate" so tasks are initially sorted by due date.
- * @type {"default" | "dueDate" | "priority" | "title"}
+ * @type {"dueDate" | "priority" | "title"}
  */
 let currentSortMode = "dueDate";
 
+
 /**
  * Initializes the sorting dropdown in the board header.
- * - Sets the dropdown to reflect the current sort mode.
- * - Listens for user changes and reloads tasks accordingly.
+ * Synchronizes the current sort mode and listens for user changes.
  */
 function initSorting() {
   const select = document.getElementById("task-sort-select");
+  syncDropdownWithSortMode(select);
+  bindSortDropdownChange();
+}
 
-  // Synchronize dropdown with the current sort mode (dueDate by default)
+
+/**
+ * Synchronizes the dropdown UI with the current sorting mode.
+ * @param {HTMLSelectElement|null} select - Sorting dropdown element.
+ */
+function syncDropdownWithSortMode(select) {
   if (select) select.value = currentSortMode;
+}
 
+
+/**
+ * Binds a change event listener to the sorting dropdown.
+ * Updates the current sort mode and reloads all tasks when changed.
+ */
+function bindSortDropdownChange() {
   document.addEventListener("change", event => {
     const select = event.target.closest("#task-sort-select");
     if (!select) return;
     currentSortMode = select.value;
-    loadTasks(); // re-render with new sort
+    loadTasks();
   });
 }
 
 
 /**
- * Returns a sorted copy of the provided task list based on the
- * currently active sort mode (default, due date, priority, title).
- * Falls back to "dueDate" if mode is "default".
- * @param {Array<Object>} taskList - List of task objects to sort.
+ * Returns a sorted copy of the provided task list.
+ * Automatically ensures a valid sorting mode ("dueDate", "priority", "title").
+ * @param {Array<Object>} taskList - Array of task objects.
  * @returns {Array<Object>} Sorted array of tasks.
  */
 function sortTasks(taskList) {
   const sorted = [...taskList];
-  const mode = currentSortMode === "default" ? "dueDate" : currentSortMode;
+  ensureValidSortMode();
+  return sortByCurrentMode(sorted);
+}
 
-  switch (mode) {
+
+/**
+ * Ensures the current sort mode is valid, otherwise resets it to "dueDate".
+ */
+function ensureValidSortMode() {
+  const validModes = ["dueDate", "priority", "title"];
+  if (!validModes.includes(currentSortMode)) currentSortMode = "dueDate";
+}
+
+
+/**
+ * Sorts a list of tasks based on the active sort mode.
+ * @param {Array<Object>} tasks - Array of task objects to sort.
+ * @returns {Array<Object>} Sorted array of tasks.
+ */
+function sortByCurrentMode(tasks) {
+  switch (currentSortMode) {
     case "dueDate":
-      return sorted.sort(compareByDueDate);
+      return tasks.sort(compareByDueDate);
     case "priority":
-      return sorted.sort(compareByPriority);
+      return tasks.sort(compareByPriority);
     case "title":
-      return sorted.sort(compareByTitle);
+      return tasks.sort(compareByTitle);
     default:
-      return sorted;
+      return tasks;
   }
 }
 

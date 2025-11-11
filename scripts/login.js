@@ -33,8 +33,8 @@ if (!hasShownWelcomeAnimation) {
 window.addEventListener("DOMContentLoaded", () => {
     /** @type {string[]} List of logo image paths to preload. */
     let animationImages = [
-        "../assets/img/logo-black.png",
-        "../assets/img/logo-white.png"
+        "./assets/img/logo-black.png",
+        "./assets/img/logo-white.png"
     ];
 
     animationImages.forEach(src => {
@@ -309,7 +309,7 @@ function togglePasswordVisibility() {
  */
 function updatePasswordLockIcon() {
     if (password.value === "") {
-        passwordIcon.src = "../assets/img/lock.svg";
+        passwordIcon.src = "./assets/img/lock.svg";
     } else {
         togglePasswordIcon();
     }
@@ -322,10 +322,10 @@ function updatePasswordLockIcon() {
  */
 function togglePasswordIcon() {
     if (password.type === 'password') {
-        passwordIcon.src = '../assets/img/pw-not-visible.svg';
+        passwordIcon.src = './assets/img/pw-not-visible.svg';
     }
     else {
-        passwordIcon.src = '../assets/img/pw-visible.svg';
+        passwordIcon.src = './assets/img/pw-visible.svg';
     }
 }
 
