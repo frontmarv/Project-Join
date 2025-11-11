@@ -1,20 +1,14 @@
-const HIGHLIGHT_CLASS = "search-highlight";
 
-/** ---------------- Init ---------------- */
+const HIGHLIGHT_CLASS = "search-highlight";
 
 function initSearch() {
   const input = document.getElementById("search-tasks");
   if (!input) return;
-  addSearchEventListeners(input);
+  input.addEventListener("input", () => filterTasks(input.value));
+  input.addEventListener("keydown", clearSearchOnEsc);
   patchLoadTasks();
 }
 
-function addSearchEventListeners(input) {
-  input.addEventListener("input", () => filterTasks(input.value));
-  input.addEventListener("keydown", clearSearchOnEsc);
-}
-
-/** ---------------- Escape Key ---------------- */
 
 function clearSearchOnEsc(event) {
   if (event.key !== "Escape") return;
@@ -22,30 +16,30 @@ function clearSearchOnEsc(event) {
   filterTasks("");
 }
 
-/** ---------------- Patch loadTasks ---------------- */
 
 function patchLoadTasks() {
   if (loadTasks.__patched) return;
+
   const original = loadTasks;
   loadTasks = function () {
     original.apply(this, arguments);
-    applySearchAfterLoad();
+    const value = document.getElementById("search-tasks")?.value || "";
+    filterTasks(value);
   };
+
   loadTasks.__patched = true;
 }
 
-function applySearchAfterLoad() {
-  const value = document.getElementById("search-tasks")?.value || "";
-  filterTasks(value);
-}
-
-/** ---------------- Filtering ---------------- */
 
 function filterTasks(query) {
   const clean = query.trim().toLowerCase();
-  document.querySelectorAll(".task").forEach(card => processCardFilter(card, clean));
+  document.querySelectorAll(".task").forEach((card) =>
+    processCardFilter(card, clean)
+  );
+  
   updateSearchPlaceholders(clean);
 }
+
 
 function processCardFilter(card, query) {
   const title = card.querySelector(".task__title");
@@ -55,33 +49,24 @@ function processCardFilter(card, query) {
   resetHighlight(title);
   if (description) resetHighlight(description);
 
-  if (query.length < 2) return resetCardVisibility(card);
+  if (query.length < 2) {
+    card.style.display = "";
+    return;
+  }
 
-  const { titleText, descText } = getTaskTextContent(title, description);
-  const hasMatch = titleText.includes(query) || descText.includes(query);
-  setCardVisibility(card, hasMatch);
-  if (hasMatch) applyHighlights(title, description, query, titleText, descText);
-}
-
-function getTaskTextContent(title, description) {
   const titleText = title.dataset.rawText.toLowerCase();
   const descText = description ? description.dataset.rawText.toLowerCase() : "";
-  return { titleText, descText };
-}
 
-function resetCardVisibility(card) {
-  card.style.display = "";
-}
-
-function setCardVisibility(card, hasMatch) {
+  const hasMatch = titleText.includes(query) || descText.includes(query);
   card.style.display = hasMatch ? "" : "none";
-}
+  if (!hasMatch) return;
 
-/** ---------------- Highlighting ---------------- */
-
-function applyHighlights(title, description, query, titleText, descText) {
-  if (titleText.includes(query)) highlightText(title, query);
-  if (description && descText.includes(query)) highlightText(description, query);
+  if (titleText.includes(query)) {
+    highlightText(title, query);
+  }
+  if (description && descText.includes(query)) {
+    highlightText(description, query);
+  }
 }
 
 function resetHighlight(element) {
@@ -92,51 +77,38 @@ function resetHighlight(element) {
 function highlightText(element, query) {
   const origText = element.dataset.rawText;
   const expression = new RegExp(`(${escapeRegExp(query)})`, "gi");
-  element.innerHTML = origText.replace(
-    expression,
-    `<span class="${HIGHLIGHT_CLASS}">$1</span>`
-  );
+  element.innerHTML = origText.replace(expression, `<span class="${HIGHLIGHT_CLASS}">$1</span>`);
 }
 
 function escapeRegExp(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/** ---------------- Placeholders ---------------- */
-
 function updateSearchPlaceholders(query) {
   Object.values(columnMap).forEach(columnId => {
     const column = document.getElementById(columnId);
-    updateColumnPlaceholderState(column, query);
+    const tasks = column.querySelectorAll('.task');
+    const visibleTasks = Array.from(tasks).filter(task => task.style.display !== 'none');
+    const existingPlaceholder = column.querySelector('.no-tasks-placeholder');
+
+    if (query.length < 2) {
+      if (existingPlaceholder) existingPlaceholder.remove();
+      if (tasks.length === 0) {
+        const placeholder = document.createElement('div');
+        placeholder.innerHTML = getPlaceholderTpl();
+        column.appendChild(placeholder.firstElementChild);
+      }
+      return;
+    }
+
+    if (visibleTasks.length === 0) {
+      if (!existingPlaceholder) {
+        const placeholder = document.createElement('div');
+        placeholder.innerHTML = getSearchPlaceholderTpl();
+        column.appendChild(placeholder.firstElementChild);
+      }
+    } else {
+      if (existingPlaceholder) existingPlaceholder.remove();
+    }
   });
-}
-
-function updateColumnPlaceholderState(column, query) {
-  const tasks = column.querySelectorAll(".task");
-  const visibleTasks = [...tasks].filter(task => task.style.display !== "none");
-  const existingPlaceholder = column.querySelector(".no-tasks-placeholder");
-
-  if (query.length < 2) {
-    resetDefaultPlaceholder(column, tasks, existingPlaceholder);
-  } else {
-    updateSearchPlaceholder(column, visibleTasks, existingPlaceholder);
-  }
-}
-
-function resetDefaultPlaceholder(column, tasks, existingPlaceholder) {
-  if (existingPlaceholder) existingPlaceholder.remove();
-  if (tasks.length === 0) appendPlaceholder(column, getPlaceholderTpl());
-}
-
-function updateSearchPlaceholder(column, visibleTasks, existingPlaceholder) {
-  if (visibleTasks.length === 0 && !existingPlaceholder)
-    appendPlaceholder(column, getSearchPlaceholderTpl());
-  else if (visibleTasks.length > 0 && existingPlaceholder)
-    existingPlaceholder.remove();
-}
-
-function appendPlaceholder(column, tplFn) {
-  const placeholder = document.createElement("div");
-  placeholder.innerHTML = tplFn();
-  column.appendChild(placeholder.firstElementChild);
 }
