@@ -2,7 +2,7 @@ function initSubtaskInput() {
   const input = document.getElementById('subtask-input');
   const list = document.querySelector('.dlg-edit__subtask-list');
   if (!input || !list) return;
-  input.addEventListener('keydown', e => handleSubtaskInputKeydown(e, input, list));
+  input.addEventListener('keydown', event => handleSubtaskInputKeydown(event, input, list));
 }
 
 function handleSubtaskInputKeydown(event, input, list) {
@@ -23,15 +23,67 @@ function clearSubtaskInput(event, input) {
   input.blur();
 }
 
+
 function initSubtaskHandlers() {
-  const list = document.querySelector('.dlg-edit__subtask-list');
+  const list = document.querySelector(".dlg-edit__subtask-list");
   if (!list) return;
-  list.addEventListener('dblclick', handleSubtaskEdit);
-  list.addEventListener('click', e => handleSubtaskClick(e));
-  list.addEventListener('keydown', e => handleSubtaskEditKeydown(e));
+
+  list.addEventListener("dblclick", event => {
+    const listItem = event.target.closest("li");
+    if (!listItem) return;
+    if (event.target.closest(".subtask-edit-box__delete-img")) return;
+    if (event.target.closest(".subtask-edit-box__edit-img")) return;
+    startSubtaskEdit(listItem);
+  });
+
+  list.addEventListener("click", event => handleSubtaskClick(event));
+  list.addEventListener("keydown", event => handleSubtaskEditKeydown(event));
 }
 
+
+function resetEditIcons(list) {
+  const icons = list.querySelectorAll(".subtask-edit-box__edit-img");
+  icons.forEach(icon => icon.replaceWith(icon.cloneNode(true)));
+}
+
+function bindSubtaskDblclick(list) {
+  list.addEventListener("dblclick", event => {
+    const listItem = event.target.closest("li");
+    if (!listItem) return;
+    if (event.target.closest(".subtask-edit-box__delete-img")) return;
+    startSubtaskEdit(listItem);
+  });
+}
+
+function bindEditIconClicks(list) {
+  const icons = list.querySelectorAll(".subtask-edit-box__edit-img");
+  icons.forEach(icon => {
+    icon.addEventListener("click", event => {
+      event.stopPropagation();
+      const listItem = event.target.closest("li");
+      if (!listItem) return;
+      startSubtaskEdit(listItem);
+    });
+  });
+}
+
+
+function startSubtaskEdit(listItem) {
+  if (!listItem || listItem.classList.contains("edit-mode")) return;
+  const text = (listItem.textContent || "").replace("•", "").trim();
+  replaceSubtaskWithEditTpl(listItem, text);
+}
+
+
 function handleSubtaskClick(event) {
+  const editBtn = event.target.closest(".subtask-edit-box__edit-img");
+  if (editBtn) {
+    event.stopPropagation();
+    const listItem = editBtn.closest("li");
+    if (listItem) startSubtaskEdit(listItem);
+    return;
+  }
+
   handleSubtaskConfirm(event);
   handleSubtaskDelete(event);
 }
@@ -61,8 +113,8 @@ function initSubtaskIconButtons() {
   const confirm = document.querySelector('.subtask-input__confirm-img');
   const cancel = document.querySelector('.subtask-input__cancel-img');
   if (!input || !list) return;
-  confirm?.addEventListener('mousedown', e => handleConfirmBtnClick(e, input, list));
-  cancel?.addEventListener('mousedown', e => handleCancelBtnClick(e, input));
+  confirm?.addEventListener('mousedown', event => handleConfirmBtnClick(event, input, list));
+  cancel?.addEventListener('mousedown', event => handleCancelBtnClick(event, input));
 }
 
 function handleConfirmBtnClick(event, input, list) {
@@ -119,10 +171,10 @@ function collectSubtasksFromEditDialog() {
 }
 
 function buildSubtaskObject(items) {
-  const result = {};
-  items.forEach((li, i) => {
-    const value = (li.textContent || '').replace('•', '').trim();
-    if (value) result[`subtask${i}`] = { task: value, taskChecked: false };
+  const subtasksList = {};
+  items.forEach((listItem, i) => {
+    const value = (listItem.textContent || '').replace('•', '').trim();
+    if (value) subtasksList[`subtask${i}`] = { task: value, taskChecked: false };
   });
-  return result;
+  return subtasksList;
 }

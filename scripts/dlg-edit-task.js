@@ -158,7 +158,7 @@ function showPopupMsgChangesSaved() {
 function showAndAutoRemovePopup() {
   const popupEl = document.querySelector('.popup-msg-container');
   requestAnimationFrame(() => popupEl.classList.add('show'));
-  setTimeout(() => hidePopupElement(popupEl), 1500);
+  setTimeout(() => hidePopupElement(popupEl), 1800);
 }
 
 function hidePopupElement(popupEl) {
