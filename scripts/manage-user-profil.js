@@ -61,4 +61,5 @@ async function logOutUser() {
         window.location.replace("../index.html");
     }
     sessionStorage.removeItem('greetingShown');
+    sessionStorage.removeItem('loggedIn');
 }
