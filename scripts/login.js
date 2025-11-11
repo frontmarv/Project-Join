@@ -202,19 +202,23 @@ async function attemptLogin() {
 
 
 /**
- * Performs guest login by setting logged in status to false for all users
+ * Logs out all users by setting their loggedIn status to false in the database.
+ * Fetches all users and applies a PATCH operation to set loggedIn: false for each user.
+ * Errors are caught and logged to the console.
+ * 
+ * @async
  * @returns {Promise<void>}
+ * @throws {Error} If the HTTP request fails or no users are found.
  */
-async function guestLogin() {
-    let multipatch = { "loggedIn": false };
+async function logoutAllUsers() {
     try {
         const res = await fetch(DB_URL + "users.json");
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const users = await res.json();
         if (!users) throw new Error("No users found in database");
-        const userKeys = Object.keys(users);
+        const multipatch = { "loggedIn": false };
         await Promise.all(
-            userKeys.map(key =>
+            Object.keys(users).map(key =>
                 fetch(DB_URL + "users/" + key + ".json", {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
@@ -225,7 +229,18 @@ async function guestLogin() {
     } catch (error) {
         console.error("Error applying multipatch to all users:", error);
     }
-    sessionStorage.setItem('loggedIn', 'guest')
+}
+
+/**
+ * Initiates a guest login session and redirects to the summary page.
+ * Logs out all users, sets session storage to 'guest', and redirects to summary.html.
+ * 
+ * @async
+ * @returns {Promise<void>}
+ */
+async function guestLogin() {
+    await logoutAllUsers();
+    sessionStorage.setItem('loggedIn', 'guest');
     window.location.replace("./pages/summary.html");
 }
 
