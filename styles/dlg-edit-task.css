@@ -168,6 +168,10 @@
   flex-wrap: wrap;
 }
 
+.dlg-edit__user-box {
+  cursor: default;
+}
+
 .dlg-edit__main__add-subtasks-box {
   margin-bottom: 0.5rem;
 }
