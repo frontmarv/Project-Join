@@ -27,8 +27,10 @@ const focusOrder = ["title", "description", "due-date"];
  */
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Enter") return;
-  const { id } = e.target;
   if (!e.target.closest("form")) return;
+  if (e.target.id === "subtask-input" || e.target.classList.contains("subtask-input")) {
+    return;}
+  const { id } = e.target;
   const next = focusOrder[focusOrder.indexOf(id) + 1];
   if (!next) return;
   e.preventDefault();
