@@ -345,16 +345,41 @@ function formatCategory(category) {
 function clearTask() {
   const form = document.getElementById("task-form");
   form.reset();
-  const catVisible = document.querySelector(".category-selection .selector");
-  const catProxy = document.getElementById("category-proxy");
-  const catHidden = document.getElementById("category-hidden");
-  const subList = document.getElementById('subtask-list');
-  if (catVisible) catVisible.value = "";
-  if (catProxy) catProxy.value = "";
-  if (catHidden) catHidden.value = "";
-  if (subList) subList.innerHTML = "";
+  document.querySelector(".category-selection .selector").value = "";
+  document.getElementById("category-proxy").value = "";
+  document.getElementById("category-hidden").value = "";
+  document.getElementById('subtask-list').innerHTML = "";
+  document.getElementById('assigned-user').innerHTML = "";
+  resetContactList();
   resetPriorityButtons();
   updateCategoryValidity();
+}
+
+
+/**
+ * Resets the contact selection list by clearing all active states.
+ *
+ * This function finds all `<li>` elements within the `#contact-options` list
+ * that have the class `active`, removes the class, resets their `data-checked`
+ * attribute to "false", and updates their associated `<img>` elements to show
+ * the unchecked checkbox icon.
+ *
+ * Use this to fully reset the contact selection UI back to its default state.
+ *
+ * @function resetContactList
+ * @example
+ * // Reset all contact list entries
+ * resetContactList();
+ */
+function resetContactList() {
+  document.querySelectorAll('#contact-options li.active').forEach(li => {
+    li.classList.remove('active');
+    li.dataset.checked = 'false';
+
+    const img = li.querySelector('img');
+    img.dataset.checked = 'false';
+    img.src = '../assets/img/checkbox-unchecked.svg';
+  });
 }
 
 /**
