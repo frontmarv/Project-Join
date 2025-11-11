@@ -1,27 +1,38 @@
+// ======================================================
+// 🔹 INSERT LOADER MODULE
+// ======================================================
+
 /**
  * InsertLoader
  * -------------
- * Lädt automatisch HTML-Inserts (z. B. Header/Footer) in Elemente mit [data-insert].
- * Nutzt MemoryCache + LocalStorage zur Performance-Optimierung.
- * Überprüft im Hintergrund auf neuere Versionen (stale-while-revalidate).
+ * Automatically loads HTML inserts (e.g., header/footer) into elements with [data-insert].
+ * Uses MemoryCache + LocalStorage for performance optimization.
+ * Supports background revalidation (stale-while-revalidate).
  */
 const InsertLoader = (() => {
-  /** @constant {string} CACHE_KEY - Schlüsselname für den localStorage-Cache */
+
+  // ======================================================
+  // 🔹 CONSTANTS & CACHE SETUP
+  // ======================================================
+
+  /** @constant {string} CACHE_KEY - LocalStorage key for cached inserts */
   const CACHE_KEY = "html_insert_cache";
 
-  /** @constant {number} CACHE_TTL_MS - Lebensdauer (Time To Live) des Caches in Millisekunden (24 Stunden) */
+  /** @constant {number} CACHE_TTL_MS - Cache lifetime in milliseconds (24 hours) */
   const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
-  /** @type {Map<string, string>} memoryCache - Kurzlebiger In-Memory-Cache für Inserts während der Laufzeit */
+  /** @type {Map<string, string>} - In-memory cache for inserts */
   const memoryCache = new Map();
 
-  /** @type {Record<string, {html: string, timestamp: number, lastModified: string|null}>} localCache - Persistenter Cache aus localStorage */
+  /** @type {Record<string, {html: string, timestamp: number, lastModified: string|null}>} */
   let localCache = loadLocalCache();
 
-  /**
-   * Lädt den Cache-Inhalt aus dem localStorage.
-   * @returns {Record<string, any>} Gespeicherte Cache-Daten oder leeres Objekt.
-   */
+
+  // ======================================================
+  // 🔹 CACHE MANAGEMENT
+  // ======================================================
+
+  /** Loads cache content from localStorage. */
   function loadLocalCache() {
     try {
       return JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
@@ -30,43 +41,55 @@ const InsertLoader = (() => {
     }
   }
 
-  /**
-   * Speichert den aktuellen Cache-Zustand im localStorage.
-   * @returns {void}
-   */
+
+  /** Saves the current cache state to localStorage. */
   function saveLocalCache() {
     localStorage.setItem(CACHE_KEY, JSON.stringify(localCache));
   }
 
+
   /**
-   * Prüft, ob ein Cache-Eintrag abgelaufen ist.
-   * @param {{timestamp: number}} entry - Cache-Eintrag mit Zeitstempel.
-   * @returns {boolean} true, wenn der Eintrag abgelaufen ist.
+   * Checks if a cache entry has expired.
+   * @param {{timestamp: number}} entry - Cache entry with timestamp.
+   * @returns {boolean} True if expired.
    */
   function isExpired(entry) {
     return !entry || Date.now() - entry.timestamp > CACHE_TTL_MS;
   }
 
+
+  /** Clears both memory and local caches. */
+  function clearCache() {
+    localCache = {};
+    memoryCache.clear();
+    saveLocalCache();
+    console.info("InsertLoader: Cache cleared");
+  }
+
+
+  // ======================================================
+  // 🔹 FETCHING & UPDATING
+  // ======================================================
+
   /**
-   * Lädt HTML-Inhalt von einer URL.
+   * Fetches HTML from a given URL.
    * @async
-   * @param {string} url - URL der zu ladenden Datei.
-   * @param {"no-cache"|"reload"|"force-cache"} [mode="no-cache"] - Cache-Modus für den Fetch-Request.
-   * @returns {Promise<string>} Der geladene HTML-Text.
-   * @throws {Error} Wenn die Anfrage fehlschlägt.
+   * @param {string} url - Target file URL.
+   * @param {"no-cache"|"reload"|"force-cache"} [mode="no-cache"] - Fetch cache mode.
+   * @returns {Promise<string>} The HTML content.
    */
   async function fetchHTML(url, mode = "no-cache") {
     const response = await fetch(url, { cache: mode });
-    if (!response.ok) throw new Error(`Fehler beim Laden von ${url}: ${response.status}`);
+    if (!response.ok) throw new Error(`Failed to load ${url}: ${response.status}`);
     return await response.text();
   }
 
+
   /**
-   * Speichert HTML-Inhalt im Cache (Memory + localStorage).
-   * @param {string} url - URL des Inserts.
-   * @param {string} html - HTML-Inhalt.
-   * @param {string|null} lastModified - Letztes Änderungsdatum laut Server.
-   * @returns {void}
+   * Stores fetched HTML content in both memory and local caches.
+   * @param {string} url - Insert URL.
+   * @param {string} html - HTML content.
+   * @param {string|null} lastModified - Last-Modified header value.
    */
   function setCache(url, html, lastModified) {
     const cachedFile = { html, timestamp: Date.now(), lastModified };
@@ -75,10 +98,11 @@ const InsertLoader = (() => {
     saveLocalCache();
   }
 
+
   /**
-   * Holt HTML-Inhalt aus dem Cache, falls vorhanden und nicht abgelaufen.
-   * @param {string} url - URL des Inserts.
-   * @returns {string|null} Der HTML-Inhalt oder null, wenn nicht vorhanden/gültig.
+   * Retrieves HTML from cache if valid and not expired.
+   * @param {string} url - Insert URL.
+   * @returns {string|null} Cached HTML or null if invalid.
    */
   function getCachedHTML(url) {
     const cachedFile = localCache[url];
@@ -89,12 +113,12 @@ const InsertLoader = (() => {
     return null;
   }
 
+
   /**
-   * Lädt ein Insert neu vom Server und aktualisiert den Cache.
+   * Fetches and updates an insert, refreshing the cache.
    * @async
-   * @param {string} url - URL der Insert-Datei.
-   * @param {HTMLElement} insertElement - Ziel-Element im DOM, in das der HTML-Inhalt geladen wird.
-   * @returns {Promise<void>}
+   * @param {string} url - Insert URL.
+   * @param {HTMLElement} insertElement - Target DOM element.
    */
   async function updateInsert(url, insertElement) {
     try {
@@ -104,16 +128,22 @@ const InsertLoader = (() => {
       if (insertElement) insertElement.innerHTML = html;
     } catch (error) {
       console.error(error);
-      if (insertElement)
-        insertElement.innerHTML = /*html*/ `<div style="color:red;">Fehler beim Laden von "${url}"</div>`;
+      if (insertElement) {
+        insertElement.innerHTML = /*html*/ `
+          <div style="color:red;">Error loading "${url}"</div>`;
+      }
     }
   }
 
+
+  // ======================================================
+  // 🔹 BACKGROUND REFRESH
+  // ======================================================
+
   /**
-   * Prüft im Hintergrund, ob eine neuere Version der Datei existiert, und aktualisiert bei Bedarf.
+   * Checks for newer versions in the background and updates if needed.
    * @async
-   * @param {string} url - URL des Inserts.
-   * @returns {Promise<void>}
+   * @param {string} url - Insert URL.
    */
   async function backgroundRefresh(url) {
     try {
@@ -123,15 +153,16 @@ const InsertLoader = (() => {
         await updateInsert(url);
       }
     } catch (error) {
-      console.warn(`Background-Refresh für ${url} fehlgeschlagen`, error);
+      console.warn(`Background refresh failed for ${url}`, error);
     }
   }
 
+
   /**
-   * Fragt das "Last-Modified"-Datum einer Datei beim Server ab.
+   * Retrieves the "Last-Modified" header value from a file.
    * @async
-   * @param {string} url - URL der zu prüfenden Datei.
-   * @returns {Promise<string|null>} Letztes Änderungsdatum oder null, falls nicht vorhanden.
+   * @param {string} url - Target file URL.
+   * @returns {Promise<string|null>} Last modified date or null.
    */
   async function getLastModified(url) {
     try {
@@ -142,13 +173,16 @@ const InsertLoader = (() => {
     }
   }
 
+
+  // ======================================================
+  // 🔹 MAIN INSERT LOADING LOGIC
+  // ======================================================
+
   /**
-   * Lädt ein Insert entweder aus dem Cache oder direkt vom Server.
-   * Führt bei Cache-Treffern einen stillen Hintergrund-Refresh aus.
+   * Loads an insert either from cache or directly from the server.
    * @async
-   * @param {string} url - URL der Insert-Datei.
-   * @param {HTMLElement} insertElement - Ziel-Element, in das das HTML geladen wird.
-   * @returns {Promise<void>}
+   * @param {string} url - Insert file URL.
+   * @param {HTMLElement} insertElement - Target DOM element.
    */
   async function fetchInsert(url, insertElement) {
     const cached = getCachedHTML(url);
@@ -160,10 +194,10 @@ const InsertLoader = (() => {
     }
   }
 
+
   /**
-   * Findet alle [data-insert]-Elemente auf der Seite und lädt deren Inhalte.
+   * Finds and loads all elements with [data-insert].
    * @async
-   * @returns {Promise<void>}
    */
   async function loadInserts() {
     const inserts = document.querySelectorAll("[data-insert]");
@@ -175,33 +209,33 @@ const InsertLoader = (() => {
     );
   }
 
+  
   /**
-   * Löscht den gesamten Cache (Memory + localStorage).
-   * @returns {void}
-   */
-  function clearCache() {
-    localCache = {};
-    memoryCache.clear();
-    saveLocalCache();
-    console.info("InsertLoader: Cache gelöscht");
-  }
-
-  /**
-   * Lädt ein bestimmtes Insert-Element anhand des data-insert-Attributs.
+   * Loads a single insert element by its [data-insert] attribute.
    * @async
-   * @param {HTMLElement} insertElement - Das Element mit data-insert
-   * @returns {Promise<void>}
+   * @param {HTMLElement} insertElement - Target element.
    */
   async function loadInsertByElement(insertElement) {
     const url = insertElement.getAttribute("data-insert");
-    if (url) {
-      await fetchInsert(url, insertElement);
-    }
+    if (url) await fetchInsert(url, insertElement);
   }
 
-  // Öffentliche Funktionen - jederzeit manuell und global abrufbar
-  return { loadInserts, clearCache, loadInsertByElement };
+
+  // ======================================================
+  // 🔹 PUBLIC API
+  // ======================================================
+
+  return {
+    loadInserts,
+    clearCache,
+    loadInsertByElement
+  };
+
 })();
 
-// Startet automatisch, sobald der DOM geladen ist
+
+// ======================================================
+// 🔹 AUTO INITIALIZATION
+// ======================================================
+
 document.addEventListener("DOMContentLoaded", InsertLoader.loadInserts);

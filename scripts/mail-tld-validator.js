@@ -1,18 +1,29 @@
-// ============================================================
-// mail-tld-validator.js
-// ------------------------------------------------------------
-// Lädt aktuelle IANA-TLDs, cached sie, prüft E-Mail-Syntax + TLD
-// und zeigt Live-Validierung im Eingabefeld an.
-// ============================================================
+// ======================================================
+// 🔹 MAIL TLD VALIDATOR
+// ======================================================
+// Fetches and caches IANA TLDs, validates email syntax + TLD,
+// and provides live input feedback.
+// ======================================================
+
+
+// ======================================================
+// 🔹 CONSTANTS & FALLBACK
+// ======================================================
 
 const IANA_URL = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt";
 const CACHE_KEY = "iana_tlds";
-const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 Stunden
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 const FALLBACK_TLDS = ["com", "net", "org", "de", "io", "app"];
 
+
+// ======================================================
+// 🔹 FETCHING TLD DATA
+// ======================================================
+
 /**
- * Lädt aktuelle TLDs von der IANA-Liste.
- * @returns {Promise<string[]>} Liste aller gültigen TLDs in Kleinbuchstaben.
+ * Fetches the latest TLD list from the IANA registry.
+ * @async
+ * @returns {Promise<string[]>} Array of valid TLDs in lowercase.
  */
 async function fetchTlds() {
   try {
@@ -28,18 +39,24 @@ async function fetchTlds() {
   }
 }
 
+
+// ======================================================
+// 🔹 CACHE MANAGEMENT
+// ======================================================
+
 /**
- * Speichert eine TLD-Liste im localStorage mit Zeitstempel.
- * @param {string[]} tlds - Die TLD-Liste, die gespeichert werden soll.
+ * Saves a TLD list to localStorage with a timestamp.
+ * @param {string[]} tlds - List of TLDs to cache.
  */
 function saveTldsToCache(tlds) {
   const data = { tlds, time: Date.now() };
   localStorage.setItem(CACHE_KEY, JSON.stringify(data));
 }
 
+
 /**
- * Liest TLDs aus dem Cache, falls sie noch gültig sind.
- * @returns {string[] | null} Gecachte TLDs oder null, wenn abgelaufen.
+ * Retrieves cached TLDs if they are still valid.
+ * @returns {string[]|null} Cached TLDs or null if expired.
  */
 function getCachedTlds() {
   const cache = localStorage.getItem(CACHE_KEY);
@@ -48,9 +65,11 @@ function getCachedTlds() {
   return Date.now() - time < CACHE_TTL ? tlds : null;
 }
 
+
 /**
- * Holt TLDs aus Cache oder lädt neue von IANA.
- * @returns {Promise<string[]>} Eine gültige TLD-Liste.
+ * Loads TLDs either from cache or from the IANA list.
+ * @async
+ * @returns {Promise<string[]>} Valid TLD list.
  */
 async function loadTlds() {
   const cached = getCachedTlds();
@@ -60,10 +79,16 @@ async function loadTlds() {
   return latestTlds;
 }
 
+
+// ======================================================
+// 🔹 EMAIL VALIDATION LOGIC
+// ======================================================
+
 /**
- * Prüft eine E-Mail-Adresse auf Syntax und TLD.
- * @param {string} email - Die zu prüfende E-Mail-Adresse.
- * @returns {Promise<boolean>} True, wenn die E-Mail gültig ist.
+ * Validates an email address for syntax and TLD correctness.
+ * @async
+ * @param {string} email - Email address to validate.
+ * @returns {Promise<boolean>} True if valid, false otherwise.
  */
 async function isValidEmail(email) {
   const tlds = await loadTlds();
@@ -73,40 +98,79 @@ async function isValidEmail(email) {
   return tlds.includes(tld);
 }
 
+
+// ======================================================
+// 🔹 LIVE VALIDATION (UI INTERACTION)
+// ======================================================
+
 /**
- * Initialisiert die Live-Validierung für das E-Mail-Eingabefeld.
- * 
- * Prüft bei jeder Eingabe, ob die E-Mail gültig ist (Syntax + TLD).
- * Zeigt bei ungültigen Eingaben eine Fehlermeldung an.
- * Entfernt Rahmen & Meldung, wenn das Feld leer ist.
+ * Initializes live email validation on input field.
  */
 function initEmailValidation() {
   const email = document.getElementById("email");
   const msg = document.getElementById("msg");
   const validEmail = document.getElementById("valid-email");
+  bindEmailInputHandler(email, msg, validEmail);
+}
 
+
+/**
+ * Binds the input event listener for live email validation.
+ * @param {HTMLInputElement} email - Email input element.
+ * @param {HTMLElement} msg - Message display element.
+ * @param {HTMLElement} validEmail - Validation wrapper element.
+ */
+function bindEmailInputHandler(email, msg, validEmail) {
   email.addEventListener("input", async () => {
     const value = email.value.trim();
-
-    // Wenn Feld leer ist → neutraler Zustand (kein Rand, keine Meldung)
-    if (!value) {
-      validEmail.style.border = "";
-      msg.style.display = "none";
-      return;
-    }
-
-    // Prüfe E-Mail, wenn Text vorhanden
-    const valid = await isValidEmail(value);
-    formState.isEmailValid = valid;
-    evaluateFormValidity();
-    validEmail.style.border = valid
-      ? "2px solid var(--color-success)"
-      : "2px solid var(--color-error)";
-    msg.style.display = valid ? "none" : "inline";
+    if (!value) return resetEmailValidationUI(validEmail, msg);
+    await handleEmailValidation(value, validEmail, msg);
   });
 }
 
+
 /**
- * Aktiviert die Live-E-Mail-Validierung nach dem Laden des DOM.
+ * Resets the email input UI when empty.
+ * @param {HTMLElement} validEmail - Validation wrapper element.
+ * @param {HTMLElement} msg - Message display element.
  */
+function resetEmailValidationUI(validEmail, msg) {
+  validEmail.style.border = "";
+  msg.style.display = "none";
+}
+
+
+/**
+ * Validates the email and updates UI accordingly.
+ * @async
+ * @param {string} value - Current input value.
+ * @param {HTMLElement} validEmail - Validation wrapper element.
+ * @param {HTMLElement} msg - Message display element.
+ */
+async function handleEmailValidation(value, validEmail, msg) {
+  const valid = await isValidEmail(value);
+  formState.isEmailValid = valid;
+  evaluateFormValidity();
+  updateEmailValidationUI(valid, validEmail, msg);
+}
+
+
+/**
+ * Updates the visual feedback for email validity.
+ * @param {boolean} valid - Whether the email is valid.
+ * @param {HTMLElement} validEmail - Validation wrapper element.
+ * @param {HTMLElement} msg - Message display element.
+ */
+function updateEmailValidationUI(valid, validEmail, msg) {
+  validEmail.style.border = valid
+    ? "2px solid var(--color-success)"
+    : "2px solid var(--color-error)";
+  msg.style.display = valid ? "none" : "inline";
+}
+
+
+// ======================================================
+// 🔹 AUTO INITIALIZATION
+// ======================================================
+
 window.addEventListener("DOMContentLoaded", initEmailValidation);
