@@ -13,6 +13,7 @@ let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
 let dragStartTime = 0;
+let wasDroppedInSameColumn = false;
 const DRAG_THRESHOLD = 5;
 
 
@@ -197,15 +198,16 @@ function handleNewHoverColumn(col) {
  */
 async function onPointerUp(event) {
   removeDragListeners();
-
   const movedDistance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
   const wasClick = movedDistance < DRAG_THRESHOLD && event.timeStamp - dragStartTime < 500;
 
-  if (wasClick && clickedTask && !isDragging) {
+  if (isDragging) {
+    await stopDragging(event);
+  }
+  if (wasClick && clickedTask && !isDragging && !wasDroppedInSameColumn) {
     handleTaskClick(clickedTask);
   }
 
-  if (isDragging) await stopDragging(event);
   resetDragState();
 }
 
@@ -247,11 +249,23 @@ async function stopDragging(event) {
   if (!draggedTask) return;
 
   const { id, newState, oldState } = getDragContextData();
+
+  wasDroppedInSameColumn = newState === oldState;
+
   finalizeDraggedTaskStyle(event);
   moveTaskToPlaceholder();
 
   await handleTaskStateChange(id, newState, oldState);
   resetDragReferences();
+}
+
+
+/** Resets all temporary drag-related state variables. */
+function resetDragState() {
+  clickedTask = null;
+  isDragging = false;
+  lastHoverCol = null;
+  wasDroppedInSameColumn = false;
 }
 
 
@@ -286,6 +300,7 @@ async function handleTaskStateChange(id, newState, oldState) {
 function resetDragReferences() {
   draggedTask = null;
   startCol = null;
+  lastHoverCol = null;
 }
 
 
