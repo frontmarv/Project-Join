@@ -1,9 +1,88 @@
 // ======================================================
 // 🔹 DRAG & DROP HELPERS
 // ======================================================
-// Contains utility functions for drag-and-drop handling,
-// including placeholder management and visual styling.
+// Provides utility functions for drag-and-drop handling,
+// including placeholder management, column hovering logic,
+// and temporary visual styling for dragged task cards.
 // ======================================================
+
+
+// ======================================================
+// 🔹 GLOBAL CLICK SUPPRESSION
+// ======================================================
+
+/**
+ * Timestamp (in ms) until which click events should be ignored.
+ * Used to prevent accidental "click" triggers right after a drop,
+ * particularly in Firefox where a click may follow a drag-drop.
+ * @type {number}
+ */
+let suppressClicksUntil = 0;
+
+/**
+ * Suppresses click events fired right after a drag/drop.
+ * Prevents Firefox and touch stacks from opening the task dialog
+ * when a card is dropped back into the same column.
+ * @param {MouseEvent} event - The click event to possibly suppress.
+ * @returns {void}
+ */
+function suppressClickAfterDrag(event) {
+  if (performance.now() < suppressClicksUntil) {
+    event.stopImmediatePropagation();
+    event.preventDefault();
+  }
+}
+
+
+/**
+ * Schedules click suppression for a short duration after a drop.
+ * @param {number} [duration=300] - Duration (ms) to suppress clicks.
+ * @returns {void}
+ */
+function setClickSuppression(duration = 300) {
+  suppressClicksUntil = performance.now() + duration;
+}
+
+
+// ======================================================
+// 🔹 COLUMN HOVER LOGIC
+// ======================================================
+
+/**
+ * Updates the currently hovered column based on pointer position.
+ * @param {PointerEvent} event - The current pointer event.
+ * @returns {void}
+ */
+function updateHoverColumn(event) {
+  const underPointer = document.elementFromPoint(event.clientX, event.clientY);
+  const col = underPointer?.closest(".tasks") || null;
+  if (col !== lastHoverCol) handleColumnChange(col);
+}
+
+
+/**
+ * Handles transition between hovered columns during dragging.
+ * Ensures placeholders update visually when moving between columns.
+ * @param {HTMLElement|null} col - The newly hovered column.
+ * @returns {void}
+ */
+function handleColumnChange(col) {
+  if (col) handleNewHoverColumn(col);
+  if (lastHoverCol && lastHoverCol !== col) showNoTasksPlaceholderIfEmpty(lastHoverCol);
+  lastHoverCol = col;
+}
+
+
+/**
+ * Handles entering a new hover column, hiding empty placeholders
+ * and moving the drag placeholder element into the hovered column.
+ * @param {HTMLElement} col - The column currently hovered by the pointer.
+ * @returns {void}
+ */
+function handleNewHoverColumn(col) {
+  hideNoTasksPlaceholder(col);
+  if (placeholder && !col.contains(placeholder)) col.appendChild(placeholder);
+}
 
 
 // ======================================================
@@ -29,7 +108,6 @@ function hideNoTasksPlaceholder(col) {
  */
 function showNoTasksPlaceholderIfEmpty(col) {
   if (!col) return;
-
   const hasRealTask = col.querySelector(".task:not(.task--placeholder):not(.dragging)");
   if (hasRealTask) {
     hideExistingPlaceholder(col);
@@ -40,7 +118,7 @@ function showNoTasksPlaceholderIfEmpty(col) {
 
 
 /**
- * Hides an existing placeholder within a given column.
+ * Hides an existing placeholder element within a given column.
  * @param {HTMLElement} col - The column element to check.
  * @returns {void}
  */
