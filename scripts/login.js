@@ -309,7 +309,7 @@ function togglePasswordVisibility() {
  */
 function updatePasswordLockIcon() {
     if (password.value === "") {
-        passwordIcon.src = "../assets/img/lock.svg";
+        passwordIcon.src = "./assets/img/lock.svg";
     } else {
         togglePasswordIcon();
     }
@@ -322,10 +322,10 @@ function updatePasswordLockIcon() {
  */
 function togglePasswordIcon() {
     if (password.type === 'password') {
-        passwordIcon.src = '../assets/img/pw-not-visible.svg';
+        passwordIcon.src = './assets/img/pw-not-visible.svg';
     }
     else {
-        passwordIcon.src = '../assets/img/pw-visible.svg';
+        passwordIcon.src = './assets/img/pw-visible.svg';
     }
 }
 
