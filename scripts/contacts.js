@@ -434,20 +434,3 @@ function handleMenuClick(event) {
     }
 }
 
-/**
- * Displays a success message dialog after adding a contact.
- * Shows animated dialog for 1.5 seconds then removes it.
- * @returns {void}
- */
-function AddContactSuccessDlg() {
-    const successDlg = getAddUserSuccessDlg();
-    document.body.insertAdjacentHTML('beforeend', successDlg);
-    const successDlgElement = document.querySelector('.create-contact-successful');
-    requestAnimationFrame(() => successDlgElement.classList.remove('invisible'));
-    setTimeout(() => {
-        successDlgElement.classList.add('invisible');
-        setTimeout(() => successDlgElement.remove(), 300);
-    }, 1500);
-}
-
-

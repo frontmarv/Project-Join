@@ -168,3 +168,14 @@ function getDeleteContactDlg() {
 }
 
 
+/**
+ * Generates a success notification dialog for contact editing.
+ * Displays animated confirmation message after successfully updating a contact.
+ * @returns {string} HTML string containing success message dialog
+ */
+function getEditContactSuccessDlg() {
+    return /*html*/ `
+        <div id="dlg-box" class="create-contact-successful invisible">
+                Contact edit successful
+        </div>`
+}
