@@ -1,3 +1,8 @@
+// ======================================================
+// 🔹 KONSTANTEN & BASIS
+// ======================================================
+
+/** Mapping von Task-Status zu den jeweiligen Spalten-IDs im DOM */
 const columnMap = {
   'to-do': 'to-do-tasks',
   'in-progress': 'in-progress-tasks',
@@ -5,30 +10,46 @@ const columnMap = {
   'done': 'done-tasks',
 };
 
-
+/**
+ * Gibt den Namen eines Users anhand seiner ID zurück.
+ * @param {string} id - User-ID.
+ * @returns {string} Benutzername oder "Unknown User".
+ */
 const getUserNameById = id => {
   const user = users.find(user => user.id === id);
   return user?.name || "Unknown User";
 };
 
-
+/**
+ * Gibt die Profilfarbe eines Users anhand seiner ID zurück.
+ * @param {string} id - User-ID.
+ * @returns {string|null} Profilfarbe oder null.
+ */
 const getUserPicById = id => {
   const user = users.find(user => user.id === id);
   return user?.profilImgColor || null;
 };
 
-
+/**
+ * Gibt die Initialen eines Users anhand seines Namens zurück.
+ * @param {string} id - User-ID.
+ * @returns {string} Initialen, z. B. "AB".
+ */
 const getUserInitialsById = id => {
   const user = users.find(user => user.id === id);
-  return user?.name?.split(" ").map(n => n[0].toUpperCase()).join("") || "";
+  return user?.name?.split(" ").map(name => name[0].toUpperCase()).join("") || "";
 };
-
 
 let currentLayout = null;
 window.addEventListener("resize", handleResizeScreenBoard);
 window.addEventListener("load", handleResizeScreenBoard);
 
 
+// ======================================================
+// 🔹 INITIALISIERUNG
+// ======================================================
+
+/** Initialisiert das Board inkl. Daten, Aufgaben, Suche & Drag-and-Drop. */
 async function initBoard() {
   await getData();
   loadTasks();
@@ -39,61 +60,52 @@ async function initBoard() {
   enableSearchBoxClickFocus();
 }
 
-
+/** Aktiviert Klick-Fokus für alle Suchboxen im Board-Header. */
 function enableSearchBoxClickFocus() {
-  const searchBoxes = document.querySelectorAll('.board__head__searchbox');
-  searchBoxes.forEach(box => {
-    box.addEventListener('click', () => {
-      const input = box.querySelector('input');
-      if (input) {
-        input.focus();
-        input.select();
-      }
-    });
+  document.addEventListener('click', event => {
+    const box = event.target.closest('.board__head__searchbox');
+    if (!box) return;
+    focusSearchInput(box);
   });
 }
 
+/**
+ * Fokussiert das Inputfeld in einer Suchbox.
+ * @param {HTMLElement} box - Container der Suchbox.
+ */
+function focusSearchInput(box) {
+  const input = box.querySelector('input');
+  if (input) {
+    input.focus();
+    input.select();
+  }
+}
 
-function renderTaskInfoDlg(taskId) {
-  const selectors = ['.dlg__main'];
-  const savedScroll = {};
-  selectors.forEach(select => {
-    const el = document.querySelector(select);
-    if (el) savedScroll[select] = el.scrollTop;
-  });
 
-  const task = tasks.find(t => t.id === taskId);
+// ======================================================
+// 🔹 RENDER: TASK INFO DIALOG
+// ======================================================
+
+/**
+ * Öffnet den Task-Info-Dialog für die übergebene Task-ID.
+ * @param {string} taskId - ID des Tasks.
+ */
+async function renderTaskInfoDlg(taskId) {
+  await getData();
+  const task = tasks.find(task => task.id === taskId);
   if (!task) return;
 
+  const savedScroll = saveScrollPositions(['.dlg__main']);
   setupTaskInfoDialog(task);
   displayDlg();
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      Object.entries(savedScroll).forEach(([sel, top]) => {
-        const el = document.querySelector(sel);
-        if (el) el.scrollTop = top;
-      });
-
-      if (window.__lastToggledSubtaskId) {
-        const target = document.querySelector(
-          `[data-subtask-id="${window.__lastToggledSubtaskId}"]`
-        );
-        if (target) {
-          target.scrollIntoView({ block: 'nearest' });
-        }
-      }
-    });
-  });
+  requestAnimationFrame(() => restoreScrollPositions(savedScroll));
 }
 
-
-async function loadTaskForInfo(taskId) {
-  await getData();
-  return tasks.find(task => task.id === taskId) || null;
-}
-
-
+/**
+ * Erstellt den Task-Info-Dialog.
+ * @param {object} task - Task-Objekt.
+ * @returns {HTMLElement} Das Dialogelement.
+ */
 function setupTaskInfoDialog(task) {
   const dlgBox = document.getElementById("dlg-box");
   dlgBox.classList.remove("dlg-add-task");
@@ -102,21 +114,29 @@ function setupTaskInfoDialog(task) {
 }
 
 
+// ======================================================
+// 🔹 RENDER: TASK EDIT DIALOG
+// ======================================================
+
+/**
+ * Öffnet den Bearbeitungs-Dialog für einen Task.
+ * @param {string} taskId - ID des Tasks.
+ */
 async function renderTaskEditDlg(taskId) {
-  const task = await loadTaskForEdit(taskId);
+  await getData();
+  const task = tasks.find(task => task.id === taskId);
   if (!task) return;
+
   setupTaskEditDialog(task);
   displayDlg();
   initializeTaskEditFeatures(task);
 }
 
-
-async function loadTaskForEdit(taskId) {
-  await getData();
-  return tasks.find(task => task.id === taskId) || null;
-}
-
-
+/**
+ * Erstellt das HTML für den Task-Edit-Dialog.
+ * @param {object} task - Task-Objekt.
+ * @returns {HTMLElement} Das Dialogelement.
+ */
 function setupTaskEditDialog(task) {
   const dlgBox = document.getElementById("dlg-box");
   dlgBox.classList.remove("dlg-add-task");
@@ -124,7 +144,10 @@ function setupTaskEditDialog(task) {
   return dlgBox;
 }
 
-
+/**
+ * Initialisiert alle Features im Edit-Dialog (Subtasks, Assignment etc.).
+ * @param {object} task - Task-Objekt.
+ */
 function initializeTaskEditFeatures(task) {
   initSubtaskInput();
   initSubtaskIconButtons();
@@ -134,6 +157,14 @@ function initializeTaskEditFeatures(task) {
 }
 
 
+// ======================================================
+// 🔹 RENDER: ADD TASK DIALOG
+// ======================================================
+
+/**
+ * Öffnet den Add-Task-Dialog oder leitet auf Mobile-Seite weiter.
+ * @param {string} [defaultTaskState="to-do"] - Standard-Taskstatus.
+ */
 async function renderAddTaskDlg(defaultTaskState = "to-do") {
   if (shouldRedirectToMobile()) return redirectToAddTaskPage();
   const dlg = setupAddTaskDialog(defaultTaskState);
@@ -142,18 +173,22 @@ async function renderAddTaskDlg(defaultTaskState = "to-do") {
   dueDateValidation();
   showAddTaskDialog(dlg);
 }
-  
 
+/** Prüft, ob auf Mobile weitergeleitet werden soll. */
 function shouldRedirectToMobile() {
   return window.innerWidth < 1025;
 }
 
-
+/** Leitet auf die Mobile-Add-Task-Seite weiter. */
 function redirectToAddTaskPage() {
   window.location.replace('../pages/add-task.html');
 }
 
-
+/**
+ * Erstellt den Add-Task-Dialog.
+ * @param {string} defaultTaskState - Initialer Taskstatus.
+ * @returns {HTMLElement} Das Dialogelement.
+ */
 function setupAddTaskDialog(defaultTaskState) {
   const dlg = document.getElementById("dlg-box");
   dlg.classList.add("dlg-add-task");
@@ -161,7 +196,10 @@ function setupAddTaskDialog(defaultTaskState) {
   return dlg;
 }
 
-
+/**
+ * Lädt Inhalte & Daten (Assignments, Subtasks) in den Add-Task-Dialog.
+ * @param {HTMLElement} dlg - Dialogelement.
+ */
 async function loadAddTaskContent(dlg) {
   await InsertLoader.loadInsertByElement(dlg.querySelector("[data-insert]"));
   await waitFor(".contact-options");
@@ -169,14 +207,20 @@ async function loadAddTaskContent(dlg) {
   await waitFor(".dlg-edit__subtask-list");
 }
 
-
+/**
+ * Initialisiert Eingaben und Icons im Add-Task-Dialog.
+ * @param {HTMLElement} dlg - Dialogelement.
+ */
 function initializeAddTaskFeatures(dlg) {
   initSubtaskInput();
   initSubtaskHandlers();
   initSubtaskIconButtons();
 }
 
-
+/**
+ * Zeigt den Add-Task-Dialog an und initialisiert Fälligkeitsvalidierung.
+ * @param {HTMLElement} dlg - Dialogelement.
+ */
 async function showAddTaskDialog(dlg) {
   dlg.classList.remove("d-none");
   document.getElementById('overlay').classList.remove('d-none');
@@ -186,7 +230,11 @@ async function showAddTaskDialog(dlg) {
 }
 
 
+// ======================================================
+// 🔹 TASK / BOARD MANAGEMENT
+// ======================================================
 
+/** Lädt alle Tasks in die jeweiligen Spalten. */
 function loadTasks() {
   clearColumns();
   tasks.forEach(task => appendTaskToColumn(task));
@@ -194,7 +242,10 @@ function loadTasks() {
   markOverdueDates();
 }
 
-
+/**
+ * Löscht einen Task in der Datenbank und aktualisiert das Board.
+ * @param {string} taskId - ID des Tasks.
+ */
 async function deleteTask(taskId) {
   try {
     const url = `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`;
@@ -209,14 +260,17 @@ async function deleteTask(taskId) {
   }
 }
 
-
+/** Leert alle Task-Spalten. */
 function clearColumns() {
   Object.values(columnMap).forEach(id => {
     document.getElementById(id).innerHTML = "";
   });
 }
 
-
+/**
+ * Fügt einen Task der entsprechenden Spalte hinzu.
+ * @param {object} task - Task-Objekt.
+ */
 function appendTaskToColumn(task) {
   const colId = columnMap[task.taskState];
   if (!colId) return;
@@ -227,12 +281,15 @@ function appendTaskToColumn(task) {
   col.appendChild(wrapper.firstElementChild);
 }
 
-
+/** Aktualisiert alle Placeholder-Texte in leeren Spalten. */
 function updateAllPlaceholders() {
   Object.values(columnMap).forEach(updateColumnPlaceholder);
 }
 
-
+/**
+ * Zeigt oder entfernt den Placeholder in einer bestimmten Spalte.
+ * @param {string} columnId - ID der Spalte.
+ */
 function updateColumnPlaceholder(columnId) {
   const col = document.getElementById(columnId);
   const hasTask = col.querySelector(".task");
@@ -245,7 +302,10 @@ function updateColumnPlaceholder(columnId) {
   }
 }
 
-
+/**
+ * Füllt das Formular im Edit-Dialog mit den Task-Daten.
+ * @param {object} task - Task-Objekt.
+ */
 function fillEditFormWithTaskData(task) {
   document.getElementById("title-input").value = task.title || "";
   document.getElementById("descriptions-input").value = task.description || "";
@@ -255,7 +315,10 @@ function fillEditFormWithTaskData(task) {
   loadSubtasksIntoForm(task);
 }
 
-
+/**
+ * Lädt Subtasks in die Edit-Ansicht.
+ * @param {object} task - Task-Objekt mit Subtasks.
+ */
 function loadSubtasksIntoForm(task) {
   const ul = document.querySelector(".dlg-edit__subtask-list");
   if (!ul) return;
@@ -270,8 +333,13 @@ function loadSubtasksIntoForm(task) {
 }
 
 
+// ======================================================
+// 🔹 LAYOUT / RESPONSIVE
+// ======================================================
+
+/** Handhabt Layoutwechsel zwischen Desktop und Mobile. */
 function handleResizeScreenBoard() {
-  isSmallScreen = window.innerWidth < 1025;
+  const isSmallScreen = window.innerWidth < 1025;
   const boardHead = document.getElementById('board-head');
   setLayout(isSmallScreen);
   if (currentLayout === 'mobile') {
@@ -281,63 +349,26 @@ function handleResizeScreenBoard() {
   }
 }
 
-
+/**
+ * Rendert die Mobile-Version des Headers.
+ * @param {HTMLElement} boardHead - Header-Container.
+ */
 function renderMobileHead(boardHead) {
   boardHead.innerHTML = getAddTaskBtnMobile();
 }
 
-
+/**
+ * Rendert die Desktop-Version des Headers.
+ * @param {HTMLElement} boardHead - Header-Container.
+ */
 function renderDesktopHead(boardHead) {
   boardHead.innerHTML = getBoardHeadDesktop();
 }
 
-
+/**
+ * Setzt den aktuellen Layout-Modus.
+ * @param {boolean} isSmallScreen - true, wenn Mobile-Ansicht aktiv ist.
+ */
 function setLayout(isSmallScreen) {
   currentLayout = isSmallScreen ? 'mobile' : 'desktop';
-}
-
-
-function getSurroundingCategories(task) {
-  const state = task.taskState;
-  const keys = Object.keys(columnMap);
-  const index = keys.indexOf(state);
-  const prevKey = keys[index - 1];
-  const nextKey = keys[index + 1];
-  const previousTask = prevKey ? capitalize(prevKey) : "Done";
-  const nextTask = nextKey ? capitalize(nextKey) : "To-do";
-  return { previousTask, nextTask };
-}
-
-
-function capitalize(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-
-function syncValidityClass(el) {
-  if (!el) return;
-  if (el.value && el.value.trim() !== '') {
-    el.classList.add('valid-input');
-    el.classList.remove('invalid-input', 'input-error');
-  } else {
-    el.classList.add('input-error');
-    el.classList.remove('valid-input');
-  }
-}
-
-
-function initDueDateValidationDelegated(scope) {
-  if (!scope || scope.dataset.ddBound === 'true') return;
-  scope.dataset.ddBound = 'true';
-  const date = scope.querySelector('#due-date');
-  if (date) syncValidityClass(date);
-  scope.addEventListener('input', onDueDateEvent, true);
-  scope.addEventListener('change', onDueDateEvent, true);
-  scope.addEventListener('blur', onDueDateEvent, true);
-}
-
-
-function onDueDateEvent(event) {
-  if (!event.target.matches('#due-date')) return;
-  syncValidityClass(event.target);
 }
