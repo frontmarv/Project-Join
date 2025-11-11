@@ -113,6 +113,7 @@ function validateDate(date, dateErr, valid) {
   return valid;
 }
 
+
 /**
  * Validates the category selection.
  * @param {HTMLElement} catVisible - Visible category input.
@@ -129,6 +130,7 @@ function validateCategory(catVisible, catHidden, catErr, valid) {
   clearError(catVisible, catErr);
   return valid;
 }
+
 
 /**
  * Handles due-date input validation and styling.

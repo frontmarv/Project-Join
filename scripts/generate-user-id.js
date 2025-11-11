@@ -9,6 +9,7 @@ function generateUserId(userName) {
     return `${initials}${randomNumbers}`;
 }
 
+
 /**
  * Capitalizes first letter of each word in the user's name
  * @param {string} userName - The full name to capitalize
@@ -20,6 +21,7 @@ function capitalizeInitials(userName) {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 }
+
 
 /**
  * Selects a random color from predefined CSS variables
@@ -34,6 +36,7 @@ function getRandomColor() {
     const randomColorVar = colors[Math.floor(Math.random() * colors.length)];
     return getComputedStyle(document.documentElement).getPropertyValue(randomColorVar).trim();
 }
+
 
 /**
  * Creates a user data object for database storage
@@ -59,6 +62,7 @@ function createDataObject() {
     return data
 }
 
+
 /**
  * Pushes user data to the database
  * @async
@@ -78,6 +82,7 @@ async function pushDataToDB(key, data) {
     let responseToJson = await response.json();
     return responseToJson;
 }
+
 
 /**
  * Handles form submission for user signup

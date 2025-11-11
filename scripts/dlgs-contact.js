@@ -8,6 +8,7 @@ function renderAddContactDlg() {
     showDlgWtihAnimation();
 }
 
+
 /**
  * Renders the delete contact confirmation dialog.
  * Hides the contact action menu and displays delete confirmation with animation.
@@ -19,6 +20,7 @@ function renderDeleteContactDlg() {
     dialog.classList.add('delete-contact__dialog');
     showDlgWtihAnimation();
 }
+
 
 /**
  * Renders the edit contact dialog with pre-filled contact data.
@@ -38,6 +40,7 @@ function renderEditContactDlg() {
     getAndStoreUserId(userName);
 }
 
+
 /**
  * Displays dialog with fade-in animation.
  * Shows dialog overlay and applies animation class after short delay.
@@ -49,6 +52,7 @@ function showDlgWtihAnimation() {
         dialog.classList.add('show');
     }, 100);
 }
+
 
 /**
  * Hides dialog with fade-out animation.
@@ -83,6 +87,7 @@ function setMultipatch() {
     return multipatch;
 }
 
+
 /**
  * Validates contact name input and saves data if valid.
  * Shows error animation if name field is empty.
@@ -98,6 +103,7 @@ function validateAndSaveData() {
         editContactSuccessDlg();
     }
 }
+
 
 /**
  * Saves edited contact data to database and updates UI.
@@ -120,6 +126,7 @@ async function saveDataEditContactDlg() {
     }
 }
 
+
 /**
  * Marks the specified contact as selected in the contact list.
  * Applies selected styling to matching contact list item.
@@ -134,6 +141,7 @@ function markStoredContactAsSelected(userName) {
         }
     });
 }
+
 
 /**
  * Validates and saves new contact to database.
@@ -156,6 +164,7 @@ async function putNewContactToDB() {
     }
 }
 
+
 /**
  * Collects and structures data from add contact dialog form.
  * Extracts form values and creates data object with generated user ID.
@@ -173,6 +182,7 @@ function collectDataAddContactDlg() {
     return { key, data, addUserName };
 }
 
+
 /**
  * Validates that contact name is not empty.
  * @param {string} addUserName - Contact name to validate
@@ -183,6 +193,7 @@ function validateInputAddContact(addUserName) {
         return true;
     }
 }
+
 
 /**
  * Displays error animation on input fields.
@@ -199,6 +210,7 @@ function wrongInputPulseAnimation() {
         });
     }, 500);
 }
+
 
 /**
  * Creates a complete contact data object for new contact.
@@ -239,6 +251,7 @@ function addContactSuccessDlg() {
     animationDlg(successDlg);
 }
 
+
 /**
  * Displays a success message dialog after editing a contact.
  * Shows animated dialog for 1.5 seconds then removes it.
@@ -248,6 +261,7 @@ function editContactSuccessDlg() {
     const successDlg = getEditContactSuccessDlg();
     animationDlg(successDlg);
 }
+
 
 /**
  * Animates a success dialog into view and removes it after delay.

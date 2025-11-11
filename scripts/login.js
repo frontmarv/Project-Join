@@ -231,6 +231,7 @@ async function logoutAllUsers() {
     }
 }
 
+
 /**
  * Initiates a guest login session and redirects to the summary page.
  * Logs out all users, sets session storage to 'guest', and redirects to summary.html.

@@ -12,6 +12,7 @@ function checkForLogin() {
 
 checkForLogin();
 
+
 /**
  * Event handler for pageshow event.
  * Handles browser back/forward cache (bfcache) scenarios by re-checking login status.

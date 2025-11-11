@@ -10,17 +10,20 @@ let contactMail = document.getElementById('contact-email');
 let contactPhone = document.getElementById('contact-phone');
 let contactProfilImg = document.querySelector('.header__contact-profil-img');
 
+
 /**
  * Tracks whether a contact is currently being shown on mobile view.
  * @type {boolean}
  */
 let showContact = false;
 
+
 /**
  * Global array storing all user/contact data.
  * @type {Array<Object>}
  */
 let userArrayGlobal = [];
+
 
 /**
  * Event handler for window resize.
@@ -29,12 +32,14 @@ let userArrayGlobal = [];
  */
 window.addEventListener("resize", handleResizeScreenContacts);
 
+
 /**
  * Event handler for page load.
  * Initializes contact layout based on initial screen size.
  * @listens {Event} load
  */
 window.addEventListener("load", handleResizeScreenContacts);
+
 
 /**
  * Event handler for DOM content loaded.
@@ -54,6 +59,7 @@ window.addEventListener("DOMContentLoaded", () => {
         img.src = src;
     });
 });
+
 
 /**
  * Fetches all users from Firebase database.
@@ -77,6 +83,7 @@ async function getUsersfromFirebase() {
         console.error("Error fetching data:", error.message);
     }
 }
+
 
 /**
  * Deletes a contact from the Firebase database.
@@ -102,6 +109,7 @@ async function deleteContact(userkeyToDelete) {
     }
 }
 
+
 /**
  * Executes the complete contact deletion workflow.
  * Deletes contact, updates UI, and handles responsive layout adjustments.
@@ -122,6 +130,7 @@ async function deleteContactFlow() {
     removeAnimationClass();
 }
 
+
 /**
  * Extracts and returns unique initial letters from user names.
  * Sorts letters alphabetically and removes duplicates.
@@ -140,6 +149,7 @@ function getInitialLetters(array) {
     return uniqueLetters;
 }
 
+
 /**
  * Renders HTML sections for each initial letter.
  * Creates alphabetical section headers for contact grouping.
@@ -153,6 +163,7 @@ function renderInitialLettersSections(initialLettersArray) {
     });
     return initialLetterSections;
 }
+
 
 /**
  * Renders contacts into their respective alphabetical sections.
@@ -177,6 +188,7 @@ function renderContactsIntoSections(initialLettersArray, userArray) {
     });
 }
 
+
 /**
  * Checks if user is the logged-in user and appends "(You)" indicator.
  * @param {Object} userId - User object to check
@@ -193,6 +205,7 @@ function checkLoggedInUser(userId) {
     }
 }
 
+
 /**
  * Renders the complete contact list with alphabetical sections.
  * Fetches users, clears existing list, and populates with grouped contacts.
@@ -207,6 +220,7 @@ async function renderContactList() {
     renderContactsIntoSections(initialLettersArray, userArray);
     setEventlistenerEveryContact();
 }
+
 
 /**
  * Attaches click event listeners to all contact list items.
@@ -223,6 +237,7 @@ function setEventlistenerEveryContact() {
     });
 }
 
+
 /**
  * Removes selected styling from a contact list item.
  * Resets text color and profile circle styling.
@@ -234,6 +249,7 @@ function styleContactNotSelected(i) {
     i.querySelector('.contact-name').style.color = 'var(--color-black)';
     i.querySelector('circle').classList.remove('colored-circle__selected');
 }
+
 
 /**
  * Applies selected styling to a contact list item.
@@ -248,6 +264,7 @@ function styleContactSelected(item) {
     item.querySelector('circle').classList.add('colored-circle__selected');
 }
 
+
 /**
  * Makes the contact information card visible.
  * Removes invisible class and sets visibility style.
@@ -258,6 +275,7 @@ function setContactCardtoVisible() {
     contactInfoCard.style.visibility = 'visible';
 }
 
+
 /**
  * Hides the contact information card.
  * Adds invisible class to hide card from view.
@@ -266,6 +284,7 @@ function setContactCardtoVisible() {
 function setContactCardtoInvisible() {
     contactInfoCard.classList.add('invisible');
 }
+
 
 /**
  * Displays selected contact's details in the information card.
@@ -281,6 +300,7 @@ function showContactDetailsinCard(selectedContact) {
     setContactCardtoVisible();
 }
 
+
 /**
  * Removes "(You)" suffix from user name.
  * Cleans up display name for data operations.
@@ -290,6 +310,7 @@ function showContactDetailsinCard(selectedContact) {
 function cleanName(userName) {
     return userName.replace(/\s*\(You\)\s*$/, '');
 }
+
 
 /**
  * Retrieves contact information from global user array.
@@ -310,6 +331,7 @@ function getContactInfofromContactlistandDB(userName) {
     return { cleanUserName, email, phone, profilImgColor };
 }
 
+
 /**
  * Populates contact information card with contact details.
  * Updates name, email, phone, and profile image in the card.
@@ -328,6 +350,7 @@ function setContactInfoIntoCard({ cleanUserName, email, phone, profilImgColor })
     contactProfilImg.innerHTML = getBigUserProfilImg(profilImgColor, userInitals);
 }
 
+
 /**
  * Handles screen resize events for contacts page.
  * Determines if screen is small and adjusts layout accordingly.
@@ -337,6 +360,7 @@ function handleResizeScreenContacts() {
     const isSmallScreen = window.innerWidth < 1025;
     handleContent(isSmallScreen);
 }
+
 
 /**
  * Manages content visibility based on screen size and contact view state.
@@ -360,6 +384,7 @@ function handleContent(isSmallScreen) {
     }
 }
 
+
 /**
  * Displays contact details view on mobile devices.
  * Hides contact list and shows detail view with options icon.
@@ -375,6 +400,7 @@ function showContactMobile() {
     }
 }
 
+
 /**
  * Shows add user icon and hides contact options icon on mobile.
  * Used when returning to contact list view.
@@ -384,6 +410,7 @@ function showAddUserIconMoblie() {
     document.querySelector('.add-user-icon').style.display = 'flex';
     document.querySelector('.contacts-options-icon').style.display = 'none';
 }
+
 
 /**
  * Returns to contact list view from contact detail view.
@@ -399,6 +426,7 @@ function showContactList() {
     });
 }
 
+
 /**
  * Displays the contact action menu (edit/delete).
  * Makes menu visible and sets up outside click handler after brief delay.
@@ -411,6 +439,7 @@ function displayContactActionMenu() {
     }, 400);
 }
 
+
 /**
  * Hides the contact action menu.
  * Removes menu from view and cleans up click event listener.
@@ -420,6 +449,7 @@ function hideContactActionMenu() {
     document.querySelector('.manage-contact__actions').classList.add('invisible');
     document.removeEventListener("click", handleMenuClick);
 }
+
 
 /**
  * Handles clicks outside the contact action menu to close it.

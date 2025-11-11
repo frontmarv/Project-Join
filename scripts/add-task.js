@@ -58,6 +58,7 @@ function waitFor(selector) {
   });
 }
 
+
 /**
  * Handles priority button selection: resets all, sets color/icon for selected, and updates chosenPriority.
  * @param {HTMLElement} btnEl - The clicked button element.
@@ -78,6 +79,7 @@ function changePriorityBtn(btnEl) {
   chosenPriority = sel.id;
 }
 
+
 /**
  * Resets all priority buttons to default and sets chosenPriority to "medium".
  */
@@ -90,6 +92,7 @@ function resetPriorityButtons() {
   });
   chosenPriority = "medium";
 }
+
 
 /**
  * Handles category dropdown clicks: toggles, selects options, or closes all.
@@ -105,6 +108,7 @@ document.addEventListener('click', (e) => {
   if (opt) return selectCategoryOption(root, opt);
 });
 
+
 /**
  * Toggles the open/closed state of a category dropdown.
  * @param {HTMLElement} root - The category root element.
@@ -114,6 +118,7 @@ function toggleCategory(root) {
   root.classList.toggle('open', open);
   setCatExpanded(root, open);
 }
+
 
 /**
  * Handles category option selection.
@@ -127,6 +132,7 @@ function selectCategoryOption(root, option) {
   finalizeCategorySelection(root, visible);
 }
 
+
 /**
  * Returns text label and value from the clicked category option.
  * @param {HTMLElement} option - The selected option element.
@@ -137,6 +143,7 @@ function getLabelAndValue(option) {
   const value = option.dataset.value || label;
   return { label, value };
 }
+
 
 /**
  * Sets category input values (visible/proxy/hidden).
@@ -154,6 +161,7 @@ function setCategoryInputs(root, { label, value }) {
   return visible; 
 }
 
+
 /**
  * Updates aria-selected state for the chosen category option.
  * @param {HTMLElement} root - The category root element.
@@ -164,6 +172,7 @@ function updateAriaSelection(root, option) {
       .forEach(el => el.setAttribute('aria-selected', 'false'));
   option.setAttribute('aria-selected', 'true');
 }
+
 
 /**
  * Finalizes category selection and clears validation errors.
@@ -178,6 +187,7 @@ function finalizeCategorySelection(root, visible) {
   setCatExpanded(root, false);
 }
 
+
 /**
  * Closes all open category dropdowns.
  */
@@ -185,6 +195,7 @@ function closeAllCategories() {
   document.querySelectorAll('.category-selection.open')
     .forEach(el => { el.classList.remove('open'); setCatExpanded(el, false); });
 }
+
 
 /**
  * Updates aria-expanded attributes for accessibility.
@@ -196,6 +207,7 @@ function setCatExpanded(root, open) {
   const input = root?.querySelector('.selector');
   input?.setAttribute('aria-expanded', String(open));
 }
+
 
 /**
  * Sets up invalid handler for category proxy and triggers initial validation.

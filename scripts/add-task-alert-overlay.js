@@ -1,5 +1,3 @@
-
-
 /**
  * Displays the confirmation overlay after task creation.
  */

@@ -1,15 +1,19 @@
 /** @type {HTMLElement | null} */
 const greetingHeader = document.getElementById('greeting-header');
 
+
 /** @type {HTMLElement | null} */
 const greetingName = document.getElementById('greeting-name');
 
+
 let hasShownGreeting = sessionStorage.getItem('greetingShown');
+
 
 if (!hasShownGreeting && window.innerWidth < 1025) {
     showGreetingMobile();
     sessionStorage.setItem('greetingShown', 'true');
 }
+
 
 /**
  * Counts various task states based on fixed rules.
@@ -23,6 +27,7 @@ const countRules = [
     { field: 'taskState', match: 'await-feedback', counter: 'awaitingFeedback' },
     { field: 'priority', match: 'urgent', counter: 'urgent' }
 ];
+
 
 /**
  * Initializes the summary page: loads data, displays the greeting, and counts tasks.
@@ -39,6 +44,7 @@ async function initSummary() {
     countToDos();
 }
 
+
 /**
  * Sets the greeting header based on the current time of day.
  * @returns {void}
@@ -51,6 +57,7 @@ function setGreetingHeader() {
     else greetingText = "Good evening,";
     greetingHeader.textContent = greetingText;
 }
+
 
 /**
  * Displays the logged-in user's name in the greeting message.
@@ -65,6 +72,7 @@ function setGreetingName(loggedInUser) {
         greetingHeader.textContent = greetingHeader.textContent.replace(',', '!');
     }
 }
+
 
 /**
  * Counts all tasks by status and priority and updates the HTML counters.
@@ -84,6 +92,7 @@ function countToDos() {
     tasksInBoard.textContent = tasks.length;
 }
 
+
 /**
  * Increments counters for a specific task based on predefined counting rules.
  * @param {number} index - The index of the current task in the array.
@@ -100,6 +109,7 @@ function countingLoop(index, counters, tasks) {
     });
 }
 
+
 /**
  * Retrieves all task deadlines, sorts them, and displays the next upcoming due date.
  * @returns {void}
@@ -115,6 +125,7 @@ function getDeadlineDates() {
     showUpcomingDeadline(allDeadlines);
 }
 
+
 /**
  * Displays the next upcoming due date on the page.
  * @param {Array<string>} allDeadlines - A list of all deadlines (ISO date strings).
@@ -128,6 +139,7 @@ function showUpcomingDeadline(allDeadlines) {
     }
 }
 
+
 /**
  * Formats a date string into German date format (dd.mm.yyyy).
  * @param {string} dateStr - A date in ISO string format.
@@ -138,6 +150,12 @@ function formatDate(dateStr) {
     return date.toLocaleDateString("de-DE");
 }
 
+
+/**
+ * Displays a mobile greeting animation on first visit.
+ * Shows greeting overlay for 1.6 seconds with fade-in animation, then returns to summary content.
+ * @returns {void}
+ */
 function showGreetingMobile() {
     document.querySelector('.summary-content__left').classList.add('d-none');
     document.querySelector('.summary-content__right').classList.add('greetingMobile');

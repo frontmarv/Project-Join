@@ -5,17 +5,20 @@
  */
 const databaseURL = "https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/.json";
 
+
 /**
  * Global array storing all user objects fetched from Firebase.
  * @type {Array<Object>}
  */
 let users = [];
 
+
 /**
  * Global array storing all task objects fetched from Firebase.
  * @type {Array<Object>}
  */
 let tasks = [];
+
 
 /**
  * Fetches user and task data from Firebase Realtime Database.
@@ -48,6 +51,7 @@ async function getData() {
   }
 }
 
+
 /**
  * Saves a single task object to Firebase under a specific key.
  *
@@ -74,6 +78,7 @@ async function saveTaskToFirebase(task, taskKey) {
 
   const data = await response.json();
 }
+
 
 /**
  * Generates the next available Firebase task key (e.g. "task0", "task1", …).
