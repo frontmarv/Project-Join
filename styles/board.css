@@ -51,6 +51,21 @@
   cursor: text;
 }
 
+.search-mode-indicator {
+  font-size: 0.85rem;
+  color: var(--color-greyicons);
+  margin: 0 0.5rem;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+  align-self: center;
+  text-align: center;
+}
+
+.search-mode-indicator.show {
+  opacity: 1;
+}
+
 .board__head__searchbox input:focus-visible {
   border: none !important;
 }
@@ -259,7 +274,8 @@
   .board-content {
     margin-top: 0px;
     overflow-y: auto;
-    height: calc(100vh - 180px);
+    scrollbar-width: thin;
+    height: calc(100vh - 11.25rem);
   }
 
   .board__head {

@@ -21,10 +21,12 @@ function getBoardHeadDesktop() {
         <img class="search-btn" src="../assets/img/search.svg"
               alt="icon of an magnifying glass for better descripe of the search field">
       </div>
-        <span id="add-task-btn" class="add-task-btn filled-btn" onclick="renderAddTaskDlg()">Add
-          Task
+      <div id="search-mode-indicator" class="search-mode-indicator d-none">
+          🔍 Read Only <br> (Drag & Drop disabled)
+      </div>
+        <span id="add-task-btn" class="add-task-btn filled-btn" onclick="renderAddTaskDlg()">Add Task
         <img src="../assets/img/add.svg" alt="Add Task Button">
-      </span>
+        </span>
     </div>
         `
 }
@@ -33,16 +35,20 @@ function getBoardHeadDesktop() {
 function getAddTaskBtnMobile() {
   return /*html*/ `
   <div class="board__head--mobile">
-  <h1>Board</h1>
-  <span id="add-task-btn" class="add-task-btn filled-btn" onclick="renderAddTaskDlg()">
+    <h1>Board</h1>
+    <span id="add-task-btn" class="add-task-btn filled-btn" onclick="renderAddTaskDlg()">
         <img src="../assets/img/add.svg" alt="Add Task Button">
-      </span>
+    </span>
   </div>
   <div class="board__head__searchbox">
-        <input id="search-tasks" type="search" placeholder="Find Task">
-        <img class="search-btn" src="../assets/img/search.svg"
-              alt="icon of an magnifying glass for better descripe of the search field">
-      </div>`
+    <input id="search-tasks" type="search" placeholder="Find Task">
+    <img class="search-btn" src="../assets/img/search.svg"
+            alt="icon of an magnifying glass for better descripe of the search field">
+  </div>
+  <div id="search-mode-indicator" class="search-mode-indicator d-none">
+      🔍 Read Only <br> (Drag & Drop disabled)
+  </div>
+  `
 }
 
 

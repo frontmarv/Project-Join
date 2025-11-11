@@ -16,13 +16,20 @@ function initDragAndDrop() {
 function onPointerDown(event) {
   if (event.button !== 0) return;
   if (event.target.closest(".task-card__menu-icon")) return;
+
+  const searchInput = document.getElementById("search-tasks");
+  if (searchInput && searchInput.value.trim().length > 0) return;
+
   const task = event.target.closest(".task");
   if (!task) return;
+
   clickedTask = task;
   setPointerOffsets(event, task);
   startCol = task.closest(".tasks");
+
   document.addEventListener("pointermove", onPointerMove, { passive: false });
   document.addEventListener("pointerup", onPointerUp, { passive: false });
+
   event.preventDefault();
 }
 

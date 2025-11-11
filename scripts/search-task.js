@@ -33,11 +33,11 @@ function patchLoadTasks() {
 
 function filterTasks(query) {
   const clean = query.trim().toLowerCase();
-  document.querySelectorAll(".task").forEach((card) =>
-    processCardFilter(card, clean)
-  );
-  
+  const allCards = document.querySelectorAll(".task");
+  allCards.forEach(card => processCardFilter(card, clean));
   updateSearchPlaceholders(clean);
+  updateTaskCursorState();
+  updateSearchModeIndicator();
 }
 
 
@@ -111,4 +111,24 @@ function updateSearchPlaceholders(query) {
       if (existingPlaceholder) existingPlaceholder.remove();
     }
   });
+}
+
+function updateTaskCursorState() {
+  const searchInput = document.getElementById("search-tasks");
+  const inSearchMode = searchInput && searchInput.value.trim().length > 0;
+  const tasks = document.querySelectorAll(".task");
+
+  tasks.forEach(task => {
+    task.style.cursor = inSearchMode ? "pointer" : "grab";
+  });
+}
+
+function updateSearchModeIndicator() {
+  const searchInput = document.getElementById("search-tasks");
+  const indicator = document.getElementById("search-mode-indicator");
+  if (!indicator) return;
+
+  const inSearchMode = searchInput && searchInput.value.trim().length > 0;
+  indicator.classList.toggle("show", inSearchMode);
+  indicator.classList.toggle("d-none", !inSearchMode);
 }
