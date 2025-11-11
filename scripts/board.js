@@ -203,6 +203,7 @@ async function renderAddTaskDlg(defaultTaskState = "to-do") {
   await loadAddTaskContent(dlg);
   initializeAddTaskFeatures(dlg);
   dueDateValidation();
+  bindLiveRequiredClear('title', 'title-error');
   showAddTaskDialog(dlg);
 }
 
