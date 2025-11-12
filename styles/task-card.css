@@ -10,6 +10,12 @@
   transition: transform 0.15s ease;
 }
 
+.task--pressing {
+  opacity: 0.85;
+  transform: scale(0.97);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
 .task:hover {
   transform: translateY(-2px);
   box-shadow: 0 0.375rem 0.875rem rgba(0, 0, 0, 0.15);
@@ -21,6 +27,8 @@
   transform: rotate(2deg) scale(1.02);
   box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.25);
   cursor: grabbing;
+  touch-action: none;
+  transition: none;
 }
 
 .task.no-drag {

@@ -1,9 +1,10 @@
 // ======================================================
-// 🔹 DRAG AND DROP LOGIC (with Firefox click suppression)
+// 🔹 DRAG AND DROP LOGIC (with Firefox click suppression + mobile long-press)
 // ======================================================
 // Handles all drag-and-drop interactions on the board,
 // including pointer tracking, column updates, visual feedback,
 // and suppressing synthetic clicks immediately after a drop.
+// On mobile (<1024 px), dragging activates only after a 1 second long-press.
 // ======================================================
 
 
@@ -23,9 +24,20 @@ let dragStartX = 0;
 let dragStartY = 0;
 let dragStartTime = 0;
 let wasDroppedInSameColumn = false;
+let longPressTimer = null;
+const DRAG_THRESHOLD = 0;
+const LONG_PRESS_DELAY = 500;
+const MOBILE_BREAKPOINT = 1024;
 
-/** Distance threshold (in px) to treat pointer movement as a drag. */
-const DRAG_THRESHOLD = 5;
+
+// ======================================================
+// 🧩 SAFARI / IOS TOUCH FIX
+// ======================================================
+// Verhindert, dass Safari während eines aktiven Drags scrollt oder das
+// Pointer-Capture verliert (häufiger Bug bei iPhones und iPads)
+document.addEventListener("touchmove", (e) => {
+  if (isDragging) e.preventDefault();
+}, { passive: false });
 
 
 // ======================================================
@@ -38,12 +50,36 @@ const DRAG_THRESHOLD = 5;
  */
 function initDragAndDrop() {
   document.addEventListener("pointerdown", onPointerDown);
-  // Capture-phase click suppressor (runs before any bubble handlers)
   document.addEventListener("click", suppressClickAfterDrag, true);
-  // Failsafe: reset drag if pointer is canceled by the browser
   document.addEventListener("pointercancel", onPointerCancel, { passive: true });
 }
 
+
+// ======================================================
+// 🔹 MOBILE DETECTION
+// ======================================================
+
+/**
+ * Determines if the current device width should use long-press behavior.
+ * @returns {boolean} True if viewport width < MOBILE_BREAKPOINT.
+ */
+function isMobileDragMode() {
+  return window.innerWidth < MOBILE_BREAKPOINT;
+}
+
+/** Cancels the pending long-press drag activation. */
+function cancelLongPress() {
+  clearTimeout(longPressTimer);
+  longPressTimer = null;
+}
+
+/**
+ * Prevents native touch scrolling while dragging on mobile.
+ * @param {TouchEvent} e - Touch move event.
+ */
+function preventTouchScroll(e) {
+  e.preventDefault();
+}
 
 // ======================================================
 // 🔹 POINTER DOWN
@@ -64,7 +100,37 @@ function onPointerDown(event) {
   dragStartTime = event.timeStamp;
   setPointerOffsets(event, task);
   startCol = task.closest(".tasks");
-  attachDragListeners();
+
+  if (isMobileDragMode()) {
+    task.classList.add("task--pressing");
+
+    longPressTimer = setTimeout(() => {
+      attachDragListeners();
+      startDrag(clickedTask, event);
+      task.classList.remove("task--pressing");
+    }, LONG_PRESS_DELAY);
+
+    document.addEventListener("pointerup", () => {
+      if (!isDragging) {
+        cancelLongPress();
+        task.classList.remove("task--pressing");
+      }
+    }, { once: true });
+
+    document.addEventListener("pointermove", (e) => {
+      if (!isDragging) {
+        const movedDistance = Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY);
+        if (movedDistance > 10) {
+          cancelLongPress();
+          task.classList.remove("task--pressing");
+        }
+      }
+    }, { passive: true });
+
+  } else {
+    attachDragListeners();
+  }
+
   event.preventDefault();
 }
 
@@ -112,12 +178,12 @@ function setPointerOffsets(event, task) {
  */
 function onPointerMove(event) {
   if (!clickedTask) return;
+  if (isMobileDragMode() && !isDragging && longPressTimer) return;
 
   const distance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
   const primaryButtonStillPressed = event.buttons === 1;
 
-  // Only start dragging after movement threshold and while button pressed
-  if (!isDragging && distance > DRAG_THRESHOLD && primaryButtonStillPressed) {
+  if (!isDragging && distance > DRAG_THRESHOLD && primaryButtonStillPressed && !isMobileDragMode()) {
     startDrag(clickedTask, event);
   }
 
@@ -129,6 +195,7 @@ function onPointerMove(event) {
 
 /**
  * Starts the drag operation and prepares visual feedback.
+ * Handles both desktop (immediate) and mobile (long-press) cases.
  * @param {HTMLElement} taskCard - The dragged task card.
  * @param {PointerEvent} event - Pointer event.
  */
@@ -136,10 +203,15 @@ function startDrag(taskCard, event) {
   draggedTask = taskCard;
   createPlaceholder(taskCard);
   styleDraggedTask(taskCard);
-  capturePointer(taskCard, event);
+
+  if (!isMobileDragMode()) {
+    try { taskCard.setPointerCapture(event.pointerId) } catch { }
+  }
+
+  document.addEventListener("touchmove", preventTouchScroll, { passive: false });
+
   isDragging = true;
 }
-
 
 /**
  * Safely captures pointer events to maintain drag control.
@@ -147,11 +219,7 @@ function startDrag(taskCard, event) {
  * @param {PointerEvent} event - Pointer event.
  */
 function capturePointer(taskCard, event) {
-  try {
-    taskCard.setPointerCapture(event.pointerId);
-  } catch {
-    // Firefox private mode may reject capture — ignore silently
-  }
+  try { taskCard.setPointerCapture(event.pointerId) } catch { }
 }
 
 
@@ -173,20 +241,22 @@ function updateDraggingPosition(event) {
 
 /**
  * Handles pointer release event (drop or click detection).
+ * Detects whether the interaction was a click or a drag,
+ * and restores scroll behavior afterwards.
  * @param {PointerEvent} event - Pointer event.
  */
 async function onPointerUp(event) {
+  cancelLongPress();
+  document.removeEventListener("touchmove", preventTouchScroll);
   removeDragListeners();
 
   const movedDistance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
   const wasClick = movedDistance < DRAG_THRESHOLD && event.timeStamp - dragStartTime < 500;
 
-  // If dragging was active → process drop first
   if (isDragging) {
     await stopDragging(event);
   }
 
-  // Only trigger click if it was not a drag or recent drop
   if (wasClick && clickedTask && !isDragging && !wasDroppedInSameColumn) {
     handleTaskClick(clickedTask);
   }
@@ -207,6 +277,7 @@ function removeDragListeners() {
  * @param {PointerEvent} _event - Pointer event.
  */
 function onPointerCancel(_event) {
+  cancelLongPress();
   resetDragState();
 }
 
@@ -234,7 +305,8 @@ function handleTaskClick(task) {
 async function stopDragging(event) {
   if (!draggedTask) return;
 
-  // Schedule click suppression for 300ms
+  document.removeEventListener("touchmove", preventTouchScroll);
+
   setClickSuppression(300);
 
   const { id, newState, oldState } = getDragContextData();
