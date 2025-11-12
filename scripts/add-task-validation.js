@@ -96,6 +96,12 @@ function validateTitle(title, titleErr, valid) {
   clearError(title, titleErr);
   return valid;
 }
+// "YYYY-MM-DD" in *lokaler* Zeit (kein UTC-Offset-Fehler)
+function todayLocalISO() {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().split('T')[0];
+}
 
 /**
  * Validates the due date input.
@@ -105,10 +111,18 @@ function validateTitle(title, titleErr, valid) {
  * @returns {boolean}
  */
 function validateDate(date, dateErr, valid) {
-  if (!date.value.trim()) {
+  const value = date.value.trim(); // <— hier wird value definiert
+  if (!value) {
     showError(date, dateErr, 'This field is required');
     return false;
   }
+
+  const today = todayLocalISO(); // "YYYY-MM-DD" in Lokalzeit
+  if (value < today) {
+    showError(date, dateErr, 'Please select a current or future date.');
+    return false;
+  }
+
   clearError(date, dateErr);
   return valid;
 }
@@ -138,15 +152,24 @@ function validateCategory(catVisible, catHidden, catErr, valid) {
 function dueDateValidation() {
   const d = document.getElementById('due-date'), err = document.getElementById('date-error');
   if (!d) return;
+
   if (!d.dataset.bound) {
     d.dataset.bound = '1';
-    d.addEventListener('change', () => {
-      d.classList.toggle('valid-input', !!d.value);
-      d.classList.toggle('invalid-input', !d.value);
-      if (d.value) clearError?.(d, err);
-    });
-    d.addEventListener('input', () => { if (d.value.trim()) clearError?.(d, err); });
+    const onUpdate = () => {
+      // nur Styling (kein rot erzwingen)
+      if (d.value.trim()) clearError?.(d, err);
+
+      // optional: live nach erstem Submit rot/grün zeigen
+      const form = d.closest('form');
+      if (form?.classList.contains('was-validated')) {
+        // benutze deine vorhandene validateDate-Logik
+        validateDate(d, err, true);
+      }
+    };
+    d.addEventListener('input', onUpdate);
+    d.addEventListener('change', onUpdate);
   }
+
+  // ⟵ KEIN input-error hier setzen
   d.classList.remove('valid-input','invalid-input');
-  d.classList.toggle('input-error', !d.value);
 }

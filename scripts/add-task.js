@@ -18,6 +18,7 @@ async function initAddTask() {
   updateCategoryValidity();
   dueDateValidation();
   bindLiveRequiredClear('title', 'title-error');
+  setMinDueDate({ autoCorrect: false, report: true });
 }
 
 const focusOrder = ["title", "description", "due-date"];

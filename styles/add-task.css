@@ -1,3 +1,53 @@
+/* 1) Einheitlicher Basis-Style für alle Form Controls */
+.task-content__container input,
+.task-content__container select,
+.task-content__container textarea,
+.category-selection .selector {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-lightgrey); /* Default: grau */
+  padding: 0.5rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color .15s ease;
+}
+
+/* 2) Fokus: blau */
+.task-content__container input:focus,
+.task-content__container select:focus,
+.task-content__container textarea:focus,
+.category-selection .selector:focus {
+  outline: none;
+  border-color: var(--color-lightblue) !important;
+}
+
+/* 3) Invalid-Zustand (durch JS-Klasse) */
+/* Rot nur, wenn der Nutzer das Formular schon abgesendet hat ODER ein Feld explizit input-error trägt */
+.selector.input-error,
+.was-validated .category-selection.invalid .selector {
+  border-color: var(--color-error) !important; /* rot */
+}
+
+/* Invalid > Focus: Rot hat Vorrang, wenn Feld fehlerhaft ist */
+input.input-error:focus,
+select.input-error:focus,
+textarea.input-error:focus,
+.category-selection .selector.input-error:focus,
+.was-validated .category-selection.invalid .selector:focus {
+  border-color: var(--color-error) !important;
+}
+
+
+/* 5) Fehlermeldungen */
+.field-error {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  margin-top: 0.25rem;
+  display: none;
+}
+.has-error .field-error { display: block; }
+
 .add-task__field {
   display: flex;
   flex-direction: column;
@@ -121,23 +171,6 @@
   cursor: pointer;
   padding: 0.625rem;
   gap: 0.6rem;
-}
-
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible,
-button:focus-visible,
-a:focus-visible {
-  outline: none;
-  border: 1px solid var(--color-lightblue) !important;
-}
-
-.input--validation-modifier:valid {
-  border: 1px solid var(--color-error);
-}
-
-.input--validation-modifier:not(:placeholder-shown):valid {
-  border-color: var(--color-lightblue);
 }
 
 .subtasks__input--border-color input {
@@ -336,19 +369,6 @@ a:focus-visible {
   flex-direction: column;
 }
 
-.category-selection .selector {
-  border: 1px solid var(--color-error);
-  transition: border-color .15s ease;
-}
-
-.category-selection .selector:focus {
-  border-color: var(--color-lightblue);
-}
-
-.category-selection.valid .selector {
-  border-color: var(--color-lightblue);
-}
-
 .category-proxy {
   position: absolute;
   inset: 0;
@@ -372,10 +392,6 @@ a:focus-visible {
 
 .input-error {
   border: 1px solid var(--color-error) !important;
-}
-
-.input-error:focus {
-  border: 1px solid var(--color-lightblue) !important;
 }
 
 .valid-input {
