@@ -282,15 +282,24 @@ function bindAssignmentListEvents(contactsDropDownList, avatarContainer) {
  */
 function refreshAssignedUserContainer(avatarContainer) {
   const selectedIds = getSelectedAssignmentIds();
-  avatarContainer.innerHTML = selectedIds
-    .map(id => {
-      const user = users.find(user => user.id === id);
-      const svg = getUserAvatarSvg(user);
-      return user
-        ? /*html*/ `<div class="dlg-edit__user-box" title="${user.name}">${svg}</div>`
-        : '';
-    })
-    .join('');
+  avatarContainer.innerHTML = '';
+
+  const maxVisible = 4;
+  const visibleUsers = selectedIds.slice(0, maxVisible).map(id => users.find(u => u.id === id)).filter(Boolean);
+
+  visibleUsers.forEach(user => {
+    const svg = getUserAvatarSvg(user);
+    avatarContainer.innerHTML += /*html*/ `
+      <div class="dlg-edit__user-box" title="${user.name}">
+        ${svg}
+      </div>`;
+  });
+
+  if (selectedIds.length > maxVisible) {
+    const remaining = selectedIds.length - maxVisible;
+    avatarContainer.innerHTML += /*html*/ `
+      <div class="dlg-edit__user-box more-users">+${remaining}</div>`;
+  }
 }
 
 

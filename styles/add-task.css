@@ -12,7 +12,6 @@
   transition: border-color .15s ease;
 }
 
-/* Fokus: blau (wenn kein Fehler) */
 .task-content__container input:focus,
 .task-content__container select:focus,
 .task-content__container textarea:focus,
@@ -21,7 +20,6 @@
   border-color: var(--color-lightblue) !important;
 }
 
-/* Fehler hat Vorrang – auch im Fokus */
 input.input-error:focus,
 select.input-error:focus,
 textarea.input-error:focus,
@@ -87,6 +85,7 @@ textarea.input-error:focus,
   display: flex;
   flex-direction: column;
   gap: 1.125rem;
+  max-width: 500px;
 }
 
 .task-content__container label,
@@ -96,13 +95,12 @@ textarea.input-error:focus,
   margin-bottom: 0.5rem;
 }
 
-
-
 .add-task__right-column {
   width: 50%;
   padding-left: 1.25rem;
   display: grid;
   gap: 1rem;
+  max-width: 500px;
 }
 
 .priority-options {
@@ -125,7 +123,7 @@ textarea.input-error:focus,
   align-items: end;
   gap: 1rem;
   margin-top: 2.5rem;
-  padding-right: 6rem;
+  max-width: 1000px;
   height: 2.5rem;
 }
 
@@ -371,7 +369,6 @@ textarea.input-error:focus,
   display: block;
 }
 
-/* Fehlerzustand: dauerhaft rot – auch ohne Fokus */
 .task-content__container input.input-error,
 .task-content__container textarea.input-error,
 .task-content__container select.input-error,
@@ -379,7 +376,6 @@ textarea.input-error:focus,
   border-color: var(--color-error) !important;
 }
 
-/* Fehler hat Vorrang vor Fokus-Blau */
 .task-content__container input.input-error:focus,
 .task-content__container textarea.input-error:focus,
 .task-content__container select.input-error:focus,

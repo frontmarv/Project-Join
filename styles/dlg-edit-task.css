@@ -333,3 +333,15 @@
   content: url('../assets/img/delete-hover.svg');
   cursor: pointer;
 }
+
+.dlg-edit__user-box.more-users {
+  background: #d1d1d1;
+  color: #000;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
