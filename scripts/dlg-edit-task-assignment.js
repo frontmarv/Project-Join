@@ -277,28 +277,38 @@ function bindAssignmentListEvents(contactsDropDownList, avatarContainer) {
 // ======================================================
 
 /**
- * Refreshes the assigned user avatar container based on selected IDs.
- * @param {HTMLElement} avatarContainer - Container for user avatars.
+ * Creates an SVG badge showing "+x users".
+ * @param {number} count - Number of additional users.
+ * @returns {string} SVG markup.
  */
-function refreshAssignedUserContainer(avatarContainer) {
-  const selectedIds = getSelectedAssignmentIds();
-  avatarContainer.innerHTML = '';
+function getMoreUsersSvg(count) {
+  return `
+    <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">
+      <circle cx="21" cy="21" r="20" fill="rgb(66, 82, 110)" stroke="white" stroke-width="2"/>
+      <text x="21" y="23" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="400" fill="white">
+        +${count}
+      </text>
+    </svg>`;
+}
 
-  const maxVisible = 4;
-  const visibleUsers = selectedIds.slice(0, maxVisible).map(id => users.find(u => u.id === id)).filter(Boolean);
 
-  visibleUsers.forEach(user => {
-    const svg = getUserAvatarSvg(user);
-    avatarContainer.innerHTML += /*html*/ `
-      <div class="dlg-edit__user-box" title="${user.name}">
-        ${svg}
+/**
+ * Renders up to 5 assigned user avatars and adds a "+x" SVG if more are selected.
+ * @param {HTMLElement} c - The container element where avatars are rendered.
+ */
+function refreshAssignedUserContainer(c) {
+  const ids = getSelectedAssignmentIds(), max = 5;
+  const shown = ids.slice(0, max).map(id => users.find(u => u.id === id)).filter(Boolean);
+  c.innerHTML = shown.map(u => `
+    <div class="dlg-edit__user-box" title="${u.name}">
+      ${getUserAvatarSvg(u)}
+    </div>`).join('');
+  if (ids.length > max) {
+    const more = ids.length - max;
+    c.innerHTML += `
+      <div class="dlg-edit__user-box" title="+${more} Users">
+        ${getMoreUsersSvg(more)}
       </div>`;
-  });
-
-  if (selectedIds.length > maxVisible) {
-    const remaining = selectedIds.length - maxVisible;
-    avatarContainer.innerHTML += /*html*/ `
-      <div class="dlg-edit__user-box more-users">+${remaining}</div>`;
   }
 }
 
