@@ -1,4 +1,39 @@
 /**
+ * Resets all validation and error states inside the Add Task form.
+ * Removes .input-error, clears error texts, and resets validation flags.
+ * @param {HTMLElement} dlg - The dialog element containing the form.
+ */
+function resetAddTaskFormValidation(dlg) {
+  const form = dlg.querySelector('#task-form');
+  if (!form) return;
+
+  form.classList.remove('was-validated');
+  clearAllErrors(form);
+
+  const due = form.querySelector('#due-date');
+  const dateErr = form.querySelector('#date-error');
+  due?.classList.remove('input-error');
+  if (dateErr) dateErr.textContent = '';
+}
+
+
+/**
+ * Removes all visible validation errors within a given container (default: entire document).
+ * Clears red borders, error messages, and error state classes.
+ *
+ * @param {Document|HTMLElement} [root=document] - The root element or document to search within.
+ * @example
+ * // Clears all error styles and messages in a specific form
+ * clearAllErrors(document.getElementById('task-form'));
+ */
+function clearAllErrors(root = document) {
+  root.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+  root.querySelectorAll('.has-error').forEach(el => el.classList.remove('has-error'));
+  root.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+}
+
+
+/**
  * Clears the error of a required field as soon as it has a non-empty value.
  */
 function bindLiveRequiredClear(inputId, errorId) {
@@ -16,6 +51,7 @@ function bindLiveRequiredClear(inputId, errorId) {
   }
 }
 
+
 /**
  * Updates the category validity UI (.valid / .invalid classes).
  */
@@ -32,6 +68,7 @@ function updateCategoryValidity() {
     root.classList.remove('valid');
   }
 }
+
 
 /**
  * Adds error styling and text to an input.
@@ -61,6 +98,7 @@ function clearError(inputEl, errorEl) {
   }
 }
 
+
 /**
  * Validates all fields in the Add Task form.
  * @returns {boolean} - True if valid, false otherwise.
@@ -81,6 +119,7 @@ function validateTaskForm() {
   return valid;
 }
 
+
 /**
  * Validates the title input.
  * @param {HTMLElement} title - Title input element.
@@ -96,12 +135,7 @@ function validateTitle(title, titleErr, valid) {
   clearError(title, titleErr);
   return valid;
 }
-// "YYYY-MM-DD" in *lokaler* Zeit (kein UTC-Offset-Fehler)
-function todayLocalISO() {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().split('T')[0];
-}
+
 
 /**
  * Validates the due date input.
@@ -111,18 +145,10 @@ function todayLocalISO() {
  * @returns {boolean}
  */
 function validateDate(date, dateErr, valid) {
-  const value = date.value.trim(); // <— hier wird value definiert
-  if (!value) {
+  if (!date.value.trim()) {
     showError(date, dateErr, 'This field is required');
     return false;
   }
-
-  const today = todayLocalISO(); // "YYYY-MM-DD" in Lokalzeit
-  if (value < today) {
-    showError(date, dateErr, 'Please select a current or future date.');
-    return false;
-  }
-
   clearError(date, dateErr);
   return valid;
 }
@@ -147,29 +173,32 @@ function validateCategory(catVisible, catHidden, catErr, valid) {
 
 
 /**
- * Handles due-date input validation and styling.
+ * Returns today's date in local timezone as YYYY-MM-DD.
+ */
+function todayLocalISO() {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().split('T')[0];
+}
+
+
+/**
+ * Validates the due date field in real time and shows a custom error if it's in the past.
+ */
+/**
+ * Sets up validation behavior for the due-date field without showing errors initially.
  */
 function dueDateValidation() {
   const d = document.getElementById('due-date'), err = document.getElementById('date-error');
-  if (!d) return;
-
-  if (!d.dataset.bound) {
-    d.dataset.bound = '1';
-    const onUpdate = () => {
-      // nur Styling (kein rot erzwingen)
-      if (d.value.trim()) clearError?.(d, err);
-
-      // optional: live nach erstem Submit rot/grün zeigen
-      const form = d.closest('form');
-      if (form?.classList.contains('was-validated')) {
-        // benutze deine vorhandene validateDate-Logik
-        validateDate(d, err, true);
-      }
-    };
-    d.addEventListener('input', onUpdate);
-    d.addEventListener('change', onUpdate);
-  }
-
-  // ⟵ KEIN input-error hier setzen
-  d.classList.remove('valid-input','invalid-input');
+  if (!d || d.dataset.bound) return; d.dataset.bound = '1';
+  const today = todayLocalISO();
+  const validate = () => {
+    const v = d.value.trim();
+    if (!v) return;
+    v < today ? showError(d, err, 'Please select a current or future date.')
+              : clearError(d, err);
+  };
+  d.addEventListener('input', () => { if (d.value >= today) clearError(d, err); });
+  d.addEventListener('change', validate);
+  d.addEventListener('blur', validate);
 }
