@@ -25,17 +25,17 @@ function getAddContactDlgTpl() {
                 <div class="width-div">
                     <div class="inputfields">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-name-input" type="text" placeholder="Name" aria-label="name">
+                            <input id="contact-dlg-name-input" type="text" placeholder="Name" aria-label="name" onkeyup="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
 
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email">
+                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
 
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-phone-input" type="tel" placeholder="Phone" aria-label="Phone">
+                            <input id="contact-dlg-phone-input" type="tel" placeholder="Phone" aria-label="Phone" onkeyup="validatePhoneInput(this)">
                             <img src="../assets/img/call.svg" alt="icon of an phone">
                         </div>
                         <div class="inputfields__button-holder">
@@ -76,17 +76,17 @@ function getEditContactDlgTpl() {
                 <div class="width-div">
                     <div class="inputfields">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-name-input" type="text" placeholder="Name" aria-label="name">
+                            <input id="contact-dlg-name-input" type="text" placeholder="Name" aria-label="name" onkeyup="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
 
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email">
+                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
 
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-phone-input" type="tel" placeholder="Phone" aria-label="Phone">
+                            <input id="contact-dlg-phone-input" type="tel" placeholder="Phone" aria-label="Phone" onkeyup="validatePhoneInput(this)">
                             <img src="../assets/img/call.svg" alt="icon of an phone">
                         </div>
                         <div class="inputfields__button-holder">

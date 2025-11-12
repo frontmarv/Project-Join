@@ -260,9 +260,11 @@ select {
   height: 3.125rem;
 }
 
-.svg__wrapper.loggedIn:hover #colored-circle--loggedIn {
-  cursor: pointer;
-  fill: rgba(12, 46, 98, 0.12);
+@media (hover: hover) {
+  .svg__wrapper.loggedIn:hover #colored-circle--loggedIn {
+    cursor: pointer;
+    fill: rgba(12, 46, 98, 0.12);
+  }
 }
 
 .svg__wrapper.medium {

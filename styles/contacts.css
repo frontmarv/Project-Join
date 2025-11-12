@@ -1,3 +1,7 @@
+h3 {
+    overflow-wrap: break-word;
+}
+
 section {
     display: flex;
     flex-direction: row;
@@ -131,10 +135,14 @@ main {
 .contact-name {
     font-size: 1.25rem;
     color: var(--color-black);
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .contact-email {
     color: var(--color-email) !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .content-right {
@@ -190,6 +198,7 @@ main {
 
 .manage-contact__header {
     gap: 0.5rem;
+    width: 100%;
 }
 
 .manage-contact__actions {
@@ -237,6 +246,10 @@ main {
     display: none;
 }
 
+.pulse-error {
+    border-color: var(--color-error) !important;
+}
+
 .create-contact-successful {
     position: fixed;
     top: calc(100vh - 100px);
@@ -259,6 +272,14 @@ main {
 }
 
 @media screen and (max-width: 1024px) {
+    .contact-list__initial-letter {
+        padding: 1.0625rem 1.5rem;
+    }
+
+    .contact-list__item {
+        gap: 1rem;
+        padding: 0.9375rem 1rem;
+    }
 
     .content-left__button-holder {
         display: none;
@@ -271,6 +292,7 @@ main {
 
     .content-left {
         width: 100%;
+        min-width: unset;
     }
 
     .content-right {

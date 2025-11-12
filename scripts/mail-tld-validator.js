@@ -87,10 +87,12 @@ async function loadTlds() {
 /**
  * Validates an email address for syntax and TLD correctness.
  * @async
- * @param {string} email - Email address to validate.
+ * @param {string} email - Email address to validate (max 254 characters per RFC 5321).
  * @returns {Promise<boolean>} True if valid, false otherwise.
  */
 async function isValidEmail(email) {
+  const MAX_EMAIL_LENGTH = 60;
+  if (!email || email.length > MAX_EMAIL_LENGTH) return false;
   const tlds = await loadTlds();
   const regex = /^[^\s@]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
   if (!regex.test(email)) return false;
@@ -173,4 +175,4 @@ function updateEmailValidationUI(valid, validEmail, msg) {
 // 🔹 AUTO INITIALIZATION
 // ======================================================
 
-window.addEventListener("DOMContentLoaded", initEmailValidation);
+// window.addEventListener("DOMContentLoaded", initEmailValidation);

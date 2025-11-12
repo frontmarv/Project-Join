@@ -89,31 +89,18 @@ function setMultipatch() {
 
 
 /**
- * Validates contact name input and saves data if valid.
- * Shows error animation if name field is empty.
- * @returns {void}
- */
-function validateAndSaveData() {
-    const userName = document.getElementById('contact-dlg-name-input').value;
-    if (userName === "") {
-        wrongInputPulseAnimation();
-        return;
-    } else {
-        saveDataEditContactDlg();
-        editContactSuccessDlg();
-    }
-}
-
-
-/**
  * Saves edited contact data to database and updates UI.
  * Updates contact list, reselects contact, and handles mobile view.
  * @async
  * @returns {Promise<void>}
  */
-async function saveDataEditContactDlg() {
+async function saveDataEditContactDlg(data) {
     removeAnimationClass();
-    const multipatch = setMultipatch();
+    const multipatch = {
+        "name": data.name,
+        "email": data.email,
+        "phone": data.phone
+    };
     await saveChangesToDB(multipatch);
     await renderContactList();
     const userName = rawData[STORED_USER_KEY].name;
@@ -150,18 +137,67 @@ function markStoredContactAsSelected(userName) {
  * @returns {Promise<void>}
  */
 async function putNewContactToDB() {
-    const { key, data, addUserName } = collectDataAddContactDlg();
-    const validInput = validateInputAddContact(addUserName);
-    if (!validInput) {
-        wrongInputPulseAnimation();
-        return;
-    } else {
+    const { key, data, addUserName } = collectDataFromDlg();
+    const validInput = await validateInputfieldsDlg(addUserName, data);
+    if (validInput) {
         await pushDataToDB(key, data);
         removeAnimationClass();
         renderContactList();
         setContactCardtoInvisible();
         addContactSuccessDlg();
     }
+    else { checkForEmptyInput(); }
+}
+
+
+/**
+ * Validates contact name input and saves data if valid.
+ * Shows error animation if name field is empty.
+ * @returns {void}
+ */
+async function validateAndSaveData() {
+    const { key, data, addUserName } = collectDataFromDlg();
+    const validInput = await validateInputfieldsDlg(addUserName, data);
+    if (validInput) {
+        saveDataEditContactDlg(data);
+        editContactSuccessDlg();
+    } else {
+        checkForEmptyInput();
+    }
+}
+
+
+/**
+ * Checks if fields are empty and triggers error animation for invalid inputs.
+ */
+function checkForEmptyInput() {
+    const nameInput = document.getElementById('contact-dlg-name-input');
+    const emailInput = document.getElementById('contact-dlg-email-input');
+    const phoneInput = document.getElementById('contact-dlg-phone-input');
+    if (nameInput.value === "") {
+        pulseRedError(nameInput);
+    }
+    if (emailInput.value === "") {
+        pulseRedError(emailInput);
+    }
+    if (phoneInput.value === "") {
+        pulseRedError(phoneInput);
+    }
+}
+
+
+/**
+ * Applies a red pulse animation to an input wrapper to indicate error.
+ * @param {HTMLInputElement} input - Input element to apply error animation to
+ * @returns {void}
+ */
+function pulseRedError(input) {
+    const wrapper = input.closest('.inputfield__wrapper');
+    if (!wrapper) return;
+    wrapper.classList.add('pulse-error');
+    setTimeout(() => {
+        wrapper.classList.remove('pulse-error');
+    }, 500);
 }
 
 
@@ -173,7 +209,7 @@ async function putNewContactToDB() {
  * @returns {Object} return.data - Contact data object
  * @returns {string} return.addUserName - Contact's name from form
  */
-function collectDataAddContactDlg() {
+function collectDataFromDlg() {
     const addUserName = document.getElementById('contact-dlg-name-input').value;
     const addEmail = document.getElementById('contact-dlg-email-input').value;
     const addPhone = document.getElementById('contact-dlg-phone-input').value;
@@ -183,32 +219,89 @@ function collectDataAddContactDlg() {
 }
 
 
+async function validateInputfieldsDlg(addUserName, data) {
+    const validName = isValidUsername(addUserName);
+    const validEmail = await isValidEmail(data.email);
+    const validPhone = isValidPhone(data.phone);
+    if (validName && validEmail && validPhone) { return true }
+    else { return false }
+}
+
 /**
- * Validates that contact name is not empty.
- * @param {string} addUserName - Contact name to validate
- * @returns {boolean} True if name is valid (not empty), undefined otherwise
+ * Validates username format.
+ * Username must contain at least 2 letters, only alphabetic characters and spaces allowed.
+ * @param {string} username - Username to validate
+ * @returns {boolean} True if username is valid, false otherwise
  */
-function validateInputAddContact(addUserName) {
-    if (addUserName !== "") {
-        return true;
-    }
+function isValidUsername(username) {
+    if (!username || typeof username !== 'string') return false;
+    const trimmed = username.trim();
+    const regex = /^[a-zA-ZäöüÄÖÜß\s]{2,50}$/;
+    const letterCount = (trimmed.match(/[a-zA-ZäöüÄÖÜß]/g) || []).length;
+    return regex.test(trimmed) && letterCount >= 2;
 }
 
 
 /**
- * Displays error animation on input fields.
- * Briefly changes border color to error color for visual feedback.
+ * Validates phone number format.
+ * Accepts international format with optional + prefix, spaces, hyphens, and parentheses.
+ * @param {string} phone - Phone number to validate
+ * @returns {boolean} True if phone number is valid, false otherwise
+ */
+function isValidPhone(phone) {
+    if (!phone || typeof phone !== 'string') return false;
+    const cleaned = phone.replace(/[\s\-\(\)]/g, '');
+    const regex = /^\+?[1-9][0-9]{7,14}$/;
+    return regex.test(cleaned);
+}
+
+
+/**
+ * Validates input field and applies visual feedback via border color.
+ * @param {HTMLInputElement} input - The input element being validated
+ * @param {Function} validationFn - Validation function to use (isValidUsername, isValidEmail, isValidPhone)
  * @returns {void}
  */
-function wrongInputPulseAnimation() {
-    document.querySelectorAll('.inputfield__wrapper').forEach(element => {
-        element.style.borderColor = "var(--color-error)";
-    });
-    setTimeout(() => {
-        document.querySelectorAll('.inputfield__wrapper').forEach(element => {
-            element.style.borderColor = "var(--color-lightgrey)";
-        });
-    }, 500);
+async function validateInputField(input, validationFn) {
+    const value = input.value;
+    const wrapper = input.closest('.inputfield__wrapper');
+    if (!wrapper) return;
+    if (value.length > 0) {
+        if (await validationFn(value)) {
+            wrapper.style.borderColor = 'var(--color-success)';
+        } else {
+            wrapper.style.borderColor = 'var(--color-error)';
+        }
+    } else {
+        wrapper.style.borderColor = 'var(--color-lightgrey)';
+    }
+}
+
+/**
+ * Validates username input field and applies visual feedback via border color.
+ * @param {HTMLInputElement} input - The input element being validated
+ * @returns {void}
+ */
+function validateUsernameInput(input) {
+    validateInputField(input, isValidUsername);
+}
+
+/**
+ * Validates email input field and applies visual feedback via border color.
+ * @param {HTMLInputElement} input - The input element being validated
+ * @returns {void}
+ */
+function validateEmailInput(input) {
+    validateInputField(input, isValidEmail);
+}
+
+/**
+ * Validates phone input field and applies visual feedback via border color.
+ * @param {HTMLInputElement} input - The input element being validated
+ * @returns {void}
+ */
+function validatePhoneInput(input) {
+    validateInputField(input, isValidPhone);
 }
 
 
