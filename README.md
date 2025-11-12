@@ -183,7 +183,7 @@ This project is part of the Developer Akademie curriculum.
 
 ## 👥 Authors
 
-- Join Team - Developer Akademie
+- Join Team 1331 - Developer Akademie
 
 ## 🙏 Acknowledgments
 

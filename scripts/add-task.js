@@ -18,6 +18,7 @@ async function initAddTask() {
   updateCategoryValidity();
   dueDateValidation();
   bindLiveRequiredClear('title', 'title-error');
+  setMinDueDate();
 }
 
 const focusOrder = ["title", "description", "due-date"];
@@ -338,6 +339,7 @@ function clearTask() {
   resetPriorityButtons();
   updateCategoryValidity();
   dueDateValidation();
+  clearAllErrors(form);
 }
 
 

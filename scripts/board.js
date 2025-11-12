@@ -280,6 +280,7 @@ async function showAddTaskDialog(dlg) {
   setTimeout(() => dlg.classList.add("show"), 10);
   await waitFor('#due-date');
   initDueDateValidationDelegated(dlg);
+  resetAddTaskFormValidation(dlg);
 }
 
 

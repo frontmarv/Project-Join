@@ -1,3 +1,51 @@
+
+.task-content__container input,
+.task-content__container select,
+.task-content__container textarea,
+.category-selection .selector {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-lightgrey);
+  padding: 0.5rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color .15s ease;
+}
+
+/* Fokus: blau (wenn kein Fehler) */
+.task-content__container input:focus,
+.task-content__container select:focus,
+.task-content__container textarea:focus,
+.category-selection .selector:focus {
+  outline: none;
+  border-color: var(--color-lightblue) !important;
+}
+
+/* Fehler hat Vorrang – auch im Fokus */
+input.input-error:focus,
+select.input-error:focus,
+textarea.input-error:focus,
+.category-selection .selector.input-error:focus,
+.was-validated .category-selection.invalid .selector:focus {
+  border-color: var(--color-error) !important;
+}
+
+.input.input-error,
+.selector.input-error,
+.was-validated .category-selection.invalid .selector {
+  border-color: var(--color-error) !important;
+}
+
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  margin-top: 0.25rem;
+  display: none;
+}
+.has-error .field-error { display: block; }
+
 .add-task__field {
   display: flex;
   flex-direction: column;
@@ -48,25 +96,7 @@
   margin-bottom: 0.5rem;
 }
 
-.task-content__container input,
-.task-content__container select {
-  width: 100%;
-  height: 2.5rem;
-  border-radius: 0.5rem;
-  border: 0.063rem solid var(--color-lightgrey);
-  padding: 0.5rem;
-  font-size: 1rem;
-}
 
-.task-content__container textarea {
-  width: 100%;
-  min-height: 6.25rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--color-lightgrey);
-  padding: 0.5rem;
-  font-size: 1rem;
-  field-sizing: content;
-}
 
 .add-task__right-column {
   width: 50%;
@@ -123,23 +153,6 @@
   gap: 0.6rem;
 }
 
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible,
-button:focus-visible,
-a:focus-visible {
-  outline: none;
-  border: 1px solid var(--color-lightblue) !important;
-}
-
-.input--validation-modifier:valid {
-  border: 1px solid var(--color-error);
-}
-
-.input--validation-modifier:not(:placeholder-shown):valid {
-  border-color: var(--color-lightblue);
-}
-
 .subtasks__input--border-color input {
   border: 1px solid var(--color-lightgrey);
 }
@@ -193,8 +206,9 @@ a:focus-visible {
   background-color: #1f6fff;
 }
 
-.priority-options-btn {
-  width: 150px;
+.priority-options-btn-medium {
+  background-color: rgb(255, 167, 0);
+  color: white;
 }
 
 @media screen and (max-width: 1024px) {
@@ -336,19 +350,6 @@ a:focus-visible {
   flex-direction: column;
 }
 
-.category-selection .selector {
-  border: 1px solid var(--color-error);
-  transition: border-color .15s ease;
-}
-
-.category-selection .selector:focus {
-  border-color: var(--color-lightblue);
-}
-
-.category-selection.valid .selector {
-  border-color: var(--color-lightblue);
-}
-
 .category-proxy {
   position: absolute;
   inset: 0;
@@ -370,18 +371,18 @@ a:focus-visible {
   display: block;
 }
 
-.input-error {
-  border: 1px solid var(--color-error) !important;
+/* Fehlerzustand: dauerhaft rot – auch ohne Fokus */
+.task-content__container input.input-error,
+.task-content__container textarea.input-error,
+.task-content__container select.input-error,
+.category-selection .selector.input-error {
+  border-color: var(--color-error) !important;
 }
 
-.input-error:focus {
-  border: 1px solid var(--color-lightblue) !important;
-}
-
-.valid-input {
-  border: 1px solid var(--color-lightblue) !important;
-}
-
-.invalid-input {
-  border: 1px solid var(--color-error) !important;
+/* Fehler hat Vorrang vor Fokus-Blau */
+.task-content__container input.input-error:focus,
+.task-content__container textarea.input-error:focus,
+.task-content__container select.input-error:focus,
+.category-selection .selector.input-error:focus {
+  border-color: var(--color-error) !important;
 }

@@ -47,6 +47,206 @@
     
 
 
+    <section class="readme">
+        <article><h1>Join - Kanban Project Management Tool</h1>
+<p>A collaborative task management application built with vanilla JavaScript, featuring drag-and-drop functionality, contact management, and real-time data synchronization with Firebase.</p>
+<h2>🚀 Features</h2>
+<ul>
+<li><strong>Task Management</strong>: Create, edit, and organize tasks with priorities, due dates, and subtasks</li>
+<li><strong>Kanban Board</strong>: Drag-and-drop interface for managing task workflow (To Do, In Progress, Awaiting Feedback, Done)</li>
+<li><strong>Contact Management</strong>: Add, edit, and delete contacts with profile images and contact details</li>
+<li><strong>User Authentication</strong>: Secure login system with guest access option</li>
+<li><strong>Responsive Design</strong>: Fully responsive layout optimized for desktop, tablet, and mobile devices</li>
+<li><strong>Real-time Sync</strong>: Firebase Realtime Database integration for data persistence</li>
+</ul>
+<h2>📋 Table of Contents</h2>
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#project-structure">Project Structure</a></li>
+<li><a href="#technologies">Technologies</a></li>
+<li><a href="#features-details">Features Details</a></li>
+<li><a href="#browser-compatibility">Browser Compatibility</a></li>
+<li><a href="#contributing">Contributing</a></li>
+</ul>
+<h2>🛠️ Installation</h2>
+<ol>
+<li>Clone the repository:</li>
+</ol>
+<pre class="prettyprint source lang-bash"><code>git clone https://github.com/yourusername/join.git
+cd join
+</code></pre>
+<ol start="2">
+<li>
+<p>Open the project:</p>
+<ul>
+<li>Simply open <code>index.html</code> in your browser, or</li>
+<li>Use a local development server:</li>
+</ul>
+<pre class="prettyprint source lang-bash"><code># Using Python
+python -m http.server 8000
+
+# Using Node.js
+npx serve
+</code></pre>
+</li>
+<li>
+<p>Navigate to <code>http://localhost:8000</code> (or your server's address)</p>
+</li>
+</ol>
+<h2>💻 Usage</h2>
+<h3>Login</h3>
+<ul>
+<li>Use the login form with your credentials</li>
+<li>Or click &quot;Guest Login&quot; for immediate access without registration</li>
+</ul>
+<h3>Dashboard (Summary)</h3>
+<ul>
+<li>View task statistics and upcoming deadlines</li>
+<li>See personalized greeting based on time of day</li>
+</ul>
+<h3>Board</h3>
+<ul>
+<li>Drag and drop tasks between columns</li>
+<li>Click tasks to view details or edit</li>
+<li>Filter tasks by search term</li>
+<li>Add new tasks with the &quot;+&quot; button</li>
+</ul>
+<h3>Add Task</h3>
+<ul>
+<li>Fill in task details (title, description, due date)</li>
+<li>Assign contacts to tasks</li>
+<li>Set priority (low, medium, high)</li>
+<li>Choose category (User Story or Technical Task)</li>
+<li>Add subtasks for detailed tracking</li>
+</ul>
+<h3>Contacts</h3>
+<ul>
+<li>View all contacts in alphabetical sections</li>
+<li>Add new contacts with profile colors</li>
+<li>Edit existing contact information</li>
+<li>Delete contacts (with confirmation)</li>
+<li>Mobile-responsive contact details view</li>
+</ul>
+<h2>📁 Project Structure</h2>
+<pre class="prettyprint source"><code>Project_Join/
+├── index.html                 # Login page
+├── script.js                  # Global utilities and Firebase config
+├── pages/
+│   ├── summary.html          # Dashboard overview
+│   ├── board.html            # Kanban board
+│   ├── add-task.html         # Task creation form
+│   ├── contacts.html         # Contact management
+│   ├── sign-up.html          # User registration
+│   └── help.html             # Help documentation
+├── scripts/
+│   ├── authentication.js     # Login verification
+│   ├── contacts.js           # Contact CRUD operations
+│   ├── dlgs-contact.js       # Contact dialog management
+│   ├── drag-and-drop.js      # Board drag-and-drop functionality
+│   ├── login.js              # Login page logic
+│   ├── navigation.js         # Responsive navigation
+│   └── summary.js            # Dashboard statistics
+├── templates/
+│   ├── tpl-contacts.js       # Contact HTML templates
+│   ├── tpl-login-sign-up.js  # Auth page templates
+│   ├── tpl-navigation.js     # Navigation templates
+│   └── tpl-user-profil-img.js # Avatar SVG templates
+├── styles/
+│   ├── contacts.css          # Contact page styles
+│   ├── login-signup.css      # Authentication styles
+│   └── [other CSS files]
+└── assets/
+    └── img/                  # Images and icons
+</code></pre>
+<h2>🔧 Technologies</h2>
+<ul>
+<li><strong>Frontend</strong>: HTML5, CSS3, Vanilla JavaScript (ES6+)</li>
+<li><strong>Database</strong>: Firebase Realtime Database</li>
+<li><strong>Authentication</strong>: Session Storage based authentication</li>
+<li><strong>Icons &amp; Images</strong>: SVG, PNG</li>
+<li><strong>Responsive Design</strong>: CSS Media Queries, Flexbox, Grid</li>
+</ul>
+<h2>✨ Features Details</h2>
+<h3>Task Management</h3>
+<ul>
+<li><strong>Priority Levels</strong>: Low (green), Medium (orange), High (red)</li>
+<li><strong>Categories</strong>: User Story, Technical Task</li>
+<li><strong>Subtasks</strong>: Checkbox tracking for task breakdown</li>
+<li><strong>Due Dates</strong>: Calendar picker with validation</li>
+<li><strong>Search &amp; Filter</strong>: Real-time task filtering on board</li>
+</ul>
+<h3>Contact Management</h3>
+<ul>
+<li><strong>Profile Images</strong>: Auto-generated colored circles with initials</li>
+<li><strong>Contact Details</strong>: Name, email, phone number</li>
+<li><strong>Alphabetical Grouping</strong>: Organized by first letter</li>
+<li><strong>Current User Indicator</strong>: &quot;(You)&quot; tag for logged-in user</li>
+</ul>
+<h3>Responsive Design</h3>
+<ul>
+<li><strong>Desktop</strong>: Full sidebar navigation, split-view layouts</li>
+<li><strong>Tablet</strong>: Optimized spacing and touch targets</li>
+<li><strong>Mobile</strong>: Hamburger menu, swipe-friendly interfaces, bottom navigation</li>
+</ul>
+<h3>Drag and Drop</h3>
+<ul>
+<li><strong>Visual Feedback</strong>: Placeholder indicators during drag</li>
+<li><strong>Column Highlighting</strong>: Drop zones highlight on hover</li>
+<li><strong>Touch Support</strong>: Mobile-friendly drag implementation</li>
+<li><strong>Click Prevention</strong>: Smart detection prevents accidental opens after drop</li>
+</ul>
+<h2>🌐 Browser Compatibility</h2>
+<ul>
+<li>Chrome (recommended)</li>
+<li>Firefox</li>
+<li>Safari</li>
+<li>Edge</li>
+<li>Mobile browsers</li>
+</ul>
+<h2>📝 Code Documentation</h2>
+<p>The project uses JSDoc for comprehensive code documentation:</p>
+<ul>
+<li>All functions include parameter and return type documentation</li>
+<li>Event listeners are documented with <code>@listens</code> tags</li>
+<li>Async functions marked with <code>@async</code> tag</li>
+<li>Complex objects have detailed property documentation</li>
+</ul>
+<p>Generate HTML documentation (if JSDoc is installed):</p>
+<pre class="prettyprint source lang-bash"><code>jsdoc -c jsdoc.json
+</code></pre>
+<h2>🤝 Contributing</h2>
+<ol>
+<li>Fork the repository</li>
+<li>Create a feature branch (<code>git checkout -b feature/AmazingFeature</code>)</li>
+<li>Commit your changes (<code>git commit -m 'Add some AmazingFeature'</code>)</li>
+<li>Push to the branch (<code>git push origin feature/AmazingFeature</code>)</li>
+<li>Open a Pull Request</li>
+</ol>
+<h3>Code Style Guidelines</h3>
+<ul>
+<li>Use JSDoc comments for all functions</li>
+<li>Follow existing naming conventions (camelCase for functions/variables)</li>
+<li>Use <code>const</code> by default, <code>let</code> only when reassignment is needed</li>
+<li>Keep functions under 15 lines when possible</li>
+<li>Use semantic HTML and CSS class naming</li>
+</ul>
+<h2>📄 License</h2>
+<p>This project is part of the Developer Akademie curriculum.</p>
+<h2>👥 Authors</h2>
+<ul>
+<li>Join Team 1331 - Developer Akademie</li>
+</ul>
+<h2>🙏 Acknowledgments</h2>
+<ul>
+<li>Firebase for backend infrastructure</li>
+<li>Developer Akademie for project guidance</li>
+<li>All contributors and testers</li>
+</ul>
+<hr>
+<p><strong>Note</strong>: This is an educational project created as part of the Developer Akademie full-stack web development course.</p></article>
+    </section>
+
 
 
 
@@ -57,7 +257,7 @@
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Nov 12 2025 00:05:14 GMT+0100 (Mitteleuropäische Normalzeit) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Nov 12 2025 00:23:51 GMT+0100 (Mitteleuropäische Normalzeit) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
