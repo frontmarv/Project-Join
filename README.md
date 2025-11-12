@@ -109,7 +109,7 @@ Project_Join/					                # Project-Root
 │   ├── board.js				                # Hauptlogik für das Kanban-Board
 │   ├── contacts.js				                # CRUD- und UI-Logik für Kontakte
 │   ├── db.js					                # Firebase / Datenbank-Interaktionen
-│   ├── dlg-add-task-subtask-handling.js    # Dialog-Logik für Subtasks
+│   ├── dlg-add-task-subtask-handling.js        # Dialog-Logik für Subtasks
 │   ├── dlg-edit-task-assignment.js	            # Dialog zum Zuweisen von Personen zu Tasks
 │   ├── dlg-edit-task.js		                # Dialog-/Editier-Logik für Tasks
 │   ├── dlg-task-info-helper.js	                # Helfer für Task-Info-Dialoge
