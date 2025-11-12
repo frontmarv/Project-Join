@@ -181,6 +181,10 @@
   padding-left: 0;
   list-style-type: disc;
   list-style-position: inside;
+  max-height: 150px;
+  min-height: 150px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .dlg-edit__subtask-list li {

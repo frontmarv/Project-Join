@@ -21,7 +21,8 @@ async function initAddTask() {
   setMinDueDate();
 }
 
-const focusOrder = ["title", "description", "due-date"];
+const focusOrder = [
+  "title", "description", "due-date", "urgent", "medium", "low", "contact-search", "category-proxy", "subtask-input"];
 
 /**
  * Handles Enter key navigation between form inputs.
