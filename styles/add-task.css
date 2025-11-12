@@ -206,8 +206,9 @@ textarea.input-error:focus,
   background-color: #1f6fff;
 }
 
-.priority-options-btn {
-  width: 150px;
+.priority-options-btn-medium {
+  background-color: rgb(255, 167, 0);
+  color: white;
 }
 
 @media screen and (max-width: 1024px) {
