@@ -288,9 +288,9 @@
     }
 
     .scalable-profil-img {
-        width: 15vw;
+        width: 25vw;
         min-width: 40px;
-        max-width: 120px;
+        max-width: 70px;
         font-size: max(16px, 4vw);
     }
 

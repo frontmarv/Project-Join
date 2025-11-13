@@ -92,6 +92,7 @@ main {
     width: 100%;
     padding: 0rem 3.25rem 16px 3.25rem;
     overflow-y: scroll;
+    position: relative;
 }
 
 .contact-list__item {
@@ -360,6 +361,7 @@ main {
         position: fixed;
         bottom: 132px;
         right: 16px;
+        z-index: 900;
     }
 
     .add-user-icon {
