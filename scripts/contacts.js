@@ -97,7 +97,7 @@ async function deleteContact(userkeyToDelete) {
         const response = await fetch(DB_URL + "users/" + userkeyToDelete + ".json", {
             method: "DELETE"
         });
-        if (userkeyToDelete = LOGGED_IN_USER) {
+        if (userkeyToDelete === LOGGED_IN_USER) {
             LOGGED_IN_USER = undefined;
             logOutUser();
         }
@@ -372,11 +372,12 @@ function handleContent(isSmallScreen) {
     if (isSmallScreen && !showContact) {
         document.querySelector('.content-left').style.display = 'flex';
         document.querySelector('.content-right').style.display = 'none';
-        showAddUserIconMoblie();
+        showAddContactIconMoblie();
         showContact = false;
     } else if (isSmallScreen && showContact) {
         document.querySelector('.content-left').style.display = 'none';
         document.querySelector('.content-right').style.display = 'flex';
+        showEditContactIconMobile();
         showContact = true;
     } else {
         document.querySelector('.content-right').style.display = 'flex';
@@ -394,21 +395,35 @@ function showContactMobile() {
     if (isSmallScreen) {
         document.querySelector('.content-left').style.display = 'none';
         document.querySelector('.content-right').style.display = 'flex';
-        document.querySelector('.add-user-icon').style.display = 'none';
-        document.querySelector('.contacts-options-icon').style.display = 'flex';
+        showEditContactIconMobile();
         showContact = true;
     }
 }
 
 
 /**
- * Shows add user icon and hides contact options icon on mobile.
+ * Displays add user icon and hides contact options icon on mobile.
  * Used when returning to contact list view.
  * @returns {void}
  */
-function showAddUserIconMoblie() {
+function showAddContactIconMoblie() {
     document.querySelector('.add-user-icon').style.display = 'flex';
+    document.querySelector('.add-user-icon').style.pointerEvents = "all";
     document.querySelector('.contacts-options-icon').style.display = 'none';
+    document.querySelector('.contacts-options-icon').style.pointerEvents = "none";
+}
+
+
+/**
+ * Shows contact options icon and hides add user icon on mobile.
+ * Used when viewing contact details.
+ * @returns {void}
+ */
+function showEditContactIconMobile() {
+    document.querySelector('.add-user-icon').style.display = 'none';
+    document.querySelector('.add-user-icon').style.pointerEvents = "none";
+    document.querySelector('.contacts-options-icon').style.display = 'flex';
+    document.querySelector('.contacts-options-icon').style.pointerEvents = "all";
 }
 
 

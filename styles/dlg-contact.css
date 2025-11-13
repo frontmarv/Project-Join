@@ -288,7 +288,7 @@
     .delete-contact__dialog {
         width: fit-content;
         height: fit-content;
-    }
+        }
 
     .scalable-profil-img {
         width: 15vw;

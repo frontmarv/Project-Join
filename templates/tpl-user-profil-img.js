@@ -62,6 +62,13 @@ function getLoggedInUserImg(userInitals) {
 }
 
 
+/**
+ * Generates a scalable HTML profile image with colored background and user initials.
+ * Uses a div element instead of SVG for flexible sizing via CSS.
+ * @param {string} profilImgColor - Hex color code for the background color
+ * @param {string} userInitals - User's initials to display (typically 1-2 characters)
+ * @returns {string} HTML string containing div markup for scalable profile image
+ */
 function getScalableProfilImg(profilImgColor, userInitals) {
     return /*html*/ `
     <div class="scalable-profil-img" id= "scalable-profil-img" style="background-color: ${profilImgColor};">

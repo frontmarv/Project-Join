@@ -9,7 +9,7 @@ section {
 
 #contacts-content {
     max-width: 120rem;
-    padding: 0 4rem 0 0;
+    padding: 0 2rem 0 0;
     height: 100%;
 }
 
@@ -111,9 +111,13 @@ main {
     background: linear-gradient(to bottom, #F9F9F9, #F0F0F0);
 }
 
+#user-profil-img__wrapper {
+    min-width: unset;
+}
 
 .contact-list__item div {
     gap: 0.3125rem;
+    min-width: 0;
 }
 
 .contact-list__initial-letter {
@@ -133,18 +137,21 @@ main {
     color: var(--color-black);
     overflow: hidden;
     text-overflow: ellipsis;
+    text-wrap-mode: nowrap;
 }
 
 .contact-email {
     color: var(--color-email) !important;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-wrap-mode: nowrap;
 }
 
 .content-right {
     margin-top: 8rem;
     width: 62%;
     gap: 2rem;
+    overflow: auto;
     padding-left: 3.4375rem;
 }
 
@@ -233,8 +240,6 @@ main {
     overflow-wrap: anywhere;
 }
 
-.add-user-icon,
-.contacts-options-icon,
 .blue-arrow-back {
     display: none;
 }
