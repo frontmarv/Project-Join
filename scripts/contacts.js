@@ -127,9 +127,15 @@ async function deleteContactFlow() {
         showContact = false;
         handleResizeScreenContacts();
     }
+    removeDeleteClass();
     removeAnimationClass();
+
 }
 
+
+function removeDeleteClass() {
+    dialog.classList.remove('delete-contact__dialog');
+}
 
 /**
  * Extracts and returns unique initial letters from user names.
