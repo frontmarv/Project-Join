@@ -83,15 +83,28 @@ function changePriorityBtn(btnEl) {
 
 
 /**
- * Resets all priority buttons to default and sets chosenPriority to "medium".
+ * Resets all priority buttons to their default visual state (white background,
+ * black text, and default icon). After resetting, the "medium" priority button
+ * is visually highlighted again (orange background, white text, selected icon),
+ * and `chosenPriority` is set back to `"medium"`.
+ *
+ * This function is typically used when clearing the Add Task form, ensuring that
+ * the priority selection always returns to its default state.
+ *
+ * @function resetPriorityButtons
+ * @returns {void}
  */
 function resetPriorityButtons() {
   document.querySelectorAll(".priority-options-btn").forEach(btn => {
-    btn.style.backgroundColor = "#FFFFFF";
-    btn.style.color = "#000000";
-    const img = btn.querySelector("img");
-    if (img) img.src = img.dataset.default;
+    btn.style.backgroundColor = "#FFF";
+    btn.style.color = "#000";
+    btn.querySelector("img").src = btn.querySelector("img").dataset.default;
   });
+  const mediumBtn = document.getElementById("medium");
+  const img = mediumBtn.querySelector("img");
+  mediumBtn.style.backgroundColor = "#FFA700";
+  mediumBtn.style.color = "#FFF";
+  img.src = img.dataset.selected;
   chosenPriority = "medium";
 }
 
@@ -241,14 +254,6 @@ window.handleCreateTask = async function handleCreateTask(event) {
 
 
 /**
- * Focuses the first input with an error style.
- */
-function focusFirstError() {
-  document.querySelector('.input-error')?.focus();
-}
-
-
-/**
  * Resets the Add Task form and its related UI components.
  * @param {HTMLFormElement} form - The form element to reset.
  */
@@ -273,24 +278,6 @@ async function createTask() {
 
   await saveTaskToFirebase(newTask, key);
   showAlertOverlay();
-}
-
-
-/**
- * Constructs a new task object based on form inputs.
- * @returns {Object} The newly built task.
- */
-function buildNewTask() {
-  return {
-    title: document.getElementById("title").value,
-    description: document.getElementById("description").value,
-    dueDate: document.getElementById("due-date").value,
-    assignedContacts: getSelectedAssignmentIds(),
-    category: getSelectedCategoryText(),
-    subtasks: collectSubtasksFromEditDialog(),
-    priority: chosenPriority,
-    taskState: document.getElementById("task-state").value
-  };
 }
 
 

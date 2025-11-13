@@ -1,4 +1,12 @@
 /**
+ * Focuses the first input with an error style.
+ */
+function focusFirstError() {
+  document.querySelector('.input-error')?.focus();
+}
+
+
+/**
  * Resets all validation and error states inside the Add Task form.
  * Removes .input-error, clears error texts, and resets validation flags.
  * @param {HTMLElement} dlg - The dialog element containing the form.

@@ -79,6 +79,11 @@ textarea.input-error:focus,
   margin-top: 4rem;
 }
 
+.task-content__container textarea {
+  resize: none;
+  height: 200px;
+}
+
 .add-task__left-column {
   width: 50%;
   padding-right: 1.25rem;
