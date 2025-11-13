@@ -130,10 +130,26 @@ textarea.input-error:focus,
 }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 1020px) {
   .priority-options {
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
+}
+}
+
+@media (max-width: 500px) {
+  .priority-options-btn {
+    font-weight: 400;
+    padding: 0.75rem 1rem;
+} .dlg-edit__subtask-list {
+  max-height: 75px;
+  min-height: 75px;
+}
+}
+
+@media (max-width: 500px) {
+  .task-content__container textarea  {
+    height: 100px;
 }
 }
 

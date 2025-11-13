@@ -187,6 +187,14 @@
   scrollbar-width: thin;
 }
 
+
+@media (max-width: 500px) {
+  .dlg-edit__subtask-list {
+  max-height: 75px;
+  min-height: 75px;
+}
+}
+
 .dlg-edit__subtask-list li {
   width: 100%;
   padding: 0.25rem 0.25rem 0.25rem 1.5rem;

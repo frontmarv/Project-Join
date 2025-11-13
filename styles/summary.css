@@ -1,4 +1,4 @@
-.summary-content__header {
+f.summary-content__header {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -167,6 +167,12 @@ h3 {
     background-color: var(--color-lightgrey);
 }
 
+@media (max-width: 500px) {
+    .grey_seperator-summary {
+        height: 4rem;
+    }
+}
+
 @media screen and (max-width: 1024px) {
     body {
         flex-direction: column-reverse;
@@ -281,5 +287,17 @@ h3 {
 
     #bottom-row {
         justify-content: initial;
+    }
+}
+
+@media (max-width: 400px) {
+    .summary-content__metrics-row {
+        height: 100px;
+    }
+}
+
+@media (max-width: 400px) {
+    .summary-content__left {
+        overflow-y: unset;
     }
 }
