@@ -85,53 +85,71 @@ function preventTouchScroll(e) {
 // 🔹 POINTER DOWN
 // ======================================================
 
-/**
- * Handles pointer down event and prepares drag start conditions.
- * @param {PointerEvent} event - Pointer event.
- */
 function onPointerDown(event) {
   if (!isValidDragStart(event)) return;
-  const task = event.target.closest(".task");
-  if (!task) return;
 
-  clickedTask = task;
-  dragStartX = event.clientX;
-  dragStartY = event.clientY;
-  dragStartTime = event.timeStamp;
-  setPointerOffsets(event, task);
-  startCol = task.closest(".tasks");
+  const taskCard = event.target.closest(".task");
+  if (!taskCard) return;
+
+  event.preventDefault();
+  initializePointerDownState(event, taskCard);
 
   if (isMobileDragMode()) {
-    task.classList.add("task--pressing");
-
-    longPressTimer = setTimeout(() => {
-      attachDragListeners();
-      startDrag(clickedTask, event);
-      task.classList.remove("task--pressing");
-    }, LONG_PRESS_DELAY);
-
-    document.addEventListener("pointerup", () => {
-      if (!isDragging) {
-        cancelLongPress();
-        task.classList.remove("task--pressing");
-      }
-    }, { once: true });
-
-    document.addEventListener("pointermove", (e) => {
-      if (!isDragging) {
-        const movedDistance = Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY);
-        if (movedDistance > 10) {
-          cancelLongPress();
-          task.classList.remove("task--pressing");
-        }
-      }
-    }, { passive: true });
-
+    handleMobilePointerDown(taskCard, event);
   } else {
     attachDragListeners();
   }
+}
 
-  event.preventDefault();
+
+function initializePointerDownState(event, taskCard) {
+  clickedTask = taskCard;
+  dragStartX = event.clientX;
+  dragStartY = event.clientY;
+  dragStartTime = event.timeStamp;
+  setPointerOffsets(event, taskCard);
+  startCol = taskCard.closest(".tasks");
+}
+
+
+function handleMobilePointerDown(taskCard, event) {
+  taskCard.classList.add("task--pressing");
+
+  startLongPressTimer(taskCard, event);
+  setupMobilePointerUpCancel(taskCard);
+  setupMobileMoveCancel(taskCard);
+}
+
+
+function startLongPressTimer(taskCard, event) {
+  longPressTimer = setTimeout(() => {
+    attachDragListeners();
+    startDrag(clickedTask, event);
+    taskCard.classList.remove("task--pressing");
+  }, LONG_PRESS_DELAY);
+}
+
+
+function setupMobilePointerUpCancel(taskCard) {
+  document.addEventListener("pointerup", () => {
+    if (!isDragging) {
+      cancelLongPress();
+      taskCard.classList.remove("task--pressing");
+    }
+  }, { once: true });
+}
+
+
+function setupMobileMoveCancel(taskCard) {
+  document.addEventListener("pointermove", (e) => {
+    if (!isDragging) {
+      const movedDistance = Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY);
+      if (movedDistance > 10) {
+        cancelLongPress();
+        taskCard.classList.remove("task--pressing");
+      }
+    }
+  }, { passive: true });
 }
 
 
@@ -161,8 +179,8 @@ function attachDragListeners() {
  * @param {PointerEvent} event - Pointer event.
  * @param {HTMLElement} task - The task card element.
  */
-function setPointerOffsets(event, task) {
-  const rect = task.getBoundingClientRect();
+function setPointerOffsets(event, taskCard) {
+  const rect = taskCard.getBoundingClientRect();
   offsetX = event.clientX - rect.left;
   offsetY = event.clientY - rect.top;
 }
@@ -201,11 +219,14 @@ function onPointerMove(event) {
  */
 function startDrag(taskCard, event) {
   draggedTask = taskCard;
+
+  taskCard.classList.remove("task--pressing");
+
   createPlaceholder(taskCard);
-  styleDraggedTask(taskCard);
+  prepareTaskForDragging(taskCard, event);
 
   if (!isMobileDragMode()) {
-    try { taskCard.setPointerCapture(event.pointerId) } catch { }
+    try { taskCard.setPointerCapture(event.pointerId) } catch {}
   }
 
   document.addEventListener("touchmove", preventTouchScroll, { passive: false });

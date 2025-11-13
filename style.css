@@ -74,7 +74,7 @@
 }
 
 *::placeholder {
-  font-size: 16px;
+  font-size: 1.2rem;
   color: var(--color-lightgrey);
 }
 
@@ -113,7 +113,7 @@ main {
 
 .content {
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: auto;
 }
 
 .d-none {

@@ -172,12 +172,13 @@ function createPlaceholder(taskCard) {
  * @param {HTMLElement} taskCard - The task card being dragged.
  * @returns {void}
  */
-function styleDraggedTask(taskCard) {
+function prepareTaskForDragging(taskCard, event) {
   const rect = taskCard.getBoundingClientRect();
+
   Object.assign(taskCard.style, {
     position: "fixed",
-    left: `${rect.left}px`,
-    top: `${rect.top}px`,
+    left: `${event.clientX - offsetX}px`,
+    top: `${event.clientY - offsetY}px`,
     width: `${rect.width}px`,
     height: `${rect.height}px`,
     zIndex: "10000",
