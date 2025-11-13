@@ -347,7 +347,7 @@ function setContactInfoIntoCard({ cleanUserName, email, phone, profilImgColor })
     contactMail.innerText = email;
     contactPhone.innerText = phone;
     const userInitals = getUserNameInitials(cleanUserName);
-    contactProfilImg.innerHTML = getBigUserProfilImg(profilImgColor, userInitals);
+    contactProfilImg.innerHTML = getScalableProfilImg(profilImgColor, userInitals);
 }
 
 

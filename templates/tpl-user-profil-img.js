@@ -61,3 +61,11 @@ function getLoggedInUserImg(userInitals) {
     `
 }
 
+
+function getScalableProfilImg(profilImgColor, userInitals) {
+    return /*html*/ `
+    <div class="scalable-profil-img" id= "scalable-profil-img" style="background-color: ${profilImgColor};">
+    ${userInitals}
+    </div>
+    `
+}

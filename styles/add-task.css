@@ -213,7 +213,7 @@ textarea.input-error:focus,
 
 @media screen and (max-width: 1024px) {
   .task-content__header {
-    margin-top: 40px;
+    margin-top: 1rem;
     justify-content: center;
   }
 

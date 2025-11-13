@@ -1,7 +1,7 @@
 .add-contact__dialog {
     display: flex;
     flex-direction: row;
-    position: absolute;
+    min-height: 500px;
     height: 50vh;
     max-height: 43.75rem;
     width: 90vw;
@@ -9,7 +9,6 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    z-index: 2;
     border-radius: 1.875rem;
     background-color: var(--color-white);
     padding: 0rem;
@@ -17,6 +16,18 @@
     opacity: 0;
     transform: translate(200vw, -50%);
     transition: all 300ms ease-in-out;
+}
+
+.scalable-profil-img {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1 / 1;
+    width: 7vw;
+    min-width: 80px;
+    max-width: 120px;
+    color: var(--color-white);
+    font-size: max(16px, 2vw);
+    border-radius: 50%;
 }
 
 .delete-contact__dialog {
@@ -86,8 +97,8 @@
 
 .close-button__wrapper {
     position: absolute;
-    top: 3.25rem;
-    right: 3.25rem;
+    top: 3rem;
+    right: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,8 +115,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 4.5rem;
+    gap: 2rem;
 }
 
 .profil-img__wrapper img {
@@ -115,7 +125,7 @@
 
 .width-div {
     min-width: 21.25rem;
-    width: 60%;
+    width: 100%;
 }
 
 .inputfields {
@@ -177,9 +187,8 @@
         flex-direction: column;
         min-height: max-content;
         height: calc(500px + 20vh);
-        min-width: 325px;
-        width: 60vw;
-        max-width: 95vw;
+        width: 95vw;
+        max-width: 600px;
         max-height: 95vh;
         transform: translate(-50%, 200vh);
     }
@@ -203,7 +212,6 @@
 
     .content-right__wrapper {
         justify-content: center;
-        margin-top: 60px;
     }
 
     .dialog-right {
@@ -215,8 +223,8 @@
 
     .close-button__wrapper {
         position: fixed;
-        top: 5%;
-        right: 5%;
+        top: 1rem;
+        right: 1rem;
     }
 
     .close-button__wrapper img {
@@ -229,7 +237,8 @@
 
     .profil-img__wrapper {
         position: absolute;
-        top: -60px;
+        top: calc(-40px - 0.0303 * (100vw - 300px));
+        ;
     }
 
     .inputfields {
@@ -250,6 +259,7 @@
 
     .width-div {
         min-width: fit-content;
+        max-width: 400px;
     }
 
     .delete-contact__dialog {
@@ -257,9 +267,17 @@
     }
 
     .inputfields__button-holder {
-        flex-direction: column-reverse;
         align-items: center;
         height: fit-content;
+        margin-top: 1rem;
+    }
+
+    .profil-img__wrapper img {
+        min-width: 80px;
+        max-width: 7.5rem;
+        aspect-ratio: 1 / 1;
+        width: 15vw;
+        height: unset;
     }
 
     .empty-btn {
@@ -270,5 +288,30 @@
     .delete-contact__dialog {
         width: fit-content;
         height: fit-content;
+    }
+
+    .scalable-profil-img {
+        width: 15vw;
+        min-width: 80px;
+        max-width: 120px;
+        font-size: max(16px, 4vw);
+    }
+
+}
+
+@media screen and (max-width: 420px) {
+    .filled-btn {
+        min-width: 7.875rem;
+        width: fit-content;
+    }
+
+    .inputfields__button-holder {
+        flex-wrap: wrap-reverse;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .content-right__wrapper {
+        margin-top: 2rem;
     }
 }

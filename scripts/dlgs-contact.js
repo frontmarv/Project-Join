@@ -33,9 +33,11 @@ function renderEditContactDlg() {
     document.getElementById("contact-dlg-email-input").value = contactMail.innerHTML;
     document.getElementById("contact-dlg-phone-input").value = contactPhone.innerHTML;
     const userName = contactName.innerHTML;
-    const profilImgColor = document.getElementById('colored-circle__big').getAttribute('fill');
+    const profilImgColor = document.getElementById('scalable-profil-img').style.backgroundColor;
+    console.log(profilImgColor);
+    
     const userInitals = getUserNameInitials(userName);
-    document.querySelector('.profil-img__wrapper').innerHTML = getBigUserProfilImg(profilImgColor, userInitals);
+    document.querySelector('.profil-img__wrapper').innerHTML = getScalableProfilImg(profilImgColor, userInitals) ;
     showDlgWtihAnimation();
     getAndStoreUserId(userName);
 }
@@ -229,16 +231,25 @@ async function validateInputfieldsDlg(addUserName, data) {
 
 /**
  * Validates username format.
- * Username must contain at least 2 letters, only alphabetic characters and spaces allowed.
+ * Username must contain at least 2 letters, allows alphabetic characters, spaces, and hyphens.
+ * Maximum 2 words allowed (hyphenated names like Ann-Cathrin count as one word).
  * @param {string} username - Username to validate
  * @returns {boolean} True if username is valid, false otherwise
  */
 function isValidUsername(username) {
     if (!username || typeof username !== 'string') return false;
     const trimmed = username.trim();
-    const regex = /^[a-zA-ZäöüÄÖÜß\s]{2,50}$/;
+    
+    // Allow letters, spaces, hyphens, and German umlauts
+    const regex = /^[a-zA-ZäöüÄÖÜß\-\s]{2,50}$/;
+    
+    // Check for at least 2 actual letters
     const letterCount = (trimmed.match(/[a-zA-ZäöüÄÖÜß]/g) || []).length;
-    return regex.test(trimmed) && letterCount >= 2;
+    
+    // Check word count (max 2 words, hyphenated names count as one word)
+    const wordCount = trimmed.split(/\s+/).filter(word => word.length > 0).length;
+    
+    return regex.test(trimmed) && letterCount >= 2 && wordCount <= 2;
 }
 
 

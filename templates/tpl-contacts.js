@@ -28,7 +28,7 @@ function getAddContactDlgTpl() {
                             <input id="contact-dlg-name-input" type="text" placeholder="Name" aria-label="name" onkeyup="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
-
+                        
                         <div class="inputfield__wrapper">
                             <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
@@ -79,6 +79,7 @@ function getEditContactDlgTpl() {
                             <input id="contact-dlg-name-input" type="text" placeholder="Name" aria-label="name" onkeyup="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
+                        
 
                         <div class="inputfield__wrapper">
                             <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
