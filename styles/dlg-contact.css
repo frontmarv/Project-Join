@@ -292,7 +292,7 @@
 
     .scalable-profil-img {
         width: 15vw;
-        min-width: 80px;
+        min-width: 40px;
         max-width: 120px;
         font-size: max(16px, 4vw);
     }

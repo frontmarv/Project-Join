@@ -1,5 +1,5 @@
 h3 {
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 section {
@@ -154,6 +154,7 @@ main {
     align-items: center;
     gap: 1.875rem;
     flex-wrap: wrap;
+    margin-right: 1rem;
 }
 
 .content-right__header span {
@@ -229,6 +230,7 @@ main {
 
 .details__email {
     color: var(--color-email);
+    overflow-wrap: anywhere;
 }
 
 .add-user-icon,
@@ -289,8 +291,9 @@ main {
     .content-right {
         width: 100%;
         margin-top: 1rem;
-        padding-left: 16px;
-        gap: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        gap: 5vw;
     }
 
     #contacts-content {
