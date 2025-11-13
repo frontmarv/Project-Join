@@ -198,6 +198,9 @@
 .dlg-edit__subtask-list li {
   width: 100%;
   padding: 0.25rem 0.25rem 0.25rem 1.5rem;
+
+  height: 1.7rem;
+  align-items: center;
 }
 
 .dlg-edit__main__subtask {

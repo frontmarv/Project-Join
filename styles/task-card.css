@@ -16,11 +16,12 @@
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
+@media (hover: hover)  {
 .task:hover {
   transform: translateY(-2px);
   box-shadow: 0 0.375rem 0.875rem rgba(0, 0, 0, 0.15);
   cursor: grab;
-}
+}}
 
 .task.dragging {
   opacity: 0.4;

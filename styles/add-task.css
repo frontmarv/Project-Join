@@ -1,3 +1,12 @@
+#task-form {
+    max-height: 65vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-right: 8px;
+}
 
 .task-content__container input,
 .task-content__container select,
@@ -172,6 +181,7 @@ textarea.input-error:focus,
   margin-top: 2.5rem;
   max-width: 1000px;
   height: 2.5rem;
+  flex-shrink: 0;
 }
 
 .task-content__footer-btn {

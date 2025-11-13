@@ -221,6 +221,16 @@ function collectDataFromDlg() {
 }
 
 
+/**
+ * Validates all input fields from the contact dialog.
+ * Checks if username, email, and phone number meet validation requirements.
+ * @async
+ * @param {string} addUserName - The username to validate
+ * @param {Object} data - Contact data object containing email and phone
+ * @param {string} data.email - Email address to validate
+ * @param {string} data.phone - Phone number to validate
+ * @returns {Promise<boolean>} True if all fields are valid, false otherwise
+ */
 async function validateInputfieldsDlg(addUserName, data) {
     const validName = isValidUsername(addUserName);
     const validEmail = await isValidEmail(data.email);
@@ -228,6 +238,7 @@ async function validateInputfieldsDlg(addUserName, data) {
     if (validName && validEmail && validPhone) { return true }
     else { return false }
 }
+
 
 /**
  * Validates username format.
@@ -239,16 +250,9 @@ async function validateInputfieldsDlg(addUserName, data) {
 function isValidUsername(username) {
     if (!username || typeof username !== 'string') return false;
     const trimmed = username.trim();
-    
-    // Allow letters, spaces, hyphens, and German umlauts
     const regex = /^[a-zA-ZäöüÄÖÜß\-\s]{2,50}$/;
-    
-    // Check for at least 2 actual letters
     const letterCount = (trimmed.match(/[a-zA-ZäöüÄÖÜß]/g) || []).length;
-    
-    // Check word count (max 2 words, hyphenated names count as one word)
     const wordCount = trimmed.split(/\s+/).filter(word => word.length > 0).length;
-    
     return regex.test(trimmed) && letterCount >= 2 && wordCount <= 2;
 }
 

@@ -9,7 +9,7 @@ section {
 
 #contacts-content {
     max-width: 120rem;
-    padding: 0 4rem 0 0;
+    padding: 0 2rem 0 0;
     height: 100%;
 }
 
@@ -90,8 +90,9 @@ main {
 
 .contact-list {
     width: 100%;
-    padding: 0rem 3.25rem;
+    padding: 0rem 3.25rem 16px 3.25rem;
     overflow-y: scroll;
+    position: relative;
 }
 
 .contact-list__item {
@@ -111,9 +112,13 @@ main {
     background: linear-gradient(to bottom, #F9F9F9, #F0F0F0);
 }
 
+#user-profil-img__wrapper {
+    min-width: unset;
+}
 
 .contact-list__item div {
     gap: 0.3125rem;
+    min-width: 0;
 }
 
 .contact-list__initial-letter {
@@ -133,12 +138,14 @@ main {
     color: var(--color-black);
     overflow: hidden;
     text-overflow: ellipsis;
+    text-wrap-mode: nowrap;
 }
 
 .contact-email {
     color: var(--color-email) !important;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-wrap-mode: nowrap;
 }
 
 .content-right {
@@ -172,6 +179,7 @@ main {
 
 .content-right__contact-info-card {
     visibility: hidden;
+    overflow: auto;
     transition: transform 300ms ease-in-out;
 }
 
@@ -233,8 +241,6 @@ main {
     overflow-wrap: anywhere;
 }
 
-.add-user-icon,
-.contacts-options-icon,
 .blue-arrow-back {
     display: none;
 }
@@ -268,6 +274,11 @@ main {
     width: 100%;
 }
 
+.add-user-icon,
+.contacts-options-icon {
+    display: none;
+}
+
 @media screen and (max-width: 1024px) {
     .contact-list__initial-letter {
         padding: 1.0625rem 1.5rem;
@@ -284,7 +295,7 @@ main {
 
     .contact-list {
         margin-bottom: 100px;
-        padding: 0px 16px;
+        padding: 0px 16px 16px 16px;
     }
 
     .content-left {
@@ -326,10 +337,6 @@ main {
         right: 16px;
     }
 
-    .blue-arrow-back:active {
-        content: url('../assets/img/arrow-left-blue-hover.svg');
-    }
-
     .content-right__contact-info-card {
         margin-bottom: 120px;
         overflow-y: auto;
@@ -350,6 +357,7 @@ main {
         position: fixed;
         bottom: 132px;
         right: 16px;
+        z-index: 900;
     }
 
     .add-user-icon {
@@ -358,26 +366,10 @@ main {
         height: 70px;
     }
 
-    .add-user-icon:hover {
-        cursor: pointer;
-    }
-
-    .add-user-icon:active {
-        content: url('../assets/img/contacts-add-user-active.svg');
-    }
-
     .contacts-options-icon {
         display: none;
         width: auto;
         height: 70px;
-    }
-
-    .contacts-options-icon:active {
-        content: url('../assets/img/contacts-options-active.svg');
-    }
-
-    .contacts-options-icon:hover {
-        cursor: pointer;
     }
 
     .manage-contact__actions {

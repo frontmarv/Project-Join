@@ -97,10 +97,6 @@ async function deleteContact(userkeyToDelete) {
         const response = await fetch(DB_URL + "users/" + userkeyToDelete + ".json", {
             method: "DELETE"
         });
-        if (userkeyToDelete = LOGGED_IN_USER) {
-            LOGGED_IN_USER = undefined;
-            logOutUser();
-        }
         if (!response.ok) {
             throw new Error(`Fehler beim Löschen: ${response.status}`);
         }
@@ -119,17 +115,27 @@ async function deleteContact(userkeyToDelete) {
 async function deleteContactFlow() {
     let userName = contactName.innerText;
     getAndStoreUserId(userName);
-    await deleteContact(STORED_USER_KEY);
-    if (userName == LOGGED_IN_USER) { logOutUser(); }
-    renderContactList();
-    setContactCardtoInvisible();
+    if (userName == LOGGED_IN_USER) {
+        await deleteContact(STORED_USER_KEY);
+        window.location.replace("../index.html");
+    } else {
+        await deleteContact(STORED_USER_KEY);
+        renderContactList();
+        setContactCardtoInvisible();
+    }
     if (window.innerWidth < 1025) {
         showContact = false;
         handleResizeScreenContacts();
     }
+    removeDeleteClass();
     removeAnimationClass();
+
 }
 
+
+function removeDeleteClass() {
+    dialog.classList.remove('delete-contact__dialog');
+}
 
 /**
  * Extracts and returns unique initial letters from user names.
@@ -372,11 +378,12 @@ function handleContent(isSmallScreen) {
     if (isSmallScreen && !showContact) {
         document.querySelector('.content-left').style.display = 'flex';
         document.querySelector('.content-right').style.display = 'none';
-        showAddUserIconMoblie();
+        showAddContactIconMoblie();
         showContact = false;
     } else if (isSmallScreen && showContact) {
         document.querySelector('.content-left').style.display = 'none';
         document.querySelector('.content-right').style.display = 'flex';
+        showEditContactIconMobile();
         showContact = true;
     } else {
         document.querySelector('.content-right').style.display = 'flex';
@@ -394,21 +401,35 @@ function showContactMobile() {
     if (isSmallScreen) {
         document.querySelector('.content-left').style.display = 'none';
         document.querySelector('.content-right').style.display = 'flex';
-        document.querySelector('.add-user-icon').style.display = 'none';
-        document.querySelector('.contacts-options-icon').style.display = 'flex';
+        showEditContactIconMobile();
         showContact = true;
     }
 }
 
 
 /**
- * Shows add user icon and hides contact options icon on mobile.
+ * Displays add user icon and hides contact options icon on mobile.
  * Used when returning to contact list view.
  * @returns {void}
  */
-function showAddUserIconMoblie() {
+function showAddContactIconMoblie() {
     document.querySelector('.add-user-icon').style.display = 'flex';
+    document.querySelector('.add-user-icon').style.pointerEvents = "all";
     document.querySelector('.contacts-options-icon').style.display = 'none';
+    document.querySelector('.contacts-options-icon').style.pointerEvents = "none";
+}
+
+
+/**
+ * Shows contact options icon and hides add user icon on mobile.
+ * Used when viewing contact details.
+ * @returns {void}
+ */
+function showEditContactIconMobile() {
+    document.querySelector('.add-user-icon').style.display = 'none';
+    document.querySelector('.add-user-icon').style.pointerEvents = "none";
+    document.querySelector('.contacts-options-icon').style.display = 'flex';
+    document.querySelector('.contacts-options-icon').style.pointerEvents = "all";
 }
 
 

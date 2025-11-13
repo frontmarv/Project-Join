@@ -34,6 +34,7 @@
     width: fit-content;
     height: fit-content;
     padding: 3rem;
+    min-height: unset;
 }
 
 .delete-contact__content {
@@ -231,8 +232,10 @@
         content: url('../assets/img/close-white.svg');
     }
 
-    .close-button__wrapper img:hover {
-        content: url('../assets/img/close-white-active.svg');
+    @media (hover: none) {
+        .close-button__wrapper img:hover {
+            content: url('../assets/img/close-white-active.svg');
+        }
     }
 
     .profil-img__wrapper {
@@ -262,10 +265,6 @@
         max-width: 400px;
     }
 
-    .delete-contact__dialog {
-        flex-direction: initial;
-    }
-
     .inputfields__button-holder {
         align-items: center;
         height: fit-content;
@@ -286,14 +285,14 @@
     }
 
     .delete-contact__dialog {
-        width: fit-content;
+        flex-direction: initial;
         height: fit-content;
     }
 
     .scalable-profil-img {
-        width: 15vw;
+        width: 10vh;
         min-width: 40px;
-        max-width: 120px;
+        max-width: 70px;
         font-size: max(16px, 4vw);
     }
 
