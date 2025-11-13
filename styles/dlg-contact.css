@@ -232,8 +232,10 @@
         content: url('../assets/img/close-white.svg');
     }
 
-    .close-button__wrapper img:hover {
-        content: url('../assets/img/close-white-active.svg');
+    @media (hover: none) {
+        .close-button__wrapper img:hover {
+            content: url('../assets/img/close-white-active.svg');
+        }
     }
 
     .profil-img__wrapper {

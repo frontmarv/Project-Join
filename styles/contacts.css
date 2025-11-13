@@ -337,10 +337,6 @@ main {
         right: 16px;
     }
 
-    .blue-arrow-back:active {
-        content: url('../assets/img/arrow-left-blue-hover.svg');
-    }
-
     .content-right__contact-info-card {
         margin-bottom: 120px;
         overflow-y: auto;
@@ -370,26 +366,10 @@ main {
         height: 70px;
     }
 
-    .add-user-icon:hover {
-        cursor: pointer;
-    }
-
-    .add-user-icon:active {
-        content: url('../assets/img/contacts-add-user-active.svg');
-    }
-
     .contacts-options-icon {
         display: none;
         width: auto;
         height: 70px;
-    }
-
-    .contacts-options-icon:active {
-        content: url('../assets/img/contacts-options-active.svg');
-    }
-
-    .contacts-options-icon:hover {
-        cursor: pointer;
     }
 
     .manage-contact__actions {
