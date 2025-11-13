@@ -264,6 +264,10 @@ main {
     transform: translate(200vw, 0px);
 }
 
+#add-new-contact-btn {
+    width: 100%;
+}
+
 @media screen and (max-width: 1024px) {
     .contact-list__initial-letter {
         padding: 1.0625rem 1.5rem;
