@@ -181,6 +181,10 @@
   padding-left: 0;
   list-style-type: disc;
   list-style-position: inside;
+  max-height: 150px;
+  min-height: 150px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .dlg-edit__subtask-list li {
@@ -332,4 +336,16 @@
 .dlg-edit__main__subtask.edit-mode .subtask-edit-box__delete-img:hover {
   content: url('../assets/img/delete-hover.svg');
   cursor: pointer;
+}
+
+.dlg-edit__user-box.more-users {
+  background: #d1d1d1;
+  color: #000;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
 }

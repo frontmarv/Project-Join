@@ -73,6 +73,11 @@
   scroll-behavior: smooth;
 }
 
+*::placeholder {
+  font-size: 16px;
+  color: var(--color-lightgrey);
+}
+
 .overlay {
   position: fixed;
   inset: 0;
@@ -153,13 +158,6 @@ h3 {
 input:focus {
   outline: none;
   border: none;
-}
-
-textarea::placeholder,
-input::placeholder {
-  font-weight: 400;
-  font-size: 1.25rem;
-  color: var(--color-lightgrey);
 }
 
 .input--validation-modifier:invalid {
