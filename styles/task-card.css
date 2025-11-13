@@ -200,6 +200,7 @@
   gap: 1.5rem;
   align-items: center;
   padding: 0.5rem 0;
+  margin: 0 1rem;
 }
 
 .task__assignments svg {
@@ -221,13 +222,13 @@
   justify-content: center;
   height: 2.5rem;
   width: 2.5rem;
+  padding: 1rem;
   border-radius: 50%;
   border: 1px solid var(--color-white);
   color: var(--color-white);
   font-weight: 400;
   font-size: 0.9rem;
   text-transform: uppercase;
-  margin-left: 1rem;
   transition: transform 0.05s ease, z-index 0.05s ease;
   cursor: default;
 }

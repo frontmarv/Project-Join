@@ -151,6 +151,12 @@
   gap: 1rem;
 }
 
+.user-selection-field span {
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
+
 .checkbox {
   width: 1.5rem;
   height: 1.5rem;

@@ -25,7 +25,7 @@ let dragStartY = 0;
 let dragStartTime = 0;
 let wasDroppedInSameColumn = false;
 let longPressTimer = null;
-const DRAG_THRESHOLD = 0;
+const DRAG_THRESHOLD = 2;
 const LONG_PRESS_DELAY = 500;
 const MOBILE_BREAKPOINT = 1024;
 
