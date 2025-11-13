@@ -97,10 +97,6 @@ async function deleteContact(userkeyToDelete) {
         const response = await fetch(DB_URL + "users/" + userkeyToDelete + ".json", {
             method: "DELETE"
         });
-        if (userkeyToDelete === LOGGED_IN_USER) {
-            LOGGED_IN_USER = undefined;
-            logOutUser();
-        }
         if (!response.ok) {
             throw new Error(`Fehler beim Löschen: ${response.status}`);
         }
@@ -119,10 +115,14 @@ async function deleteContact(userkeyToDelete) {
 async function deleteContactFlow() {
     let userName = contactName.innerText;
     getAndStoreUserId(userName);
-    await deleteContact(STORED_USER_KEY);
-    if (userName == LOGGED_IN_USER) { logOutUser(); }
-    renderContactList();
-    setContactCardtoInvisible();
+    if (userName == LOGGED_IN_USER) {
+        await deleteContact(STORED_USER_KEY);
+        window.location.replace("../index.html");
+    } else {
+        await deleteContact(STORED_USER_KEY);
+        renderContactList();
+        setContactCardtoInvisible();
+    }
     if (window.innerWidth < 1025) {
         showContact = false;
         handleResizeScreenContacts();

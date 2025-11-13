@@ -1,4 +1,4 @@
-f.summary-content__header {
+.summary-content__header {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -247,7 +247,7 @@ h3 {
     }
 
     .summary-content__metrics.content-wrapper {
-        margin-top: 1rem;
+        margin-top: unset;
         justify-content: center;
         height: calc(100vh - 380px);
     }

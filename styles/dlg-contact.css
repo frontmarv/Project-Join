@@ -34,6 +34,7 @@
     width: fit-content;
     height: fit-content;
     padding: 3rem;
+    min-height: unset;
 }
 
 .delete-contact__content {
@@ -262,10 +263,6 @@
         max-width: 400px;
     }
 
-    .delete-contact__dialog {
-        flex-direction: initial;
-    }
-
     .inputfields__button-holder {
         align-items: center;
         height: fit-content;
@@ -286,9 +283,9 @@
     }
 
     .delete-contact__dialog {
-        width: fit-content;
+        flex-direction: initial;
         height: fit-content;
-        }
+    }
 
     .scalable-profil-img {
         width: 15vw;

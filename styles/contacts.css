@@ -90,7 +90,7 @@ main {
 
 .contact-list {
     width: 100%;
-    padding: 0rem 3.25rem;
+    padding: 0rem 3.25rem 16px 3.25rem;
     overflow-y: scroll;
 }
 
@@ -151,7 +151,6 @@ main {
     margin-top: 8rem;
     width: 62%;
     gap: 2rem;
-    overflow: auto;
     padding-left: 3.4375rem;
 }
 
@@ -179,6 +178,7 @@ main {
 
 .content-right__contact-info-card {
     visibility: hidden;
+    overflow: auto;
     transition: transform 300ms ease-in-out;
 }
 
@@ -273,6 +273,11 @@ main {
     width: 100%;
 }
 
+.add-user-icon,
+.contacts-options-icon {
+    display: none;
+}
+
 @media screen and (max-width: 1024px) {
     .contact-list__initial-letter {
         padding: 1.0625rem 1.5rem;
@@ -289,7 +294,7 @@ main {
 
     .contact-list {
         margin-bottom: 100px;
-        padding: 0px 16px;
+        padding: 0px 16px 16px 16px;
     }
 
     .content-left {

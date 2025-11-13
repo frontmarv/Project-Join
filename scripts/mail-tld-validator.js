@@ -15,7 +15,9 @@ const CACHE_KEY = "iana_tlds";
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 const FALLBACK_TLDS = ["com", "net", "org", "de", "io", "app"];
 
-
+if (window.location.pathname === '/pages/sign-up.html') {
+  initEmailValidation();
+}
 // ======================================================
 // 🔹 FETCHING TLD DATA
 // ======================================================
@@ -169,10 +171,3 @@ function updateEmailValidationUI(valid, validEmail, msg) {
     : "2px solid var(--color-error)";
   msg.style.display = valid ? "none" : "inline";
 }
-
-
-// ======================================================
-// 🔹 AUTO INITIALIZATION
-// ======================================================
-
-// window.addEventListener("DOMContentLoaded", initEmailValidation);
