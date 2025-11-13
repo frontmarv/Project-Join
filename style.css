@@ -95,8 +95,10 @@ body {
   display: flex;
   width: 100%;
   min-height: 100vh;
+  height: 100vh;
   background-color: var(--color-background);
   line-height: 1.2;
+  overflow-y: hidden;
 }
 
 main {
@@ -109,6 +111,7 @@ main {
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow-y: auto;
 }
 
 .content {
