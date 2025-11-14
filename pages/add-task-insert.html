@@ -16,9 +16,23 @@
                 </div>
                 <div class="add-task__field">
                     <label for="due-date" class="required required--after">Due date</label>
-                    <input name="dueDate" onclick="setMinDueDate()" class="input--validation-modifier" type="date" id="due-date"
-                        placeholder="dd/mm/yyyy">
-                    <p id="date-error" class="field-error"></p>    
+                        <div class="date-wrapper">
+                            <input
+                                name="dueDate"
+                                onclick="setMinDueDate()"
+                                class="input--validation-modifier"
+                                type="date"
+                                id="due-date"
+                                placeholder="dd/mm/yyyy">
+
+                            <img
+                                src="../assets/img/calender.svg"
+                                alt="Open date picker"
+                                class="custom-date-icon"
+                                onclick="openCustomDatePicker()">
+                        </div>
+
+                        <p id="date-error" class="field-error"></p>
                 </div>
             </div>
             <div class="grey-seperator"></div>

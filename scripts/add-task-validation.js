@@ -1,4 +1,22 @@
 /**
+ * Opens the browser's native date picker for the due-date input field.
+ *
+ * This function focuses the date input to trigger visual focus styles.
+ * If the browser supports the `showPicker()` method (modern Chromium-based
+ * browsers), it explicitly opens the native date selection popup.
+ * 
+ * @function openCustomDatePicker
+ * @returns {void}
+ */
+function openCustomDatePicker() {
+  const input = document.getElementById('due-date');
+  input.focus();
+  if (input.showPicker) {
+    input.showPicker(); // wird von modernen Browsern unterstützt
+  }
+}
+
+/**
  * Focuses the first input with an error style.
  */
 function focusFirstError() {
