@@ -111,7 +111,6 @@ password.addEventListener("keydown", function (event) {
  * @returns {void}
  */
 function welcomeScreenAnimation() {
-    logo.style.visibility = 'hidden';
     logo.style.transition = 'none';
     logo.classList.add('start');
     logo.style.visibility = 'visible';
@@ -158,6 +157,7 @@ function welcomeScreenAnimationMobile() {
  * @returns {void}
  */
 function welcomeScreenNoAnimation() {
+    logo.style.visibility = 'visible';
     welcomescreenMobile.classList.add('d-none');
     footer.classList.remove('invisible');
     main.classList.remove('invisible');

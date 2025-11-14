@@ -31,6 +31,7 @@ body {
     height: 7.625rem;
     margin-top: 0.8125rem;
     z-index: 3;
+    visibility: hidden;
     transition: transform 1s ease-in-out;
 }
 
