@@ -34,10 +34,8 @@ function renderEditContactDlg() {
     document.getElementById("contact-dlg-phone-input").value = contactPhone.innerHTML;
     const userName = contactName.innerHTML;
     const profilImgColor = document.getElementById('scalable-profil-img').style.backgroundColor;
-    console.log(profilImgColor);
-    
     const userInitals = getUserNameInitials(userName);
-    document.querySelector('.profil-img__wrapper').innerHTML = getScalableProfilImg(profilImgColor, userInitals) ;
+    document.querySelector('.profil-img__wrapper').innerHTML = getScalableProfilImg(profilImgColor, userInitals);
     showDlgWtihAnimation();
     getAndStoreUserId(userName);
 }
@@ -148,7 +146,10 @@ async function putNewContactToDB() {
         setContactCardtoInvisible();
         addContactSuccessDlg();
     }
-    else { checkForEmptyInput(); }
+    else {
+        validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
+        validateInputField(document.getElementById('contact-dlg-email-input'), isValidEmail, true);
+    }
 }
 
 
@@ -164,42 +165,15 @@ async function validateAndSaveData() {
         saveDataEditContactDlg(data);
         editContactSuccessDlg();
     } else {
-        checkForEmptyInput();
+        validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
+        validateInputField(document.getElementById('contact-dlg-email-input'), isValidEmail, true);
     }
 }
 
 
-/**
- * Checks if fields are empty and triggers error animation for invalid inputs.
- */
-function checkForEmptyInput() {
-    const nameInput = document.getElementById('contact-dlg-name-input');
-    const emailInput = document.getElementById('contact-dlg-email-input');
-    const phoneInput = document.getElementById('contact-dlg-phone-input');
-    if (nameInput.value === "") {
-        pulseRedError(nameInput);
-    }
-    if (emailInput.value === "") {
-        pulseRedError(emailInput);
-    }
-    if (phoneInput.value === "") {
-        pulseRedError(phoneInput);
-    }
-}
-
-
-/**
- * Applies a red pulse animation to an input wrapper to indicate error.
- * @param {HTMLInputElement} input - Input element to apply error animation to
- * @returns {void}
- */
-function pulseRedError(input) {
-    const wrapper = input.closest('.inputfield__wrapper');
-    if (!wrapper) return;
-    wrapper.classList.add('pulse-error');
-    setTimeout(() => {
-        wrapper.classList.remove('pulse-error');
-    }, 500);
+function resetInputInfo() {
+    document.querySelectorAll('.inputfield__wrapper').forEach(element => element.style.borderColor = 'var(--color-lightgrey)');
+    document.querySelectorAll('.inputfield_fill-in-info').forEach(element => element.style.opacity = '0');
 }
 
 
@@ -234,8 +208,7 @@ function collectDataFromDlg() {
 async function validateInputfieldsDlg(addUserName, data) {
     const validName = isValidUsername(addUserName);
     const validEmail = await isValidEmail(data.email);
-    const validPhone = isValidPhone(data.phone);
-    if (validName && validEmail && validPhone) { return true }
+    if (validName && validEmail) { return true }
     else { return false }
 }
 
@@ -266,7 +239,7 @@ function isValidUsername(username) {
 function isValidPhone(phone) {
     if (!phone || typeof phone !== 'string') return false;
     const cleaned = phone.replace(/[\s\-\(\)]/g, '');
-    const regex = /^\+?[1-9][0-9]{7,14}$/;
+    const regex = /^\+?[0-9][0-9]{7,14}$/;
     return regex.test(cleaned);
 }
 
@@ -277,18 +250,22 @@ function isValidPhone(phone) {
  * @param {Function} validationFn - Validation function to use (isValidUsername, isValidEmail, isValidPhone)
  * @returns {void}
  */
-async function validateInputField(input, validationFn) {
+async function validateInputField(input, validationFn, submit) {
     const value = input.value;
     const wrapper = input.closest('.inputfield__wrapper');
+    const infoText = input.closest('.inputfield-section').querySelector('.inputfield_fill-in-info');
     if (!wrapper) return;
-    if (value.length > 0) {
+    if (value.length > 0 || submit) {
         if (await validationFn(value)) {
             wrapper.style.borderColor = 'var(--color-success)';
+            infoText.style.opacity = '0';
         } else {
             wrapper.style.borderColor = 'var(--color-error)';
+            infoText.style.opacity = '1';
         }
     } else {
         wrapper.style.borderColor = 'var(--color-lightgrey)';
+        infoText.style.opacity = '0';
     }
 }
 
@@ -384,5 +361,5 @@ function animationDlg(successDlg) {
     setTimeout(() => {
         successDlgElement.classList.add('invisible');
         setTimeout(() => successDlgElement.remove(), 300);
-    }, 1500);
+    }, 2000);
 }

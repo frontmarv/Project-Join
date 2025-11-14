@@ -245,10 +245,6 @@ main {
     display: none;
 }
 
-.pulse-error {
-    border-color: var(--color-error) !important;
-}
-
 .create-contact-successful {
     position: fixed;
     top: calc(100vh - 100px);
@@ -257,7 +253,7 @@ main {
     z-index: 200;
     height: fit-content;
     padding: 25px 30px;
-    width: 320px;
+    min-width: 330px;
     background-color: var(--color-maincolor);
     font-size: 20px;
     color: var(--color-white);
@@ -403,6 +399,7 @@ main {
     .create-contact-successful {
         top: calc(100vh - 300px);
         left: 50vw;
+        min-width: fit-content;
     }
 
     .create-contact-successful.invisible {

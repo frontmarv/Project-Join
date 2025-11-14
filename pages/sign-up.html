@@ -33,7 +33,7 @@
 
             <div class="form__inputfields">
                 <div id="name__wrapper" class="inputfield__wrapper">
-                    <input id="name" type="text" placeholder="Name" aria-label="name"
+                    <input id="name" type="text" placeholder="Name and Surname" aria-label="name"
                         onkeyup="handleNameValidation(this)">
                     <img src="../assets/img/person.svg" alt="icon of an person">
                 </div>
@@ -43,6 +43,7 @@
                     <small id="msg" style="color: var(--color-error); display:none; width: 12rem;"> ❌ invalid
                         E-Mail</small>
                     <img src="../assets/img/mail.svg" alt="icon of an email">
+                    <p id="email-error-warning" class="email-taken__err-warning">This email already exists</p>
                 </div>
 
                 <div id="password__wrapper" class="inputfield__wrapper">

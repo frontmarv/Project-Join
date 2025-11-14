@@ -164,25 +164,6 @@ function welcomeScreenNoAnimation() {
 
 
 /**
- * Fetches user data from the database
- * @returns {Promise<Object|null>} The user data or null if fetch fails
- */
-async function fetchData() {
-    try {
-        const response = await fetch(DB_URL + "users/" + ".json");
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        rawData = await response.json();
-        return rawData
-    } catch (error) {
-        console.error("Error fetching data:", error.message);
-        return null;
-    }
-}
-
-
-/**
  * Attempts to log in the user with provided credentials
  * @returns {Promise<void>}
  */
@@ -343,5 +324,24 @@ function handleResizeScreen() {
         let header = document.getElementById('header__mobile-signup');
         if (header) header.remove();
         headerAdded = false;
+    }
+}
+
+
+/**
+ * Fetches user data from the database
+ * @returns {Promise<Object|null>} The user data or null if fetch fails
+ */
+async function fetchData() {
+    try {
+        const response = await fetch(DB_URL + "users/" + ".json");
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        rawData = await response.json();
+        return rawData
+    } catch (error) {
+        console.error("Error fetching data:", error.message);
+        return null;
     }
 }

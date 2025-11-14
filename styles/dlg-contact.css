@@ -132,19 +132,23 @@
 .inputfields {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
     align-items: center;
+    gap: 40px;
 }
 
 .inputfield__wrapper {
     display: flex;
     flex-direction: row;
-    width: fit-content;
     justify-content: space-between;
     border: 1px solid var(--color-lightgrey);
     border-radius: 0.625rem;
     padding: 0.75rem 1.3125rem;
     width: 100%;
+}
+
+.inputfield-section {
+    width: 100%;
+    position: relative;
 }
 
 .inputfield__wrapper input {
@@ -155,6 +159,14 @@
 
 .inputfield__wrapper:focus-within {
     border: 1px solid var(--color-lightblue);
+}
+
+.inputfield_fill-in-info {
+    padding: 0rem 1.3125rem;
+    color: var(--color-error);
+    opacity: 0;
+    position: absolute;
+    left: 0;
 }
 
 .inputfields__button-holder {
@@ -204,7 +216,7 @@
         padding: 1rem 16px;
         width: 100%;
         border-radius: 30px 30px 0px 0px;
-        height: 35%;
+        height: 30%;
     }
 
     .dialog-left img {
@@ -218,7 +230,7 @@
     .dialog-right {
         padding: 0rem 16px;
         width: 100%;
-        height: 65%;
+        height: 70%;
         border-radius: 0px 0px 30px 30px;
     }
 
@@ -242,10 +254,6 @@
         position: absolute;
         top: calc(-40px - 0.0303 * (100vw - 300px));
         ;
-    }
-
-    .inputfields {
-        gap: 15px;
     }
 
     .filled-btn {
@@ -298,10 +306,28 @@
 
 }
 
+@media screen and (max-width: 650px) {
+    .inputfields {
+        gap: 2.2rem;
+    }
+
+    .inputfield_fill-in-info {
+        font-size: 14px;
+    }
+}
+
+
 @media screen and (max-width: 420px) {
     .filled-btn {
         min-width: 7.875rem;
         width: fit-content;
+        font-size: 16px;
+        padding: 0.5rem;
+    }
+
+    .empty-btn {
+        font-size: 16px;
+        padding: 0.5rem;
     }
 
     .inputfields__button-holder {
@@ -312,5 +338,9 @@
 
     .content-right__wrapper {
         margin-top: 2rem;
+    }
+
+    .inputfield__wrapper{
+        padding: 6px 1.3125rem;
     }
 }

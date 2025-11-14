@@ -89,12 +89,53 @@ async function pushDataToDB(key, data) {
  * Creates user ID, stores data, and shows success message
  * @returns {void}
  */
-function sendSignupForm() {
-    let key = generateUserId(nameInput.value);
-    let data = createDataObject();
-    pushDataToDB(key, data);
-    showSuccessfulSignUpMessage();
-    redirectToLoginAfterDelay();
+async function sendSignupForm() {
+    const userAlreadyExists = await checkEmailAlreadyExists();
+    if (userAlreadyExists == undefined) {
+        let key = generateUserId(nameInput.value);
+        let data = createDataObject();
+        pushDataToDB(key, data);
+        showSuccessfulSignUpMessage();
+        redirectToLoginAfterDelay();
+    }
+    else {
+        emailTakenStyling();
+    }
 }
 
 
+/**
+ * Applies error styling when email is already taken.
+ * Shows error message, applies error border color, unchecks privacy checkbox,
+ * updates form state, disables sign-up button, and auto-hides error after 2 seconds.
+ * @returns {void}
+ */
+function emailTakenStyling() {
+    document.getElementById('email-error-warning').style.visibility = 'visible';
+    document.getElementById('valid-email').style.borderColor = "var(--color-error)";
+    document.getElementById('check').checked = false;
+    formState.isCheckboxChecked = false;
+    disableSignUpBtn();
+    setTimeout(() => {
+        document.getElementById('email-error-warning').style.visibility = 'hidden';
+    }, 2000);
+}
+
+
+/**
+ * Fetches user data from the database
+ * @returns {Promise<Object|null>} The user data or null if fetch fails
+ */
+async function fetchData() {
+    try {
+        const response = await fetch(DB_URL + "users/" + ".json");
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        rawData = await response.json();
+        return rawData
+    } catch (error) {
+        console.error("Error fetching data:", error.message);
+        return null;
+    }
+}

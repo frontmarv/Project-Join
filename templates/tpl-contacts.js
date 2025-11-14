@@ -24,20 +24,27 @@ function getAddContactDlgTpl() {
                 </div>
                 <div class="width-div">
                     <div class="inputfields">
+                    <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-name-input" type="text" placeholder="Name" aria-label="name" onkeyup="validateUsernameInput(this)">
+                            <input id="contact-dlg-name-input" type="text" placeholder="Name (and Surname)" aria-label="name" onkeyup="resetInputInfo()">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
-                        
+                        <p class="inputfield_fill-in-info">No middlenames, connect double names with "-"</p>
+                    </div>
+                    <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
+                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="resetInputInfo()">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
-
+                        <p class="inputfield_fill-in-info">Enter a valid e-mail adress</p>
+                    </div>
+                    <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-phone-input" type="tel" placeholder="Phone" aria-label="Phone" onkeyup="validatePhoneInput(this)">
+                            <input id="contact-dlg-phone-input" type="tel" placeholder="Phone (optional)" aria-label="Phone (optional)" onkeyup="validatePhoneInput(this)">
                             <img src="../assets/img/call.svg" alt="icon of an phone">
                         </div>
+                        <p class="inputfield_fill-in-info">Enter a valid phone number</p>
+                    </div>
                         <div class="inputfields__button-holder">
                             <button class="empty-btn" onclick="removeAnimationClass()">Cancel<img src="../assets/img/close.svg"
                                     alt="icon of the letter X"></button>
@@ -75,21 +82,27 @@ function getEditContactDlgTpl() {
                 </div>
                 <div class="width-div">
                     <div class="inputfields">
+                    <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-name-input" type="text" placeholder="Name" aria-label="name" onkeyup="validateUsernameInput(this)">
+                            <input id="contact-dlg-name-input" type="text" placeholder="Name (and Surname)" aria-label="name" onkeyup="resetInputInfo()">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
-                        
-
+                        <p class="inputfield_fill-in-info">No middlenames, connect double names with "-"</p>
+                    </div>
+                    <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
+                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="resetInputInfo()">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
-
+                        <p class="inputfield_fill-in-info">Enter a valid e-mail adress</p>
+                    </div>
+                    <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-phone-input" type="tel" placeholder="Phone" aria-label="Phone" onkeyup="validatePhoneInput(this)">
+                            <input id="contact-dlg-phone-input" type="tel" placeholder="Phone (optional)" aria-label="Phone (optional)" onkeyup="validatePhoneInput(this)">
                             <img src="../assets/img/call.svg" alt="icon of an phone">
                         </div>
+                        <p class="inputfield_fill-in-info">Enter a valid phone number</p>
+                    </div>
                         <div class="inputfields__button-holder">
                             <button class="empty-btn" onclick="removeAnimationClass()">Cancel<img src="../assets/img/close.svg"
                                     alt="icon of the letter X"></button>
@@ -177,6 +190,6 @@ function getDeleteContactDlg() {
 function getEditContactSuccessDlg() {
     return /*html*/ `
         <div id="dlg-box" class="create-contact-successful invisible">
-                Contact edit successful
+                Changes successfully saved
         </div>`
 }

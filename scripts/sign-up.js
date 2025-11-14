@@ -246,3 +246,16 @@ function evaluateFormValidity() {
     else { disableSignUpBtn() }
 }
 
+
+/**
+ * Checks if an email address already exists in the database.
+ * Fetches all users and searches for a matching email address.
+ * @async
+ * @returns {Promise<Object|undefined>} The existing user object if found, undefined otherwise
+ */
+async function checkEmailAlreadyExists() {
+    let data = await fetchData();
+    let dataArray = Object.values(data)
+    let existingUser = dataArray.find(user => user.email === email.value);
+    return existingUser
+}

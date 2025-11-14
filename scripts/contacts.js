@@ -114,12 +114,13 @@ async function deleteContact(userkeyToDelete) {
  */
 async function deleteContactFlow() {
     let userName = contactName.innerText;
-    getAndStoreUserId(userName);
+    userKey = getAndStoreUserId(userName);
+    await removeContactFromAllTasks(userKey);
     if (userName == LOGGED_IN_USER) {
-        await deleteContact(STORED_USER_KEY);
+        await deleteContact(userKey);
         window.location.replace("../index.html");
     } else {
-        await deleteContact(STORED_USER_KEY);
+        await deleteContact(userKey);
         renderContactList();
         setContactCardtoInvisible();
     }
@@ -129,13 +130,44 @@ async function deleteContactFlow() {
     }
     removeDeleteClass();
     removeAnimationClass();
-
 }
 
 
+/**
+ * Removes a specific contact from all tasks' assignedContacts arrays (batch update)
+ * @param {string} contactToRemove - The contact ID to remove (e.g., "EM123")
+ */
+async function removeContactFromAllTasks(contactToRemove) {
+    try {
+        const response = await fetch(DB_URL + "tasks.json");
+        if (!response.ok) throw new Error(`Failed to fetch tasks: ${response.status}`);
+        const tasks = await response.json();
+        if (!tasks) return 0;
+        const updates = {};
+        for (const [taskKey, taskData] of Object.entries(tasks)) {
+            if (taskData.assignedContacts && Array.isArray(taskData.assignedContacts) && taskData.assignedContacts.includes(contactToRemove)) {
+                updates[`tasks/${taskKey}/assignedContacts`] = taskData.assignedContacts.filter(contact => contact !== contactToRemove);
+            }
+        }
+        if (Object.keys(updates).length > 0) {
+            const updateResponse = await fetch(DB_URL + ".json", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(updates) });
+            if (!updateResponse.ok) throw new Error(`Batch update failed: ${updateResponse.status}`);
+        }
+    } catch (error) {
+        console.error('Error removing contact from tasks:', error);
+        throw error;
+    }
+}
+
+
+/**
+ * Removes the delete contact dialog styling class from the dialog element.
+ * @returns {void}
+ */
 function removeDeleteClass() {
     dialog.classList.remove('delete-contact__dialog');
 }
+
 
 /**
  * Extracts and returns unique initial letters from user names.
