@@ -111,8 +111,10 @@ password.addEventListener("keydown", function (event) {
  * @returns {void}
  */
 function welcomeScreenAnimation() {
+    logo.style.visibility = 'hidden';
     logo.style.transition = 'none';
     logo.classList.add('start');
+    logo.style.visibility = 'visible';
     setTimeout(() => {
         logo.style.transition = 'transform 1s ease-in-out';
         logo.classList.remove('start');
