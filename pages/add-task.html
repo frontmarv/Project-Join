@@ -9,7 +9,7 @@
     <link rel="icon" href="../assets/img/logo-black.png" type="image/x-icon">
     <script src="../scripts/authentication.js"></script>
     <link rel="stylesheet" href="../style.css">
-
+    <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../styles/header.css">
     <link rel="stylesheet" href="../styles/navigation.css">
     <link rel="stylesheet" href="../styles/add-task.css">
@@ -27,7 +27,6 @@
     <script src="../scripts/add-task-alert-overlay.js" defer></script>
     <script src="../scripts/add-task.js" defer></script>
     <script src="../scripts/manage-user-profil.js" defer></script>
-    <script src="../templates/tpl-navigation.js" defer></script>
     <script src="../templates/tpl-add-task.js"></script>
     <script src="../templates/tpl-user-profil-img.js" defer></script>
 <script src="../scripts/navigation.js" defer></script>
@@ -79,15 +78,9 @@
                 <div data-insert="add-task-insert.html"></div>
             </div>
         </main>
-<div id="alert-overlay" class="alert-overlay d-none">
-  <div class="alert-box">
-    <h2 id="alert-message">Task added successfully!</h2>
-    <div class="alert-buttons">
-      <button id="alert-ok" onclick="closeAlertOverlay()">OK</button>
-      <button id="alert-board" onclick="goToBoard()">Go to Board</button>
-    </div>
-  </div>
-</div>
+        <overlay id="alert-overlay" class="overlay d-none"></overlay>
+        <dialog id="alert-dlg-box" class="add-contact__dialog d-none"></dialog>
+
     </div>
 
 </body>

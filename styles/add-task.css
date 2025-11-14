@@ -1,3 +1,29 @@
+.add-contact__dialog {
+    display: flex;
+    flex-direction: row;
+    min-height: 500px;
+    height: 50vh;
+    max-height: 43.75rem;
+    width: 90vw;
+    max-width: 93.75rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: 1.875rem;
+    background-color: var(--color-white);
+    padding: 0rem;
+    z-index: 1000;
+    opacity: 0;
+    transform: translate(200vw, -50%);
+    transition: all 300ms ease-in-out;
+}
+
+.show {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    transition: all 300ms ease-in-out;
+}
+
 #task-form {
     max-height: 65vh;
     overflow-y: auto;
@@ -213,16 +239,10 @@ textarea.input-error:focus,
 }
 
 .alert-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+    width: fit-content;
+    height: fit-content;
+    padding: 3rem;
+    min-height: unset;
 }
 
 .alert-box {

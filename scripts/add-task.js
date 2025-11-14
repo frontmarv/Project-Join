@@ -1,5 +1,6 @@
 let chosenPriority = "medium";
-
+const alertDialog = document.getElementById('alert-dlg-box');
+const alertOverlay = document.getElementById('alert-overlay');
 window.addEventListener("resize", relocateRequiredInfo);
 window.addEventListener("load", relocateRequiredInfo);
 
@@ -277,7 +278,8 @@ async function createTask() {
   const newTask = buildNewTask();
 
   await saveTaskToFirebase(newTask, key);
-  showAlertOverlay();
+  closeBoardAddTaskDialogIfExists();
+  showTaskAddedAlert();
 }
 
 
