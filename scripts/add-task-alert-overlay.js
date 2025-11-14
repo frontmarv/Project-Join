@@ -1,7 +1,19 @@
 /**
- * Shows the "Task Added" alert dialog with a slide-in animation.
- * Removes the d-none class from the overlay and dialog, then
- * triggers the CSS animation by adding the "show" class.
+ * Checks whether the current page is the Board page.
+ *
+ * @returns {boolean} True if the current URL ends with "board.html", otherwise false.
+ */
+function isBoardPage() {
+  return window.location.pathname.toLowerCase().endsWith("board.html");
+}
+
+
+/**
+ * Displays the "Task Added" alert dialog with a slide-in animation.
+ * The overlay and dialog are unhidden and then animated in via CSS.
+ *
+ * On the Board page, the alert automatically closes after 2 seconds
+ * to avoid requiring user interaction and to keep the workflow smooth.
  */
 function showAddTaskDlgWtihAnimation() {
     alertOverlay.classList.remove('d-none');
@@ -10,14 +22,23 @@ function showAddTaskDlgWtihAnimation() {
     setTimeout(() => {
         alertDialog.classList.add('show');
     }, 100);
+
+    // Auto-close after 2 seconds on the Board page
+    if (isBoardPage()) {
+      setTimeout(() => {
+        closeAddTaskDlgWithAnimation();
+      }, 2000);
+    }
 }
 
 
 /**
  * Closes the "Task Added" alert dialog with a slide-out animation.
- * After the animation completes, it hides the dialog and overlay.
- * If executed on the Board page, it automatically refreshes the task list
- * by calling `initBoard()`.
+ * After the animation ends, both dialog and overlay are hidden.
+ *
+ * When executed on the Board page, this function also triggers a
+ * refresh of the task list by calling `initBoard()` so that the
+ * newly created task becomes visible immediately.
  */
 function closeAddTaskDlgWithAnimation() {
     alertDialog.classList.remove('show');
@@ -26,8 +47,9 @@ function closeAddTaskDlgWithAnimation() {
     setTimeout(() => {
         alertDialog.classList.add('d-none');
         alertOverlay.classList.add('d-none');
-        const path = window.location.pathname.toLowerCase();
 
+        // Refresh board tasks if we are on the Board page
+        const path = window.location.pathname.toLowerCase();
         if (path.endsWith('board.html') && typeof initBoard === 'function') {
             initBoard();
         }
@@ -36,9 +58,8 @@ function closeAddTaskDlgWithAnimation() {
 
 
 /**
- * Renders and displays the "Task Added Successfully" alert dialog.
- * Injects the dialog HTML, ensures the correct classes are applied,
- * and triggers the opening animation.
+ * Injects the alert dialog markup and shows the "Task Added" feedback overlay.
+ * This function is triggered after successfully creating a task.
  */
 function showTaskAddedAlert() {
     alertDialog.innerHTML = getTaskAddDlg();
@@ -49,8 +70,8 @@ function showTaskAddedAlert() {
 
 
 /**
- * Closes the board's Add Task dialog if it is currently open.
- * This prevents overlapping dialogs when the success alert appears.
+ * Closes the Board's Add-Task dialog if it is currently open.
+ * Prevents visual overlapping when the "Task Added" alert appears on top.
  */
 function closeBoardAddTaskDialogIfExists() {
     const boardOverlay = document.getElementById('overlay');
@@ -66,24 +87,31 @@ function closeBoardAddTaskDialogIfExists() {
 
 
 /**
- * Returns the HTML markup for the "Task Added Successfully" alert dialog.
- * The content adapts based on the page:
- * - On add-task.html: shows "OK" and "Go to Board" buttons.
- * - On board.html: shows only "OK".
+ * Generates the HTML markup for the "Task Added Successfully" alert dialog.
  *
- * @returns {string} HTML string representing the alert dialog
+ * Behavior:
+ * - On add-task.html → shows both buttons:
+ *     - "Add more tasks"
+ *     - "Go to Board"
+ * - On board.html → hides all buttons (the alert auto-closes instead).
+ *
+ * @returns {string} The HTML string for the alert dialog content.
  */
 function getTaskAddDlg() {
-    const onBoard = window.location.pathname.endsWith("board.html");
+    const onBoard = isBoardPage();
+
     return `
       <div class="alert-overlay">
         <h2 id="alert-message">Task added successfully!</h2>
         <div class="alert-buttons">
-          <button id="alert-ok" onclick="closeAddTaskDlgWithAnimation()">OK</button>
           
-          ${ onBoard 
-              ? ""
-              : `<button id="alert-board" onclick="goToBoard()">Go to Board</button>`
+          ${
+            onBoard
+              ? ""  // No buttons on the Board page
+              : `
+                <button id="alert-ok" onclick="closeAddTaskDlgWithAnimation()">Add more tasks</button>
+                <button id="alert-board" onclick="goToBoard()">Go to Board</button>
+              `
           }
         </div>
       </div>
