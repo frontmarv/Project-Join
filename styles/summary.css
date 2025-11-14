@@ -339,3 +339,9 @@ h3 {
         margin-bottom: 0;
     }
 }
+
+@media (max-height: 750px) {
+    .summary-content__metrics-row  {
+        height: 6.25rem;
+    }
+}
