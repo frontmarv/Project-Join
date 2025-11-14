@@ -47,10 +47,8 @@ function closeAddTaskDlgWithAnimation() {
     setTimeout(() => {
         alertDialog.classList.add('d-none');
         alertOverlay.classList.add('d-none');
-
-        // Refresh board tasks if we are on the Board page
-        const path = window.location.pathname.toLowerCase();
-        if (path.endsWith('board.html') && typeof initBoard === 'function') {
+        
+        if (isBoardPage() && typeof initBoard === 'function') {
             initBoard();
         }
     }, 300);
