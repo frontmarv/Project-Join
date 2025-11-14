@@ -284,6 +284,14 @@ async function createTask() {
 
 
 /**
+ * Navigates to the Board view.
+ */
+function goToBoard() {
+  window.location.href = "./board.html";
+}
+
+
+/**
  * Returns the currently selected category text.
  * @returns {string}
  */
