@@ -87,6 +87,7 @@ textarea.input-error:focus,
 
 .required {
   font-size: 1rem;
+  margin-bottom: 0.3rem;
 }
 
 .required--after::after {
@@ -214,6 +215,7 @@ textarea.input-error:focus,
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  margin-bottom: 0.3rem;
 }
 
 .empty-btn {
@@ -264,21 +266,6 @@ textarea.input-error:focus,
   justify-content: center;
   gap: 20px;
   margin-top: 20px;
-}
-
-.alert-buttons button {
-  background-color: var(--color-lightblue);
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s;
-}
-
-.alert-buttons button:hover {
-  background-color: #1f6fff;
 }
 
 .priority-options-btn-medium {
