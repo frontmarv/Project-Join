@@ -49,8 +49,8 @@ h3 {
     align-items: center;
     margin-top: 4rem;
     gap: 4rem;
-  flex: 1; /* nimmt den restlichen Platz */
-    overflow-y: auto; /* scrollen erlaubt */
+    flex: 1;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
@@ -188,7 +188,7 @@ h3 {
     background-color: var(--color-lightgrey);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 400px) {
     .grey_seperator-summary {
         height: 4rem;
     }
@@ -279,6 +279,7 @@ h3 {
         margin-top: unset;
         justify-content: center;
         height: calc(100vh - 380px);
+        margin-bottom: 6.25rem;
     }
 
     .summary-content__metrics-row {
@@ -334,5 +335,7 @@ h3 {
 @media (max-height: 700px) {
     .summary-content__metrics {
         align-items: flex-start;
+    } .summary-content__metrics.content-wrapper {
+        margin-bottom: 0;
     }
 }
