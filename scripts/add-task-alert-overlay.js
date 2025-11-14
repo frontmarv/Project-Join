@@ -107,7 +107,7 @@ function getTaskAddDlg() {
           
           ${
             onBoard
-              ? ""  // No buttons on the Board page
+              ? ""
               : `
                 <button id="alert-ok" class="empty-btn" onclick="closeAddTaskDlgWithAnimation()">Add more tasks</button>
                 <button id="alert-board" class="filled-btn" onclick="goToBoard()">Go to Board</button>
