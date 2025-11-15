@@ -393,6 +393,10 @@ textarea.input-error:focus,
   box-sizing: border-box;
 }
 
+.input--validation-modifier {
+  height: 3rem;
+}
+
 
 .selector::placeholder {
   font-size: inherit;
