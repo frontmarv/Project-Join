@@ -1,3 +1,29 @@
+.date-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.date-wrapper input[type="date"] {
+  width: 100%;
+  padding-right: 2.5rem;
+  box-sizing: border-box;
+}
+
+.add-task__field .custom-date-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .add-contact__dialog {
     display: flex;
     flex-direction: row;
@@ -46,7 +72,7 @@
   box-sizing: border-box;
   transition: border-color .15s ease;
 }
-
+input[type="date"]:focus,
 .task-content__container input:focus,
 .task-content__container select:focus,
 .task-content__container textarea:focus,
@@ -446,4 +472,3 @@ textarea.input-error:focus,
 .category-selection .selector.input-error:focus {
   border-color: var(--color-error) !important;
 }
-
