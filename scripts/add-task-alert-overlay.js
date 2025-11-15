@@ -98,7 +98,7 @@ function closeBoardAddTaskDialogIfExists() {
 function getTaskAddDlg() {
     const onBoard = isBoardPage();
 
-    return `
+    return /*html*/ `
       <div class="alert-overlay">
         <h2 id="alert-message">Task added successfully!</h2>
         <div class="alert-buttons">

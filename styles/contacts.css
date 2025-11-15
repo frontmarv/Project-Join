@@ -253,7 +253,7 @@ main {
     z-index: 200;
     height: fit-content;
     padding: 25px 30px;
-    min-width: 330px;
+    min-width: 320px;
     background-color: var(--color-maincolor);
     font-size: 20px;
     color: var(--color-white);

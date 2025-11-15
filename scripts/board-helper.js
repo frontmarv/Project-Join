@@ -254,3 +254,56 @@ function compareByPriority(a, b) {
 function compareByTitle(a, b) {
   return (a.title || "").localeCompare(b.title || "");
 }
+
+
+// ======================================================
+// 🔹 POPUP MESSAGE
+// ======================================================
+
+const POPUP_ANIMATION_TIME = 500;
+const POPUP_VISIBLE_TIME   = 1000;
+const POPUP_TOTAL_TIME     = POPUP_ANIMATION_TIME * 2 + POPUP_VISIBLE_TIME;
+
+function preloadPopupMsg() {
+  if (document.querySelector('.popup-msg-container')) return;
+
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = getPopupMsgChangesSavedTpl();
+
+  const popupEl = wrapper.firstElementChild;
+  document.body.appendChild(popupEl);
+
+  popupEl.offsetHeight;
+
+  return popupEl;
+}
+
+
+function showPopupMsgChangesSaved() {
+  const popupEl = document.querySelector('.popup-msg-container');
+  if (!popupEl) return;
+
+  setDialogActionsDisabled(true);
+
+  requestAnimationFrame(() => popupEl.classList.add('show'));
+
+  setTimeout(() => {
+    hidePopupElement(popupEl);
+  }, POPUP_ANIMATION_TIME + POPUP_VISIBLE_TIME);
+
+  setTimeout(() => {
+    setDialogActionsDisabled(false);
+  }, POPUP_TOTAL_TIME);
+}
+
+
+function hidePopupElement(popupEl) {
+  popupEl.classList.remove('show');
+  setTimeout(() => popupEl.remove(), POPUP_ANIMATION_TIME);
+}
+
+
+function setDialogActionsDisabled(disabled) {
+  const dlg = document.querySelector('#dlg-box');
+  if (dlg) dlg.classList.toggle('dialog-action-area--disabled', disabled);
+}

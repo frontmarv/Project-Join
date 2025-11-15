@@ -182,6 +182,7 @@ function setupTaskEditDialog(task) {
  * @param {Object} task - Task object being edited.
  */
 function initializeTaskEditFeatures(task) {
+  preloadPopupMsg();
   initSubtaskInput();
   initSubtaskIconButtons();
   initSubtaskHandlers();

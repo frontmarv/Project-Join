@@ -323,3 +323,11 @@ async function refreshTaskInfo(taskId) {
   updateAllPlaceholders?.();
   renderTaskInfoDlg(taskId);
 }
+
+
+function setFooterOptionsDisabled(disabled) {
+  const optionsBox = document.querySelector('.dlg__footer__options-box');
+  if (!optionsBox) return;
+
+  optionsBox.classList.toggle('dlg__footer__options-box--disabled', disabled);
+}

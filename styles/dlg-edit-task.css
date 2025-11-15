@@ -59,7 +59,7 @@
   border-radius: 0.5rem;
   border: 1px solid var(--color-lightgrey);
   padding: 0.75rem 1.25rem;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 }
 
 .dlg-edit__textarea {
@@ -85,14 +85,14 @@
 .contacts-selection {
   position: relative;
   user-select: none;
-  font-size: 1.5rem;
 }
 
 .selector {
+  height: 3rem;
   width: 100%;
   border: 1px solid var(--color-lightgrey);
   border-radius: 0.5rem;
-  padding: 0.6rem 2.5rem 0.6rem 1rem;
+  padding: 0 2.5rem 0 1rem;
   background: var(--color-white)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23888' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
     no-repeat right 1rem center;
@@ -155,7 +155,6 @@
   text-overflow: ellipsis;
   word-break: break-all;
 }
-
 
 .checkbox {
   width: 1.5rem;
@@ -226,6 +225,7 @@
 }
 
 .subtask-input {
+  height: 3rem;
   flex: 1;
   cursor: text !important;
 }
@@ -260,6 +260,7 @@
 }
 
 .dlg-edit__footer {
+  margin: 0 1rem 0 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -267,16 +268,13 @@
 
 .dlg-edit__footer__discard-btn,
 .dlg-edit__footer__save-btn {
-  width: 6.5rem;
+  width: 8rem;
   height: 3.5rem;
-}
-
-.dlg-edit__footer__discard-btn {
-  margin-left: 0.5rem;
+  font-size: 1.25rem;
 }
 
 .dlg-edit__footer__save-btn {
-  margin-right: 1rem;
+  width: fit-content;
 }
 
 .dlg-edit__main__subtask:hover:not(.edit-mode) {

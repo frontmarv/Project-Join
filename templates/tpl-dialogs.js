@@ -159,8 +159,12 @@ function getTaskEditDlgTpl(task) {
             </div>
         </main>
         <footer class="dlg-edit__footer">
-            <div class="dlg-edit__footer__discard-btn filled-btn" onclick="renderTaskInfoDlg('${task.id}')">Discard</div>
-            <div class="dlg-edit__footer__save-btn filled-btn" onclick="saveEditedTask('${task.id}')">SAVE</div>
+            <button class="dlg-edit__footer__discard-btn empty-btn" onclick="renderTaskInfoDlg('${task.id}')">Discard
+            <img src="../assets/img/close.svg" alt="close icon">
+            </button>
+            <button class="dlg-edit__footer__save-btn filled-btn" onclick="saveEditedTask('${task.id}')">Save Changes
+            <img src="../assets/img/done.svg" alt="accept hook icon">
+            </button>
         </footer>`;
 }
 

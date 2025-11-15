@@ -246,41 +246,6 @@ function getValueById(id) {
 
 
 // ======================================================
-// 🔹 POPUP MESSAGE
-// ======================================================
-
-/**
- * Displays a "Changes saved" popup message.
- */
-function showPopupMsgChangesSaved() {
-  const popup = document.createElement('div');
-  popup.innerHTML = getPopupMsgChangesSavedTpl();
-  document.body.appendChild(popup.firstElementChild);
-  showAndAutoRemovePopup();
-}
-
-
-/**
- * Shows the popup and hides it automatically after a delay.
- */
-function showAndAutoRemovePopup() {
-  const popupEl = document.querySelector('.popup-msg-container');
-  requestAnimationFrame(() => popupEl.classList.add('show'));
-  setTimeout(() => hidePopupElement(popupEl), 1800);
-}
-
-
-/**
- * Hides and removes the popup message element.
- * @param {HTMLElement} popupEl - The popup element.
- */
-function hidePopupElement(popupEl) {
-  popupEl.classList.remove('show');
-  setTimeout(() => popupEl.remove(), 300);
-}
-
-
-// ======================================================
 // 🔹 DELETE SUBTASK
 // ======================================================
 
