@@ -100,12 +100,14 @@
                         </select>
                         <div class="task-search-and-add-box">
                                 <div class="board__head-searchbox-wrapper">
-                                    <div class="board__head__searchbox">
-                                        <input id="search-tasks" type="search" placeholder="Find Task">
-                                        <img class="search-btn" src="../assets/img/search.svg" alt="Search icon">
-                                    </div>
-                                    <div id="search-mode-indicator" class="search-mode-indicator d-none">
-                                        🔍 Read Only (Drag & Drop disabled)
+                                    <div class="searchbox-wrapper">
+                                        <div class="board__head__searchbox">
+                                            <input id="search-tasks" type="search" placeholder="Find Task">
+                                            <img class="search-btn" src="../assets/img/search.svg" alt="Search icon">
+                                        </div>
+                                        <div id="search-mode-indicator" class="search-mode-indicator d-none">
+                                            🔍 Read Only (Drag & Drop disabled)
+                                        </div>
                                     </div>
                                 </div>                            
                             <div id="add-task-btn" class="add-task-btn filled-btn" onclick="renderAddTaskDlg()">

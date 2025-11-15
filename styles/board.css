@@ -61,6 +61,11 @@
   cursor: text;
 }
 
+.searchbox-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .search-mode-indicator {
   font-size: 0.85rem;
   color: var(--color-greyicons);
@@ -73,6 +78,9 @@
 }
 
 .search-mode-indicator.show {
+  align-self: flex-start;
+  transform: none;
+  text-wrap: nowrap;
   opacity: 1;
 }
 
@@ -81,9 +89,12 @@
 }
 
 .task-search-and-add-box {
+  height: 2rem;
   width: 60%;
   display: flex;
   justify-content: space-evenly;
+  align-items: flex-start;
+  margin-top: 1rem;
   gap: 0.5rem;
 }
 
