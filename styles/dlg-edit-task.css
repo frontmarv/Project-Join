@@ -151,6 +151,21 @@
   gap: 1rem;
 }
 
+.user-avatar {
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  border-radius: 50%;
+  border: 0.125rem solid #fff; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-family: sans-serif;
+  color: #fff;
+  box-sizing: border-box;
+}
+
 .user-selection-field span {
   text-overflow: ellipsis;
   word-break: break-all;

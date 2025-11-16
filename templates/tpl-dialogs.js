@@ -247,18 +247,17 @@ function getAssignmentListUserTpl(user, checked = false) {
   const userName = addTagToLoggedInUser(user.name);
   return /*html*/ `
     <li data-user-id="${user.id}" class="${checked ? "active" : ""}">
-      <div class="user-selection-field">
-        <svg width="32" height="32" viewBox="0 0 42 42" aria-hidden="true" focusable="false">
-          <circle cx="21" cy="21" r="20" fill="${color}" stroke="white" stroke-width="2" />
-          <text x="21" y="23" text-anchor="middle" dominant-baseline="middle" font-size="12" fill="white" font-family="sans-serif">${initials}</text>
-        </svg>
-        <span class="username">${userName}</span>
-      </div>
-      <img class="checkbox"
-          src="../assets/img/${checked ? "checkbox-checked-white.svg" : "checkbox-unchecked.svg"}"
-          alt="checkbox"
-          data-checked="${checked}">
-    </li>
+  <div class="user-selection-field">
+    <div class="user-avatar" style="background-color: ${color};">
+      ${initials}
+    </div>
+    <span class="username">${userName}</span>
+  </div>
+  <img class="checkbox"
+      src="../assets/img/${checked ? "checkbox-checked-white.svg" : "checkbox-unchecked.svg"}"
+      alt="checkbox"
+      data-checked="${checked}">
+</li>
   `;
 }
 

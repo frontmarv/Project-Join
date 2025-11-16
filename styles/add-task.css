@@ -159,7 +159,6 @@ textarea.input-error:focus,
 .task-content__container span {
   font-size: 1.25rem;
   font-weight: 400;
-  margin-bottom: 0.5rem;
 }
 
 .add-task__right-column {
@@ -379,7 +378,6 @@ textarea.input-error:focus,
 
 }
 
-
 .category-selection {
   position: relative;
   user-select: none;
@@ -396,7 +394,6 @@ textarea.input-error:focus,
 .input--validation-modifier {
   height: 3rem;
 }
-
 
 .selector::placeholder {
   font-size: inherit;
