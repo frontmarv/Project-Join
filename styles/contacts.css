@@ -91,7 +91,8 @@ main {
 .contact-list {
     width: 100%;
     padding: 0rem 3.25rem 16px 3.25rem;
-    overflow-y: scroll;
+    overflow-y: auto;
+    scrollbar-width: thin;
     position: relative;
 }
 
