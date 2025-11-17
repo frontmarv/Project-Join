@@ -206,7 +206,9 @@ function onPointerMove(event) {
   }
 
   if (isDragging && primaryButtonStillPressed) {
-    updateDraggingPosition(event);
+      updateDraggingPosition(event);
+      lastPointerEvent = event;
+      handleAutoScroll(event);
   }
 }
 
@@ -475,3 +477,160 @@ async function refreshBoard() {
   loadTasks();
   updateAllPlaceholders();
 }
+
+
+// ======================================================
+// 🔹 AUTO-SCROLL WHILE DRAGGING (Mobile <1024px)
+//    - Horizontal: in der aktuellen .tasks-Row
+//    - Vertikal: im .board-content Container
+// ======================================================
+
+let autoScrollInterval = null;
+let lastPointerEvent = null;
+
+const AUTO_SCROLL_EDGE = 60;      // Abstand zum Rand (px), ab dem gescrollt wird
+const AUTO_SCROLL_SPEED_MAX = 18; // max. Speed
+const AUTO_SCROLL_SPEED_MIN = 4;
+
+const autoScrollState = {
+  hSpeed: 0,
+  vSpeed: 0,
+  hContainer: null,
+  vContainer: null,
+};
+
+/**
+ * Wird bei jedem pointermove aufgerufen (wenn isDragging true).
+ * Berechnet horizontale und vertikale Scroll-Geschwindigkeit.
+ * @param {PointerEvent} event
+ */
+function handleAutoScroll(event) {
+  if (!isMobileDragMode() || !isDragging) {
+    stopAutoScroll();
+    return;
+  }
+
+  const hContainer = getHorizontalScrollContainer();
+  const vContainer = getVerticalScrollContainer();
+
+  if (!hContainer && !vContainer) {
+    stopAutoScroll();
+    return;
+  }
+
+  const { clientX: x, clientY: y } = event;
+
+  let hSpeed = 0;
+  let vSpeed = 0;
+
+  // ---------- Horizontal (in .tasks) ----------
+  if (hContainer) {
+    const rect = hContainer.getBoundingClientRect();
+    const distLeft = x - rect.left;
+    const distRight = rect.right - x;
+
+    if (distLeft < AUTO_SCROLL_EDGE) {
+      const intensity = 1 - Math.max(distLeft, 0) / AUTO_SCROLL_EDGE;
+      hSpeed = -Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
+    } else if (distRight < AUTO_SCROLL_EDGE) {
+      const intensity = 1 - Math.max(distRight, 0) / AUTO_SCROLL_EDGE;
+      hSpeed = Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
+    }
+  }
+
+  // ---------- Vertikal (in .board-content) ----------
+  if (vContainer) {
+    const rectV = vContainer.getBoundingClientRect();
+    const distTop = y - rectV.top;
+    const distBottom = rectV.bottom - y;
+
+    if (distTop < AUTO_SCROLL_EDGE) {
+      const intensity = 1 - Math.max(distTop, 0) / AUTO_SCROLL_EDGE;
+      vSpeed = -Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
+    } else if (distBottom < AUTO_SCROLL_EDGE) {
+      const intensity = 1 - Math.max(distBottom, 0) / AUTO_SCROLL_EDGE;
+      vSpeed = Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
+    }
+  }
+
+  autoScrollState.hSpeed = hSpeed;
+  autoScrollState.vSpeed = vSpeed;
+  autoScrollState.hContainer = hContainer;
+  autoScrollState.vContainer = vContainer;
+
+  if (!hSpeed && !vSpeed) {
+    stopAutoScroll();
+    return;
+  }
+
+  startAutoScroll();
+}
+
+
+/**
+ * Aktuelle horizontale Scroll-Row ermitteln (.tasks),
+ * in der der Placeholder gerade hängt.
+ */
+function getHorizontalScrollContainer() {
+  if (!placeholder) return null;
+  return placeholder.closest(".tasks");
+}
+
+
+/**
+ * Vertikalen Scroll-Container ermitteln.
+ * Primär: .board-content, Fallback: document.scrollingElement.
+ */
+function getVerticalScrollContainer() {
+  const board = document.querySelector(".board-content");
+  if (board) return board;
+  return document.scrollingElement || document.documentElement;
+}
+
+
+/**
+ * Startet das Autoscroll-Interval (falls noch nicht aktiv).
+ */
+function startAutoScroll() {
+  if (autoScrollInterval) return;
+
+  autoScrollInterval = setInterval(() => {
+    const { hContainer, vContainer, hSpeed, vSpeed } = autoScrollState;
+
+    if (!isDragging) {
+      stopAutoScroll();
+      return;
+    }
+
+    if (hContainer && hSpeed) {
+      hContainer.scrollLeft += hSpeed;
+    }
+
+    if (vContainer && vSpeed) {
+      vContainer.scrollTop += vSpeed;
+    }
+
+    // Nach Scroll: Hover/Placeholder aktualisieren,
+    // damit die Drop-Position weiterhin korrekt bleibt
+    if (draggedTask && lastPointerEvent) {
+      updateHoverColumn(lastPointerEvent);
+    }
+  }, 16); // ca. 60 fps
+}
+
+
+/** Stoppt AutoScroll komplett */
+function stopAutoScroll() {
+  if (autoScrollInterval) {
+    clearInterval(autoScrollInterval);
+    autoScrollInterval = null;
+  }
+  autoScrollState.hSpeed = 0;
+  autoScrollState.vSpeed = 0;
+  autoScrollState.hContainer = null;
+  autoScrollState.vContainer = null;
+}
+
+// Beim Loslassen / Canceln immer stoppen
+document.addEventListener("pointerup", stopAutoScroll);
+document.addEventListener("pointercancel", stopAutoScroll);
