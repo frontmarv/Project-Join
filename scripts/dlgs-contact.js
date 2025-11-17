@@ -139,12 +139,16 @@ function markStoredContactAsSelected(userName) {
 async function putNewContactToDB() {
     const { key, data, addUserName } = collectDataFromDlg();
     const validInput = await validateInputfieldsDlg(addUserName, data);
-    if (validInput) {
+    const emailNotAlreadyTaken = await checkEmailAlreadyExists(data)
+    if (validInput && emailNotAlreadyTaken === 0) {
         await pushDataToDB(key, data);
         removeAnimationClass();
         renderContactList();
         setContactCardtoInvisible();
         addContactSuccessDlg();
+    }else if(emailNotAlreadyTaken !== 0){
+        document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
+        document.getElementById('email-error-warning').style.opacity = '1';
     }
     else {
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
@@ -161,19 +165,42 @@ async function putNewContactToDB() {
 async function validateAndSaveData() {
     const { key, data, addUserName } = collectDataFromDlg();
     const validInput = await validateInputfieldsDlg(addUserName, data);
-    if (validInput) {
+    const emailNotAlreadyTaken = await checkEmailAlreadyExists(data)
+    if (validInput && emailNotAlreadyTaken === 0) {
         saveDataEditContactDlg(data);
         editContactSuccessDlg();
-    } else {
+    } else if (emailNotAlreadyTaken !== 0) {
+        document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
+        document.getElementById('email-error-warning').style.opacity = '1';
+    }
+    else {
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
         validateInputField(document.getElementById('contact-dlg-email-input'), isValidEmail, true);
     }
+}
+
+/**
+ * Checks if an email address already exists in the database.
+ * Fetches all users and returns all users with matching email address.
+ * @async
+ * @param {Object} data - Contact data object
+ * @param {string} data.email - Email address to check
+ * @returns {Promise<Array>} Array of user objects with matching email, empty array if none found
+ */
+async function checkEmailAlreadyExists(data) {
+    let fetchedData = await fetchData();
+    let dataArray = Object.values(fetchedData);
+    let existingUsers = dataArray.filter(user =>
+        user.email === data.email && user.name !== data.name
+    );
+    return existingUsers.length;
 }
 
 
 function resetInputInfo() {
     document.querySelectorAll('.inputfield__wrapper').forEach(element => element.style.borderColor = 'var(--color-lightgrey)');
     document.querySelectorAll('.inputfield_fill-in-info').forEach(element => element.style.opacity = '0');
+    document.getElementById('email-error-warning').innerHTML = 'Enter a valid e-mail adress';
 }
 
 

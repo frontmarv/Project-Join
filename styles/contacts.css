@@ -333,6 +333,10 @@ main {
         right: 16px;
     }
 
+    .blue-arrow-back:hover {
+        cursor: pointer;
+    }
+
     .content-right__contact-info-card {
         margin-bottom: 120px;
         overflow-y: auto;
@@ -354,6 +358,12 @@ main {
         bottom: 132px;
         right: 16px;
         z-index: 900;
+    }
+
+    .add-user-icon:hover,
+    .contacts-options-icon:hover,
+    .manage-contact__actions:hover {
+        cursor: pointer;
     }
 
     .add-user-icon {

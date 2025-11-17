@@ -36,7 +36,7 @@ function getAddContactDlgTpl() {
                             <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="resetInputInfo()">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
-                        <p class="inputfield_fill-in-info">Enter a valid e-mail adress</p>
+                        <p class="inputfield_fill-in-info" id="email-error-warning">Enter a valid e-mail adress</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
@@ -94,7 +94,7 @@ function getEditContactDlgTpl() {
                             <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="resetInputInfo()">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
-                        <p class="inputfield_fill-in-info">Enter a valid e-mail adress</p>
+                        <p class="inputfield_fill-in-info" id="email-error-warning">Enter a valid e-mail adress</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
