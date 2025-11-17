@@ -6,7 +6,6 @@
   box-shadow: 0 0 0.625rem 0.188rem rgba(0, 0, 0, 0.1);
   border-radius: 1.5rem;
   color: var(--color-black);
-  max-width: 20vw;
   transition: transform 0.15s ease;
 }
 
@@ -271,6 +270,7 @@
   .task {
     min-height: fit-content;
     min-width: 16rem;
+    max-width: 20vw;
   }
 
   .task-card__menu {

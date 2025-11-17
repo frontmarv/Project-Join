@@ -282,7 +282,7 @@ function bindAssignmentListEvents(contactsDropDownList, avatarContainer) {
  * @returns {string} SVG markup.
  */
 function getMoreUsersSvg(count) {
-  return `
+  return /*html*/ `
     <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">
       <circle cx="21" cy="21" r="20" fill="rgb(66, 82, 110)" stroke="white" stroke-width="2"/>
       <text x="21" y="23" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="400" fill="white">
