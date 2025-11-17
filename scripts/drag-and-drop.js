@@ -206,9 +206,9 @@ function onPointerMove(event) {
   }
 
   if (isDragging && primaryButtonStillPressed) {
-      updateDraggingPosition(event);
-      lastPointerEvent = event;
-      handleAutoScroll(event);
+    updateDraggingPosition(event);
+    lastPointerEvent = event;
+    handleAutoScroll(event);  // jetzt für Mobile + Desktop zuständig
   }
 }
 
@@ -480,17 +480,17 @@ async function refreshBoard() {
 
 
 // ======================================================
-// 🔹 AUTO-SCROLL WHILE DRAGGING (Mobile <1024px)
-//    - Horizontal: in der aktuellen .tasks-Row
-//    - Vertikal: im .board-content Container
+// 🔹 AUTO-SCROLL WHILE DRAGGING (Mobile + Desktop)
+//    - Horizontal: nur Mobile (<1024px) innerhalb .tasks
+//    - Vertikal: Seite / .board-content
 // ======================================================
 
 let autoScrollInterval = null;
 let lastPointerEvent = null;
 
-const AUTO_SCROLL_EDGE = 60;      // Abstand zum Rand (px), ab dem gescrollt wird
-const AUTO_SCROLL_SPEED_MAX = 18; // max. Speed
-const AUTO_SCROLL_SPEED_MIN = 4;
+const AUTO_SCROLL_EDGE = 60;       // Abstand zum Rand (px), ab dem gescrollt wird
+const AUTO_SCROLL_SPEED_MAX = 18;  // max. Speed
+const AUTO_SCROLL_SPEED_MIN = 4;   // min. Speed
 
 const autoScrollState = {
   hSpeed: 0,
@@ -500,17 +500,20 @@ const autoScrollState = {
 };
 
 /**
- * Wird bei jedem pointermove aufgerufen (wenn isDragging true).
- * Berechnet horizontale und vertikale Scroll-Geschwindigkeit.
- * @param {PointerEvent} event
+ * Wird bei jedem pointermove aufgerufen, wenn isDragging == true.
+ * Berechnet horizontale (nur Mobile) und vertikale Scroll-Geschwindigkeit.
  */
 function handleAutoScroll(event) {
-  if (!isMobileDragMode() || !isDragging) {
+  if (!isDragging) {
     stopAutoScroll();
     return;
   }
 
-  const hContainer = getHorizontalScrollContainer();
+  // Horizontal nur im Mobile-Layout
+  const hContainer = isMobileDragMode() ? getHorizontalScrollContainer() : null;
+
+  // Vertikal: entweder .board-content (wenn wirklich scrollbar),
+  // sonst das Dokument (Seite)
   const vContainer = getVerticalScrollContainer();
 
   if (!hContainer && !vContainer) {
@@ -519,11 +522,10 @@ function handleAutoScroll(event) {
   }
 
   const { clientX: x, clientY: y } = event;
-
   let hSpeed = 0;
   let vSpeed = 0;
 
-  // ---------- Horizontal (in .tasks) ----------
+  // ---------- Horizontal (Mobile, .tasks Row) ----------
   if (hContainer) {
     const rect = hContainer.getBoundingClientRect();
     const distLeft = x - rect.left;
@@ -538,11 +540,24 @@ function handleAutoScroll(event) {
     }
   }
 
-  // ---------- Vertikal (in .board-content) ----------
+  // ---------- Vertikal (Board / Seite) ----------
   if (vContainer) {
-    const rectV = vContainer.getBoundingClientRect();
-    const distTop = y - rectV.top;
-    const distBottom = rectV.bottom - y;
+    let distTop, distBottom;
+
+    const isDoc =
+      vContainer === document.scrollingElement ||
+      vContainer === document.documentElement ||
+      vContainer === document.body;
+
+    if (isDoc) {
+      // relativ zum Viewport
+      distTop = y;
+      distBottom = window.innerHeight - y;
+    } else {
+      const rectV = vContainer.getBoundingClientRect();
+      distTop = y - rectV.top;
+      distBottom = rectV.bottom - y;
+    }
 
     if (distTop < AUTO_SCROLL_EDGE) {
       const intensity = 1 - Math.max(distTop, 0) / AUTO_SCROLL_EDGE;
@@ -568,8 +583,8 @@ function handleAutoScroll(event) {
 
 
 /**
- * Aktuelle horizontale Scroll-Row ermitteln (.tasks),
- * in der der Placeholder gerade hängt.
+ * .tasks-Container, in dem der Placeholder gerade hängt
+ * (für horizontalen Scroll im Mobile-Layout).
  */
 function getHorizontalScrollContainer() {
   if (!placeholder) return null;
@@ -578,18 +593,44 @@ function getHorizontalScrollContainer() {
 
 
 /**
- * Vertikalen Scroll-Container ermitteln.
- * Primär: .board-content, Fallback: document.scrollingElement.
+ * Vertikal scrollbarer Container:
+ *  - Mobile: bevorzugt .board-content (ganzes Board)
+ *  - Desktop: bevorzugt die aktuelle .tasks-Spalte (Spalten-Scroll)
+ *  - Fallback: document.scrollingElement (Seite)
  */
 function getVerticalScrollContainer() {
+  // 📱 MOBILE: Board scrollt vertikal
+  if (isMobileDragMode()) {
+    const board = document.querySelector(".board-content");
+    if (board && board.scrollHeight > board.clientHeight + 1) {
+      return board;
+    }
+    return document.scrollingElement || document.documentElement;
+  }
+
+  // 🖥 DESKTOP: Spalte (.tasks) scrollt vertikal
+  if (placeholder) {
+    const col = placeholder.closest(".tasks");
+    if (col && col.scrollHeight > col.clientHeight + 1) {
+      return col;
+    }
+  }
+
+  // Fallback: falls Spalte nicht scrollen kann, Board oder Seite scrollen
   const board = document.querySelector(".board-content");
-  if (board) return board;
+  if (board && board.scrollHeight > board.clientHeight + 1) {
+    return board;
+  }
+
   return document.scrollingElement || document.documentElement;
 }
 
 
+
 /**
  * Startet das Autoscroll-Interval (falls noch nicht aktiv).
+ * Speed & Container werden auf jedem Tick aus autoScrollState gelesen,
+ * damit Richtungswechsel jederzeit funktionieren.
  */
 function startAutoScroll() {
   if (autoScrollInterval) return;
@@ -607,15 +648,23 @@ function startAutoScroll() {
     }
 
     if (vContainer && vSpeed) {
-      vContainer.scrollTop += vSpeed;
+      const isDoc =
+        vContainer === document.scrollingElement ||
+        vContainer === document.documentElement ||
+        vContainer === document.body;
+
+      if (isDoc) {
+        window.scrollBy(0, vSpeed);
+      } else {
+        vContainer.scrollTop += vSpeed;
+      }
     }
 
-    // Nach Scroll: Hover/Placeholder aktualisieren,
-    // damit die Drop-Position weiterhin korrekt bleibt
+    // Nach Scroll: Hover/Placeholder aktualisieren
     if (draggedTask && lastPointerEvent) {
       updateHoverColumn(lastPointerEvent);
     }
-  }, 16); // ca. 60 fps
+  }, 16); // ~60fps
 }
 
 
@@ -631,6 +680,6 @@ function stopAutoScroll() {
   autoScrollState.vContainer = null;
 }
 
-// Beim Loslassen / Canceln immer stoppen
+// Sicherheitshalber beim Loslassen immer stoppen
 document.addEventListener("pointerup", stopAutoScroll);
 document.addEventListener("pointercancel", stopAutoScroll);
