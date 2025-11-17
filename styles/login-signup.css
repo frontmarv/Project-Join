@@ -309,6 +309,7 @@ input[type="checkbox"]:checked+label:hover {
     pointer-events: none;
 }
 
+.name-error-warning,
 .email-taken__err-warning, 
 .confirm-password__err-warning {
     visibility: hidden;

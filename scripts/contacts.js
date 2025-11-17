@@ -108,15 +108,15 @@ async function deleteContact(userkeyToDelete) {
 
 /**
  * Executes the complete contact deletion workflow.
- * Deletes contact, updates UI, and handles responsive layout adjustments.
+ * Removes contact from tasks, deletes from database, updates UI, and handles responsive layout adjustments.
+ * Redirects to index.html if deleting the logged-in user's own contact.
  * @async
  * @returns {Promise<void>}
  */
 async function deleteContactFlow() {
-    let userName = contactName.innerText;
-    userKey = getAndStoreUserId(userName);
+    let userKey = getUserIdByEmail(contactMail.innerHTML)
     await removeContactFromAllTasks(userKey);
-    if (userName == LOGGED_IN_USER) {
+    if (userKey == getUserkeyLoggedInUser()) {
         await deleteContact(userKey);
         window.location.replace("../index.html");
     } else {
@@ -132,6 +132,19 @@ async function deleteContactFlow() {
     removeAnimationClass();
 }
 
+/**
+ * Retrieves the user key of the currently logged-in user.
+ * Searches through raw data to find the key matching the logged-in user's name.
+ * @returns {string|undefined} The user key of the logged-in user, or undefined if not found
+ */
+function getUserkeyLoggedInUser() {
+    for (const key in rawData) {
+        if (rawData[key].name === LOGGED_IN_USER) {
+            loggedInUserKey = key;
+            return loggedInUserKey
+        }
+    }
+}
 
 /**
  * Removes a specific contact from all tasks' assignedContacts arrays (batch update)
@@ -218,7 +231,7 @@ function renderContactsIntoSections(initialLettersArray, userArray) {
             const userName = checkLoggedInUser(userId);
             const email = userId.email;
             const profilImgColor = userId.profilImgColor;
-            const userInitals = getUserNameInitials(userName);
+            const userInitals = getUserNameInitials(cleanName(userName));
             const userImg = getMediumUserProfilImg(profilImgColor, userInitals);
             const userHTML = getUserContactListItemTpl(userName, email, userImg);
             section.insertAdjacentHTML("beforeend", userHTML);

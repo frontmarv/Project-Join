@@ -1,9 +1,10 @@
 /** Regular expression for validating full names (first and last name) */
-const nameInputRegex = /^[A-Za-zÄÖÜäöüß]+\s+[A-Za-zÄÖÜäöüß]+$/;
+const nameInputRegex = /^[a-zA-ZäöüÄÖÜß\-\s]{2,50}$/;
 
 /** @type {HTMLElement} DOM elements for form inputs and validation */
 const nameInput = document.getElementById('name');
 const nameWrapper = document.getElementById('name__wrapper');
+const nameErrorWarning = document.querySelector('.name-error-warning');
 const missmatchWarning = document.getElementById('pw-error-warning');
 const pwWrapper = document.getElementById('password__wrapper');
 const confirmPwWrapper = document.getElementById('confirm-pw__wrapper');
@@ -76,13 +77,19 @@ function handlePasswordInputChange(element) {
 
 /**
  * Validates if the input contains a valid full name
+ * Maximum 2 words allowed (hyphenated names like Ann-Cathrin count as one word)
  * @param {HTMLElement} element - The name input element
  * @returns {boolean} True if name is valid, false otherwise
  */
 function isValidFullName(element) {
-    let inputName = element.value;
-    let testResult = nameInputRegex.test(inputName);
-    return testResult
+    let inputName = element.value.trim();
+    if (!inputName) return false;
+    
+    const testResult = nameInputRegex.test(inputName);
+    const letterCount = (inputName.match(/[a-zA-ZäöüÄÖÜß]/g) || []).length;
+    const wordCount = inputName.split(/\s+/).filter(word => word.length > 0).length;
+    
+    return testResult && letterCount >= 2 && wordCount <= 2;
 }
 
 
@@ -95,6 +102,7 @@ function handleNameValidation(element) {
     let validInput = isValidFullName(element);
     if (element.value === "") {
         nameWrapper.classList.remove('error', 'valid-input');
+        nameErrorWarning.style.visibility= "hidden";
     } else {
         setWrapperColor(validInput, nameWrapper);
     }
@@ -112,9 +120,11 @@ function setWrapperColor(validInput, elementById) {
     elementById.classList.remove('error', 'valid-input');
     if (!validInput) {
         elementById.classList.add('error');
+        nameErrorWarning.style.visibility= "visible";
         formState.isNameValid = false;
     } else {
         elementById.classList.add('valid-input');
+        nameErrorWarning.style.visibility= "hidden";
         formState.isNameValid = true;
     }
 }

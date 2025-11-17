@@ -99,7 +99,7 @@ function displayDlg() {
 function hideDlg() {
     const dlg = document.getElementById('dlg-box');
     const overlay = document.getElementById('overlay');
-    
+
     dlg.classList.remove('show');
     const wasAddTask = dlg.classList.contains('dlg-add-task');
 
@@ -123,7 +123,7 @@ function getUserNameInitials(userName) {
     return userName
         .split(' ')
         .filter(Boolean)
-        .slice(0, 2) 
+        .slice(0, 2)
         .map(word => word[0].toUpperCase())
         .join('');
 }
@@ -148,15 +148,15 @@ function setMinDueDate() {
  * @throws {Error} If no user key is stored or the HTTP request fails.
  */
 async function saveChangesToDB(multipatch) {
-  if (!STORED_USER_KEY) throw new Error('No user key found');
+    if (!STORED_USER_KEY) throw new Error('No user key found');
 
-  const res = await fetch(`${DB_URL}users/${STORED_USER_KEY}.json`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(multipatch)
-  });
+    const res = await fetch(`${DB_URL}users/${STORED_USER_KEY}.json`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(multipatch)
+    });
 
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
 
 
@@ -223,5 +223,20 @@ function addTagToLoggedInUser(userName) {
         return modifiedUserName
     } else {
         return userName
+    }
+}
+
+
+/**
+ * Looks up a user's Firebase key by their email address and stores it in `STORED_USER_KEY`.
+ * @param {string} existingUserMail - The email address to search for.
+ * @returns {string|undefined} The found Firebase key, or undefined if not found.
+ */
+function getUserIdByEmail(existingUserMail) {
+    for (const key in rawData) {
+        if (rawData[key].email === existingUserMail) {
+            STORED_USER_KEY = key;
+            return STORED_USER_KEY
+        }
     }
 }

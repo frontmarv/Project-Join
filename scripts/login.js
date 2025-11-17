@@ -175,7 +175,7 @@ async function attemptLogin() {
     let existingUser = dataArray.find(user => user.email === email.value);
     let loginIsValid = validateLoginInputs(existingUser);
     if (loginIsValid) {
-        getAndStoreUserId(existingUser.name);
+        getUserIdByEmail(existingUser.email);
         let multipatch = { "loggedIn": true };
         await saveChangesToDB(multipatch);
         sessionStorage.setItem('loggedIn', 'user')
