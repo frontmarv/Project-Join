@@ -26,14 +26,14 @@ function getAddContactDlgTpl() {
                     <div class="inputfields">
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-name-input" type="text" placeholder="Name (and Surname)" aria-label="name" onkeyup="resetInputInfo()">
+                            <input id="contact-dlg-name-input" type="text" placeholder="Name (and Surname)" aria-label="name" onkeyup="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
                         <p class="inputfield_fill-in-info">No middlenames, connect double names with "-", max. 50 letters</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="resetInputInfo()">
+                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
                         <p class="inputfield_fill-in-info" id="email-error-warning">Enter a valid e-mail adress</p>
@@ -84,14 +84,14 @@ function getEditContactDlgTpl() {
                     <div class="inputfields">
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-name-input" type="text" placeholder="Name (and Surname)" aria-label="name" onkeyup="resetInputInfo()">
+                            <input id="contact-dlg-name-input" type="text" placeholder="Name (and Surname)" aria-label="name" onkeyup="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
                         <p class="inputfield_fill-in-info">No middlenames, connect double names with "-", max. 50 letters</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="resetInputInfo()">
+                            <input id="contact-dlg-email-input" type="email" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
                         <p class="inputfield_fill-in-info" id="email-error-warning">Enter a valid e-mail adress</p>
@@ -173,7 +173,7 @@ function getDeleteContactDlg() {
         <div class="delete-contact__content ">
             <h2>Permanently delete contact?</h2>
             <div class="inputfields__button-holder">
-                <button class="empty-btn" onclick="removeAnimationClass(), removeDeleteClass()">Cancel<img src="../assets/img/close.svg"
+                <button class="empty-btn" onclick="removeAnimationClass()">Cancel<img src="../assets/img/close.svg"
                         alt="icon of the letter X"></button>
                 <button class="filled-btn" onclick="deleteContactFlow()">Delete Contact<img src="../assets/img/done.svg"
                         alt="icon of a checkmark"></button>

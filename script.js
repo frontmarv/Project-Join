@@ -102,11 +102,11 @@ function hideDlg() {
 
     dlg.classList.remove('show');
     const wasAddTask = dlg.classList.contains('dlg-add-task');
-
+    const wasDeleteContact = dlg.classList.contains('delete-contact__dialog');
     setTimeout(() => {
         dlg.classList.add('d-none');
         overlay.classList.add('d-none');
-
+        if (wasDeleteContact) { removeDeleteClass(); }
         if (wasAddTask) dlg.classList.remove('dlg-add-task');
         dlg.innerHTML = "";
     }, 300);
