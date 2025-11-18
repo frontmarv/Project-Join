@@ -183,7 +183,7 @@
 }
 
 .dlg-edit__main__task-assignments-box {
-  min-height: 8.5rem ;
+  height: 9rem;
 }
 
 .dlg-edit__main__assigned-user-container {
