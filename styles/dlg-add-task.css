@@ -1,8 +1,7 @@
 .dlg-add-task {
   padding-top: 4rem;
-  min-height: fit-content;
   height: 60vh;
-  min-width: fit-content;
+  width: 70%;
   transition: transform 0.5s ease-in-out;
 }
 

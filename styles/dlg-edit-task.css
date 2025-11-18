@@ -290,6 +290,7 @@
   width: 8rem;
   height: 3.5rem;
   font-size: 1.25rem;
+  gap: 0.5rem;
 }
 
 .dlg-edit__footer__save-btn {
