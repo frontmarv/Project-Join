@@ -245,9 +245,6 @@ textarea.input-error:focus,
 }
 
 .empty-btn {
-  border-radius: 0.625rem;
-  cursor: pointer;
-  padding: 0.625rem;
   gap: 0.6rem;
 }
 
@@ -256,8 +253,6 @@ textarea.input-error:focus,
 }
 
 .filled-btn {
-  border-radius: 0.625rem;
-  cursor: pointer;
   padding: 0.625rem;
   gap: 0.6rem;
 }

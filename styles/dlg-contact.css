@@ -42,8 +42,7 @@
     flex-direction: column;
     width: 100%;
     gap: 2rem;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
 }
 
 .show {
@@ -171,9 +170,8 @@
 
 .inputfields__button-holder {
     display: flex;
-    flex-direction: row;
-    gap: 1.5rem;
-    height: 3.375rem;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .empty-btn {
