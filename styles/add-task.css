@@ -26,39 +26,39 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .add-contact__dialog {
-    display: flex;
-    flex-direction: row;
-    min-height: 500px;
-    height: 50vh;
-    max-height: 43.75rem;
-    width: 90vw;
-    max-width: 93.75rem;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    border-radius: 1.875rem;
-    background-color: var(--color-white);
-    padding: 0rem;
-    z-index: 1000;
-    opacity: 0;
-    transform: translate(200vw, -50%);
-    transition: all 300ms ease-in-out;
+  display: flex;
+  flex-direction: row;
+  min-height: 500px;
+  height: 50vh;
+  max-height: 43.75rem;
+  width: 90vw;
+  max-width: 93.75rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border-radius: 1.875rem;
+  background-color: var(--color-white);
+  padding: 0rem;
+  z-index: 1000;
+  opacity: 0;
+  transform: translate(200vw, -50%);
+  transition: all 300ms ease-in-out;
 }
 
 .show {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-    transition: all 300ms ease-in-out;
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  transition: all 300ms ease-in-out;
 }
 
 #task-form {
-    max-height: 65vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding-right: 8px;
+  max-height: 65vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-right: 8px;
 }
 
 .task-content__container input,
@@ -71,7 +71,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 0.5rem;
   font-size: 1rem;
   box-sizing: border-box;
-  transition: border-color .15s ease;
+  transition: border-color 0.15s ease;
 }
 input[type="date"]:focus,
 .task-content__container input:focus,
@@ -96,7 +96,6 @@ textarea.input-error:focus,
   border-color: var(--color-error) !important;
 }
 
-
 .field-error {
   color: var(--color-error);
   font-size: 0.875rem;
@@ -104,7 +103,9 @@ textarea.input-error:focus,
   margin-top: 0.25rem;
   display: none;
 }
-.has-error .field-error { display: block; }
+.has-error .field-error {
+  display: block;
+}
 
 .add-task__field {
   display: flex;
@@ -178,29 +179,41 @@ textarea.input-error:focus,
   margin-top: 0.5rem;
 }
 
+.dlg-edit__main__task-category-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.dlg-edit__main__category-title {
+  color: var(--color-maincolor);
+  margin-bottom: 0.5rem;
+}
+
 @media (max-width: 1300px) {
   .priority-options {
     flex-direction: column;
     align-items: center;
-} .priority-options-btn {
+  }
+  .priority-options-btn {
     width: 10rem !important;
-}
+  }
 }
 
 @media (max-width: 1024px) {
   .priority-options {
     flex-direction: row;
     justify-content: center;
-} .priority-options-btn {
+  }
+  .priority-options-btn {
     width: 8.5rem !important;
-}
+  }
 }
 
 @media (max-width: 500px) {
   .priority-options {
     flex-direction: column;
     justify-content: center;
-}
+  }
 }
 
 @media (max-width: 500px) {
@@ -208,16 +221,17 @@ textarea.input-error:focus,
     font-weight: 400;
     padding: 0.75rem 1rem;
     width: 10rem !important;
-} .dlg-edit__subtask-list {
-  max-height: 75px;
-  min-height: 75px;
-}
+  }
+  .dlg-edit__subtask-list {
+    max-height: 75px;
+    min-height: 75px;
+  }
 }
 
 @media (max-width: 500px) {
-  .task-content__container textarea  {
+  .task-content__container textarea {
     height: 100px;
-}
+  }
 }
 
 .grey-seperator {
@@ -249,7 +263,7 @@ textarea.input-error:focus,
 }
 
 .empty-btn:hover img {
-  content: url('../assets/img/close-hover.svg');
+  content: url("../assets/img/close-hover.svg");
 }
 
 .filled-btn {
@@ -262,10 +276,10 @@ textarea.input-error:focus,
 }
 
 .alert-overlay {
-    width: fit-content;
-    height: fit-content;
-    padding: 3rem;
-    min-height: unset;
+  width: fit-content;
+  height: fit-content;
+  padding: 3rem;
+  min-height: unset;
 }
 
 .alert-box {
@@ -371,7 +385,6 @@ textarea.input-error:focus,
   #required-mobile {
     font-size: 16px;
   }
-
 }
 
 .category-selection {
@@ -379,7 +392,6 @@ textarea.input-error:focus,
   user-select: none;
   font-size: 1.5rem;
 }
-
 
 .selector {
   font-size: inherit;

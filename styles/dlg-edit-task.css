@@ -182,6 +182,10 @@
   transform: scale(1.1);
 }
 
+.dlg-edit__main__task-assignments-box {
+  min-height: 8.5rem ;
+}
+
 .dlg-edit__main__assigned-user-container {
   display: flex;
   margin-top: 0.5rem;
