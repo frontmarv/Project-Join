@@ -210,6 +210,17 @@ function onPointerMove(event) {
     lastPointerEvent = event;
     handleAutoScroll(event);  // jetzt für Mobile + Desktop zuständig
   }
+
+  // 🆕 ALWAYS check if start column became empty while dragging
+  if (isDragging && startCol && placeholder) {
+    const hasRealTask = startCol.querySelector(".task:not(.task--placeholder):not(.dragging)");
+    const hasDragPlaceholder = startCol.querySelector(".task--placeholder");
+
+    // Wenn die Start-Spalte leer geworden ist → "No tasks"-Placeholder anzeigen
+    if (!hasRealTask && !hasDragPlaceholder) {
+        showNoTasksPlaceholderIfEmpty(startCol);
+    }
+}
 }
 
 
@@ -319,41 +330,52 @@ function handleTaskClick(task) {
 // 🔹 DRAG STOP / STATE UPDATE
 // ======================================================
 
-/**
- * Finalizes the drag operation and updates Firebase if necessary.
- * Also schedules global click suppression for a short window,
- * preventing synthetic clicks (Firefox) after a drop.
- * @param {PointerEvent} event - Pointer event.
- */
 async function stopDragging(event) {
   if (!draggedTask) return;
 
   document.removeEventListener("touchmove", preventTouchScroll);
-
   setClickSuppression(300);
 
-  const { id, newState, oldState } = getDragContextData();
-  wasDroppedInSameColumn = newState === oldState;
+  const { id, newState, oldState, isValidDrop } = getDragContextData();
 
   finalizeDraggedTaskStyle(event);
-  moveTaskToPlaceholder();
 
-  await handleTaskStateChange(id, newState, oldState);
+  if (!isValidDrop) {
+    // 🛑 Ungültiges Ziel → zurück zum Start
+    startCol.insertBefore(draggedTask, placeholder);
+  } else {
+    // ✔ Valides Ziel → auf Placeholder ablegen
+    moveTaskToPlaceholder();
+  }
+
+  // Entferne Placeholder
+  placeholder?.remove();
+  placeholder = null;
+
+  // Firebase-Update nur, wenn Ziel gültig & wirklich geändert
+  if (isValidDrop && id && newState && oldState && newState !== oldState) {
+    await updateTaskState(id, newState);
+    await refreshBoard();
+  }
+
+  if (startCol) {
+    showNoTasksPlaceholderIfEmpty(startCol);
+  }
+
   resetDragReferences();
 }
 
 
-/**
- * Retrieves current drag context (task ID, old/new state).
- * @returns {{id: string|null, newState: string|null, oldState: string|null}}
- */
+
 function getDragContextData() {
   const taskId = draggedTask.getAttribute("data-task-id");
-  const dropCol = placeholder?.closest(".tasks") || startCol;
+  const dropCol = placeholder?.closest(".tasks");  // nur echte Tasks-Spalten
   const newState = dropCol ? mapColumnIdToTaskState(dropCol.id) : null;
   const oldState = startCol ? mapColumnIdToTaskState(startCol.id) : null;
-  return { id: taskId, newState, oldState };
+  const isValidDrop = !!dropCol;  // 🎯 gültig NUR wenn eine .tasks Spalte getroffen wurde
+  return { id: taskId, newState, oldState, isValidDrop };
 }
+
 
 
 /**

@@ -60,15 +60,21 @@ function updateHoverColumn(event) {
 }
 
 
-/**
- * Handles transition between hovered columns during dragging.
- * Ensures placeholders update visually when moving between columns.
- * @param {HTMLElement|null} col - The newly hovered column.
- * @returns {void}
- */
 function handleColumnChange(col) {
-  if (col) handleNewHoverColumn(col);
-  if (lastHoverCol && lastHoverCol !== col) showNoTasksPlaceholderIfEmpty(lastHoverCol);
+  // Neue Spalte → Task-Placeholder verschieben
+  if (col) {
+    handleNewHoverColumn(col);
+
+    // ❗ WICHTIG: Wenn die Spalte leer ist (und kein Drag-Placeholder drin ist)
+    // dann NO-ACTIVE-PLACEHOLDER anzeigen
+    showNoTasksPlaceholderIfEmpty(col);
+  }
+
+  // Alte Spalte → ggf. wieder Placeholder anzeigen
+  if (lastHoverCol && lastHoverCol !== col) {
+    showNoTasksPlaceholderIfEmpty(lastHoverCol);
+  }
+
   lastHoverCol = col;
 }
 
@@ -100,22 +106,25 @@ function hideNoTasksPlaceholder(col) {
 }
 
 
-/**
- * Ensures that a "No tasks" placeholder is visible in empty columns
- * and hidden when at least one task exists.
- * @param {HTMLElement} col - The column element to update.
- * @returns {void}
- */
 function showNoTasksPlaceholderIfEmpty(col) {
   if (!col) return;
+
+  // ❗ NEW: Wenn ein DRAG-PLACEHOLDER in der Spalte ist → NICHT leer!
+  const hasDragPlaceholder = col.querySelector(".task--placeholder");
+  if (hasDragPlaceholder) {
+    hideExistingPlaceholder(col);
+    return;
+  }
+
+  // Normale Task-Suche (ohne Drag-Placeholder)
   const hasRealTask = col.querySelector(".task:not(.task--placeholder):not(.dragging)");
+
   if (hasRealTask) {
     hideExistingPlaceholder(col);
   } else {
     ensureNoTasksPlaceholder(col);
   }
 }
-
 
 /**
  * Hides an existing placeholder element within a given column.
