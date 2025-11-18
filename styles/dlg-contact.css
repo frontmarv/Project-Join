@@ -180,6 +180,8 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    height: 3.375rem;
+    gap: 1.5rem;
 }
 
 .empty-btn {
@@ -240,6 +242,12 @@
         right: 1rem;
     }
 
+    .show {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+        transition: all 300ms ease-in-out;
+    }
+
     .close-button__wrapper img {
         content: url('../assets/img/close-white.svg');
     }
@@ -277,6 +285,7 @@
         align-items: center;
         height: fit-content;
         margin-top: 1rem;
+
     }
 
     .profil-img__wrapper img {
@@ -322,12 +331,12 @@
         min-width: 7.875rem;
         width: fit-content;
         font-size: 16px;
-        padding: 0.5rem;
+        padding: 0.7rem;
     }
 
     .empty-btn {
         font-size: 16px;
-        padding: 0.5rem;
+        padding: 0.7rem;
     }
 
     .inputfields__button-holder {

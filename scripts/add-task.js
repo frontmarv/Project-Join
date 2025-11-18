@@ -1,8 +1,7 @@
 let chosenPriority = "medium";
 const alertDialog = document.getElementById('alert-dlg-box');
 const alertOverlay = document.getElementById('alert-overlay');
-window.addEventListener("resize", relocateRequiredInfo);
-window.addEventListener("load", relocateRequiredInfo);
+
 
 /**
  * Initializes the Add Task form: loads data, sets up handlers and validation.
@@ -350,49 +349,4 @@ function resetContactList() {
     img.dataset.checked = 'false';
     img.src = '../assets/img/checkbox-unchecked.svg';
   });
-}
-
-
-/**
- * Handles layout adjustments for small screens.
- */
-function relocateRequiredInfo() {
-  isSmallScreen = window.innerWidth < 1025;
-  let currentPath = window.location.pathname;
-  let addTaskPath = "/pages/add-task.html";
-  if (currentPath.endsWith(addTaskPath)) {
-    toggleFirstInfoBox(isSmallScreen);
-    toggleSecondInfoBox(isSmallScreen);
-  }
-}
-
-
-/**
- * Shows or hides the first required-info box based on screen size.
- * @param {boolean} isSmallScreen - True if current screen width < 1025px.
- */
-function toggleFirstInfoBox(isSmallScreen) {
-  let requiredInfo = document.getElementById("required-info");
-  if (!requiredInfo) return;
-  if (isSmallScreen && !requiredInfo.classList.contains("d-none")) {
-    requiredInfo.classList.add("d-none");
-  } else if (!isSmallScreen && requiredInfo.classList.contains("d-none")) {
-    requiredInfo.classList.remove("d-none");
-  }
-}
-
-
-/**
- * Handles showing/hiding of the second required-info box for mobile.
- * @param {boolean} isSmallScreen - True if current screen width < 1025px.
- */
-function toggleSecondInfoBox(isSmallScreen) {
-  let rightColumn = document.querySelector(".add-task__right-column");
-  if (!rightColumn) return;
-  if (isSmallScreen && !document.getElementById("required-mobile")) {
-    let insertHTML = getFieldRequiredInfo();
-    rightColumn.innerHTML += insertHTML;
-  } else if (!isSmallScreen && document.getElementById("required-mobile")) {
-    document.getElementById("required-mobile").remove();
-  }
 }
