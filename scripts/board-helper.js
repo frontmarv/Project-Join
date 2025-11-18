@@ -143,39 +143,49 @@ function scrollToLastToggledSubtask() {
  */
 let currentSortMode = "dueDate";
 
+function initCustomSortSelect() {
+    const wrapper = document.getElementById("custom-sort-select");
+    const display = document.getElementById("sort-selected-text");
+    const dropdown = wrapper.querySelector(".custom-sort-options");
+    const trigger = wrapper.querySelector(".custom-sort-selected");
 
-/**
- * Initializes the sorting dropdown in the board header.
- * Synchronizes the current sort mode and listens for user changes.
- */
-function initSorting() {
-  const select = document.getElementById("task-sort-select");
-  syncDropdownWithSortMode(select);
-  bindSortDropdownChange();
+    trigger.addEventListener("click", () => {
+        const isHidden = dropdown.classList.contains("d-none");
+
+        if (isHidden) {
+            dropdown.classList.remove("d-none");
+            wrapper.classList.add("is-open");
+        } else {
+            dropdown.classList.add("d-none");
+            wrapper.classList.remove("is-open");
+        }
+    });
+
+    wrapper.querySelectorAll("li").forEach(option => {
+        option.addEventListener("click", () => {
+            const val = option.dataset.value;
+            const text = option.innerText;
+
+            display.innerText = text;
+            currentSortMode = val;
+
+            dropdown.classList.add("d-none");
+            wrapper.classList.remove("is-open");
+            loadTasks();
+        });
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!wrapper.contains(event.target)) {
+            dropdown.classList.add("d-none");
+            wrapper.classList.remove("is-open");
+        }
+    });
+
+    const activeOption = wrapper.querySelector(`li[data-value="${currentSortMode}"]`);
+    if (activeOption) display.innerText = activeOption.innerText;
 }
 
-
-/**
- * Synchronizes the dropdown UI with the current sorting mode.
- * @param {HTMLSelectElement|null} select - Sorting dropdown element.
- */
-function syncDropdownWithSortMode(select) {
-  if (select) select.value = currentSortMode;
-}
-
-
-/**
- * Binds a change event listener to the sorting dropdown.
- * Updates the current sort mode and reloads all tasks when changed.
- */
-function bindSortDropdownChange() {
-  document.addEventListener("change", event => {
-    const select = event.target.closest("#task-sort-select");
-    if (!select) return;
-    currentSortMode = select.value;
-    loadTasks();
-  });
-}
 
 
 /**

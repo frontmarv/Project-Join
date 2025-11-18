@@ -95,11 +95,18 @@
                 <section id="board" class="board-content content-wrapper">
                     <div id="board-head" class="board__head">
                         <h1>Board</h1>
-                        <select id="task-sort-select" class="board__sort-select">
-                            <option value="dueDate">Sort by: Due Date</option>
-                            <option value="priority">Sort by: Priority</option>
-                            <option value="title">Sort by: Title (A–Z)</option>
-                        </select>
+                        <div class="custom-sort-select" id="custom-sort-select">
+                            <div class="custom-sort-selected">
+                                <span class="prefix">Sort by:</span>
+                                <span id="sort-selected-text">Due Date</span>
+                                <span class="sort-arrow"></span>
+                            </div>
+                                <ul class="custom-sort-options d-none">
+                                    <li data-value="dueDate">Due Date</li>
+                                    <li data-value="priority">Priority</li>
+                                    <li data-value="title">Title (A–Z)</li>
+                                </ul>
+                        </div>
                         <div class="task-search-and-add-box">
                                 <div class="board__head-searchbox-wrapper">
                                     <div class="searchbox-wrapper">

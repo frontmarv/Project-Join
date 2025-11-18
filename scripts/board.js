@@ -75,8 +75,8 @@ async function initBoard() {
   markOverdueDates();
   updateAllPlaceholders();
   initSearch();
-  initSorting();
   enableSearchBoxClickFocus();
+  initCustomSortSelect();
 }
 
 
