@@ -395,6 +395,14 @@ textarea.input-error:focus,
 
 @media screen and (max-width: 1024px) {
 
+  #task-content {
+    height: calc(100vh - 260px);
+  }
+
+  .dlg-edit__subtask-list {
+    margin-bottom: 1rem;
+  }
+
   .required {
     align-self: flex-start;
   }
