@@ -128,7 +128,6 @@ async function deleteContactFlow() {
         showContact = false;
         handleResizeScreenContacts();
     }
-    removeDeleteClass();
     removeAnimationClass();
 }
 
@@ -180,7 +179,7 @@ async function removeContactFromAllTasks(contactToRemove) {
  * @returns {void}
  */
 function removeDeleteClass() {
-    dialog.classList.remove('delete-contact__dialog');
+        dialog.classList.remove('delete-contact__dialog');
 }
 
 

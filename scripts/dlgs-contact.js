@@ -62,6 +62,7 @@ function showDlgWtihAnimation() {
 function removeAnimationClass() {
     dialog.classList.remove('show');
     setTimeout(() => {
+        removeDeleteClass();
         hideDlg();
     }, 300);
 }
@@ -146,9 +147,8 @@ async function putNewContactToDB() {
         renderContactList();
         setContactCardtoInvisible();
         addContactSuccessDlg();
-    }else if(emailNotAlreadyTaken !== 0){
-        document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
-        document.getElementById('email-error-warning').style.opacity = '1';
+    } else if (emailNotAlreadyTaken !== 0) {
+        styleEmailAlreadyTaken();
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
     }
     else {
@@ -171,8 +171,7 @@ async function validateAndSaveData() {
         saveDataEditContactDlg(data);
         editContactSuccessDlg();
     } else if (emailNotAlreadyTaken !== 0) {
-        document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
-        document.getElementById('email-error-warning').style.opacity = '1';
+        styleEmailAlreadyTaken();
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
     }
     else {
@@ -180,6 +179,19 @@ async function validateAndSaveData() {
         validateInputField(document.getElementById('contact-dlg-email-input'), isValidEmail, true);
     }
 }
+
+
+/**
+ * Styles the email input field to indicate the email is already taken.
+ * Updates error message text, shows the warning, and applies error border color.
+ * @returns {void}
+ */
+function styleEmailAlreadyTaken() {
+    document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
+    document.getElementById('email-error-warning').style.opacity = '1';
+    document.getElementById('contact-dlg-email-input').closest('.inputfield__wrapper').classList.add('error');
+}
+
 
 /**
  * Checks if an email address already exists in the database.
@@ -199,8 +211,16 @@ async function checkEmailAlreadyExists(data) {
 }
 
 
+/**
+ * Resets all input field styling to default state.
+ * Resets border colors to light grey, hides error messages, and resets email warning text.
+ * @returns {void}
+ */
 function resetInputInfo() {
-    document.querySelectorAll('.inputfield__wrapper').forEach(element => element.style.borderColor = 'var(--color-lightgrey)');
+    document.querySelectorAll('.inputfield__wrapper').forEach(element => {
+        element.classList.remove('error');
+        element.classList.remove('success');
+    });
     document.querySelectorAll('.inputfield_fill-in-info').forEach(element => element.style.opacity = '0');
     document.getElementById('email-error-warning').innerHTML = 'Enter a valid e-mail adress';
 }
@@ -285,17 +305,21 @@ async function validateInputField(input, validationFn, submit) {
     const infoText = input.closest('.inputfield-section').querySelector('.inputfield_fill-in-info');
     if (value.length > 0 || submit) {
         if (await validationFn(value)) {
-            wrapper.style.borderColor = 'var(--color-success)';
+            wrapper.classList.remove('error');
+            wrapper.classList.add('success');
             infoText.style.opacity = '0';
         } else {
-            wrapper.style.borderColor = 'var(--color-error)';
+            wrapper.classList.remove('success');
+            wrapper.classList.add('error');
             infoText.style.opacity = '1';
         }
     } else {
-        wrapper.style.borderColor = 'var(--color-lightgrey)';
+        wrapper.classList.remove('error');
+        wrapper.classList.remove('success');
         infoText.style.opacity = '0';
     }
 }
+
 
 /**
  * Validates username input field and applies visual feedback via border color.
@@ -306,6 +330,7 @@ function validateUsernameInput(input) {
     validateInputField(input, isValidUsername);
 }
 
+
 /**
  * Validates email input field and applies visual feedback via border color.
  * @param {HTMLInputElement} input - The input element being validated
@@ -314,6 +339,7 @@ function validateUsernameInput(input) {
 function validateEmailInput(input) {
     validateInputField(input, isValidEmail);
 }
+
 
 /**
  * Validates phone input field and applies visual feedback via border color.

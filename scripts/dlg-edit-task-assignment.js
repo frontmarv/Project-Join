@@ -299,6 +299,13 @@ function getMoreUsersSvg(count) {
 function refreshAssignedUserContainer(c) {
   const ids = getSelectedAssignmentIds(), max = 5;
   const shown = ids.slice(0, max).map(id => users.find(u => u.id === id)).filter(Boolean);
+  if (ids.length === 0) {
+    c.innerHTML = `
+    <p class="no-users">No user assigned</p>
+  `;
+  return;
+  }
+  else {
   c.innerHTML = shown.map(u => `
     <div class="dlg-edit__user-box" title="${u.name}">
       ${getUserAvatarSvg(u)}
@@ -309,7 +316,7 @@ function refreshAssignedUserContainer(c) {
       <div class="dlg-edit__user-box" title="+${more} Users">
         ${getMoreUsersSvg(more)}
       </div>`;
-  }
+  } }
 }
 
 
