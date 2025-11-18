@@ -116,6 +116,7 @@ textarea.input-error:focus,
 .required {
   font-size: 1rem;
   margin-bottom: 0.3rem;
+  align-items: baseline;
 }
 
 .required--after::after {
@@ -243,11 +244,10 @@ textarea.input-error:focus,
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: end;
   gap: 1rem;
   margin-top: 2.5rem;
   max-width: 1000px;
-  height: 2.5rem;
+  height: 4rem;
   flex-shrink: 0;
 }
 
@@ -255,7 +255,7 @@ textarea.input-error:focus,
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  margin-bottom: 0.3rem;
+  align-items: center;
 }
 
 .empty-btn {
