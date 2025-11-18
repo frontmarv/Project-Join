@@ -19,6 +19,7 @@ async function initAddTask() {
   dueDateValidation();
   bindLiveRequiredClear('title', 'title-error');
   setMinDueDate();
+  
 }
 
 const focusOrder = [
@@ -265,6 +266,8 @@ function resetCreatedTaskForm(form) {
   document.getElementById('category-hidden').value = '';
   updateCategoryValidity();
   resetPriorityButtons?.();
+  resetContactList();
+  refreshAssignedUserContainer();
 }
 
 
@@ -329,7 +332,7 @@ function clearTask() {
   updateCategoryValidity();
   dueDateValidation();
   clearAllErrors(form);
-  refreshAssignedUserContainer(c)
+  refreshAssignedUserContainer();
 }
 
 

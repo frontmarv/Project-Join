@@ -300,7 +300,7 @@ function refreshAssignedUserContainer(c) {
   const ids = getSelectedAssignmentIds(), max = 5;
   const shown = ids.slice(0, max).map(id => users.find(u => u.id === id)).filter(Boolean);
   if (ids.length === 0) {
-    c.innerHTML = `
+    document.getElementById('assigned-user').innerHTML = `
     <p class="no-users">No user assigned</p>
   `;
   return;
