@@ -60,6 +60,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  overflow: auto;
 }
 
 .task-content__container input,
@@ -176,7 +177,7 @@ textarea.input-error:focus,
   padding-left: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
   max-width: 500px;
 }
 
