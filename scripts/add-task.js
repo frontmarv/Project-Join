@@ -19,7 +19,12 @@ async function initAddTask() {
   dueDateValidation();
   bindLiveRequiredClear('title', 'title-error');
   setMinDueDate();
-  
+  setColumnWidth();
+}
+
+function setColumnWidth() {
+  document.querySelector('.add-task__left-column').classList.add('column-width');
+  document.querySelector('.add-task__right-column').classList.add('column-width')
 }
 
 const focusOrder = [
