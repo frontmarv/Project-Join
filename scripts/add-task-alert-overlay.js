@@ -27,7 +27,7 @@ function showAddTaskDlgWtihAnimation() {
     if (isBoardPage()) {
       setTimeout(() => {
         closeAddTaskDlgWithAnimation();
-      }, 2000);
+      }, 1500);
     }
 }
 
@@ -91,15 +91,24 @@ function closeBoardAddTaskDialogIfExists() {
  * - On add-task.html → shows both buttons:
  *     - "Add more tasks"
  *     - "Go to Board"
- * - On board.html → hides all buttons (the alert auto-closes instead).
+ * - On board.html → no buttons are rendered and the dialog receives a
+ *     special CSS class ("add-contact__dialog-board") applied to
+ *     the container element with ID "alert-dlg-box".
  *
- * @returns {string} The HTML string for the alert dialog content.
+ * Note:
+ * This function both:
+ *   1. Modifies DOM elements directly (adds a class to #alert-dlg-box)
+ *   2. Returns an HTML string for the alert dialog markup
+ *
+ * @returns {string} HTML string containing the alert dialog structure.
  */
 function getTaskAddDlg() {
     const onBoard = isBoardPage();
-
+  if (onBoard) {
+    document.getElementById('alert-dlg-box').classList.add('add-contact__dialog-board');
+  }
     return /*html*/ `
-      <div class="alert-overlay">
+      <div class="alert-overlay ${onBoard ? "alert-overlay-board" : ""}">
         <h2 id="alert-message">Task added successfully!</h2>
         <div class="alert-buttons">
           
