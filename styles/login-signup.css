@@ -128,7 +128,7 @@ h1 {
     justify-content: center;
     align-items: center;
     width: 100%;
-    gap: 2rem;
+    gap: 40px;
 }
 
 .useraccess-form__btnholder {
@@ -315,7 +315,7 @@ input[type="checkbox"]:checked+label:hover {
     visibility: hidden;
     position: absolute;
     left: 0;
-    top: 3.625rem;
+    top: 53px;
     font-size: 0.875rem;
     color: var(--color-error);
 }
@@ -361,10 +361,6 @@ input[type="checkbox"]:checked+label:hover {
 
     .inputfield__wrapper {
         width: calc(183px + 23vw);
-    }
-
-    .form__inputfields {
-        gap: 24px;
     }
 
     .useraccess-form__btnholder {
