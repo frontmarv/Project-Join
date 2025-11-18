@@ -50,11 +50,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transform: translate(-50%, -50%);
   transition: all 300ms ease-in-out;
 }
-
+#task-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 96px);
+}
 #task-form {
-  max-height: 65vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  flex: 1;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -142,6 +145,10 @@ textarea.input-error:focus,
   flex-direction: row;
   align-items: stretch;
   margin-top: 4rem;
+  flex: 1;                /* nimmt verbleibenden Raum ein */
+  overflow-y: auto;       /* scrollt bei Bedarf */
+  min-height: 0;          /* WICHTIG für korrektes Flex-Scrolling */
+
 }
 
 .task-content__container textarea {
@@ -244,8 +251,8 @@ textarea.input-error:focus,
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 1rem;
-  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  margin-top: auto;
   max-width: 1000px;
   height: 4rem;
   flex-shrink: 0;
@@ -480,4 +487,9 @@ textarea.input-error:focus,
 .task-content__container select.input-error:focus,
 .category-selection .selector.input-error:focus {
   border-color: var(--color-error) !important;
+}
+
+.no-users {
+  font-size: 1.25rem;
+  margin-left: 0.3rem;
 }

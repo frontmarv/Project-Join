@@ -330,6 +330,7 @@ function clearTask() {
   updateCategoryValidity();
   dueDateValidation();
   clearAllErrors(form);
+  refreshAssignedUserContainer(c)
 }
 
 
