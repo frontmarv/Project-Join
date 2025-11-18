@@ -160,8 +160,11 @@ textarea.input-error:focus,
   height: 200px;
 }
 
+.column-width {
+  width: 50%;
+}
+
 .add-task__left-column {
-  /* width: 50%; */
   padding-right: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -180,7 +183,6 @@ textarea.input-error:focus,
 }
 
 .add-task__right-column {
-  /* width: 50%; */
   padding-left: 1.25rem;
   display: flex;
   flex-direction: column;
