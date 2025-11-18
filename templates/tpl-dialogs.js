@@ -136,7 +136,7 @@ function getTaskEditDlgTpl(task) {
                 <span class="dlg-edit__main__assignments-title">Assigned to</span>
                     <div class="contacts-selection" id="contact-select">
                       <div class="search-wrapper">
-                        <input type="text" id="contact-search" class="selector" placeholder="Search contacts to assign..." autocomplete="off"/>
+                        <input type="text" id="contact-search" class="selector" placeholder="Search contacts" autocomplete="off"/>
                       </div>
                       <ul class="contact-options"></ul>
                     </div>

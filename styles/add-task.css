@@ -53,10 +53,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #task-content {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 96px);
+  /* height: calc(100vh - 96px); */
 }
 #task-form {
-  flex: 1;
+  /* flex: 1; */
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -154,7 +154,7 @@ textarea.input-error:focus,
 }
 
 .add-task__left-column {
-  width: 50%;
+  /* width: 50%; */
   padding-right: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -173,7 +173,7 @@ textarea.input-error:focus,
 }
 
 .add-task__right-column {
-  width: 50%;
+  /* width: 50%; */
   padding-left: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -186,6 +186,7 @@ textarea.input-error:focus,
   justify-content: space-between;
   gap: 0.625rem;
   margin-top: 0.5rem;
+  padding: 0 0.5rem;
 }
 
 .dlg-edit__main__task-category-box {
@@ -364,7 +365,7 @@ textarea.input-error:focus,
     padding: 10px 16px;
     background: var(--color-background);
     box-sizing: border-box;
-    z-index: 1001;
+    z-index: 1100;
   }
 
   .task-content__footer-btn {
@@ -418,7 +419,6 @@ textarea.input-error:focus,
   width: 100%;
   max-height: 12.5rem;
   overflow-y: auto;
-
   background: #fff;
   border: none;
   border-radius: 0 0 0.5rem 0.5rem;
@@ -487,5 +487,5 @@ textarea.input-error:focus,
 
 .no-users {
   font-size: 1.25rem;
-  margin-left: 0.3rem;
+  margin-left: 0.5rem;
 }
