@@ -203,9 +203,9 @@ function renderSubtaskItem(key, st, taskId) {
       <div class="deletebox-wrapper">
         <div class="separator"></div>
         <img class="subtask-delete-btn"
-          src="../assets/img/delete.svg"
-          alt="delete subtask"
-          onmousedown="onDeleteSubtaskMouseDown(event, '${taskId}', '${key}', this)">
+            src="../assets/img/delete.svg"
+            alt="delete subtask"
+            onmousedown="event.preventDefault(); showDeleteSubtaskConfirm('${taskId}', '${key}')">
       </div>
     </div>
   `;
@@ -239,13 +239,13 @@ function onSubtaskRowMouseDown(event, taskId, subtaskKey, rowEl) {
  * @param {string} subtaskKey - Subtask key.
  * @param {HTMLElement} btnEl - Delete button element.
  */
-function onDeleteSubtaskMouseDown(event, taskId, subtaskKey, btnEl) {
-  if (subtaskActionLock) return temporarilyLockSubtaskActions();
-  event.preventDefault();
-  event.stopPropagation();
-  const row = btnEl.closest(".dlg__main__task-subtask");
-  deleteSubtask(taskId, subtaskKey, row);
-}
+// function onDeleteSubtaskMouseDown(event, taskId, subtaskKey, btnEl) {
+//   if (subtaskActionLock) return temporarilyLockSubtaskActions();
+//   event.preventDefault();
+//   event.stopPropagation();
+//   const row = btnEl.closest(".dlg__main__task-subtask");
+//   deleteSubtask(taskId, subtaskKey, row);
+// }
 
 
 /**
@@ -330,4 +330,49 @@ function setFooterOptionsDisabled(disabled) {
   if (!optionsBox) return;
 
   optionsBox.classList.toggle('dlg__footer__options-box--disabled', disabled);
+}
+
+function showDeleteTaskConfirm(taskId) {
+    const dlg = document.getElementById("dlg-confirm");
+    const overlay = document.getElementById("overlay-confirm");
+
+    dlg.innerHTML = getDeleteTaskDlgTpl(taskId);
+
+    overlay.classList.remove("d-none");
+    dlg.classList.remove("d-none");
+
+    overlay.addEventListener("click", hideConfirmDlg, { once: true });
+
+    setTimeout(() => {
+        dlg.classList.add("show");
+    }, 10);
+}
+
+function showDeleteSubtaskConfirm(taskId, subtaskKey) {
+    const dlg = document.getElementById("dlg-confirm");
+    const overlay = document.getElementById("overlay-confirm");
+
+    dlg.innerHTML = getDeleteSubtaskDlgTpl(taskId, subtaskKey);
+
+    overlay.classList.remove("d-none");
+    dlg.classList.remove("d-none");
+
+    overlay.addEventListener("click", hideConfirmDlg, { once: true });
+
+    setTimeout(() => {
+        dlg.classList.add("show");
+    }, 10);
+}
+
+
+function hideConfirmDlg() {
+    const dlg = document.getElementById("dlg-confirm");
+    const overlay = document.getElementById("overlay-confirm");
+
+    dlg.classList.remove("show");
+
+    setTimeout(() => {
+        dlg.classList.add("d-none");
+        overlay.classList.add("d-none");
+    }, 300);
 }

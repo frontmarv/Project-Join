@@ -67,7 +67,7 @@ function getTaskInfoDlgTpl(task) {
         <img
           class="delete-btn"
           src="../assets/img/delete-with-text.svg"
-          onclick="deleteTask('${task.id}')"
+          onclick="showDeleteTaskConfirm('${task.id}')"
           alt="image of a garbage can">
         <span class="separator"></span>
         <img

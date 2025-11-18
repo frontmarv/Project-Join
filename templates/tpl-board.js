@@ -35,7 +35,7 @@ function getSearchPlaceholderTpl() {
 
 
 // ======================================================
-// 🔹 POPUP MESSAGE TEMPLATE
+// 🔹 POPUP MESSAGE TEMPLATES
 // ======================================================
 
 /**
@@ -50,3 +50,37 @@ function getPopupMsgChangesSavedTpl() {
     </div>
   `;
 }
+
+function getDeleteTaskDlgTpl(taskId) {
+    return /*html*/ `
+        <div class="dlg-confirm-delete">
+            <h2>Permanently delete Task?</h2>
+            <div class="dlg-confirm-delete__btn-box">
+                <button class="empty-btn" onclick="hideConfirmDlg()">
+                    Cancel<img src="../assets/img/close.svg">
+                </button>
+                <button class="filled-btn" onclick="deleteTask('${taskId}'); hideConfirmDlg();">
+                    Delete Task<img src="../assets/img/done.svg">
+                </button>
+            </div>
+        </div>`;
+}
+
+
+
+function getDeleteSubtaskDlgTpl(taskId, subtaskKey) {
+    return /*html*/ `
+        <div class="dlg-confirm-delete">
+            <h2>Permanently delete Subtask?</h2>
+            <div class="dlg-confirm-delete__btn-box">
+                <button class="empty-btn" onclick="hideConfirmDlg()">
+                    Cancel<img src="../assets/img/close.svg">
+                </button>
+                <button class="filled-btn" onclick="deleteSubtask('${taskId}', '${subtaskKey}'); hideConfirmDlg();">
+                    Delete Subtask<img src="../assets/img/done.svg">
+                </button>
+            </div>
+        </div>`;
+}
+
+

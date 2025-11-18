@@ -7,7 +7,7 @@
 
     <title>Kanban Board</title>
     <link rel="icon" href="../assets/img/logo-black.png" type="image/x-icon">
-    <script src="../scripts/authentication.js"></script>
+    
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../styles/header.css">
     <link rel="stylesheet" href="../styles/navigation.css">
@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="../styles/dlg-task-info.css">
     <link rel="stylesheet" href="../styles/dlg-edit-task.css">
     <link rel="stylesheet" href="../styles/dlg-add-task.css">
+
+    <script src="../scripts/authentication.js"></script>
 
     <script src="../scripts/db.js" defer></script>
     <script src="../scripts/load-inserts.js" defer></script>
@@ -160,9 +162,11 @@
         </main>
    
     <overlay id="overlay" class="overlay d-none"></overlay>
+    <overlay id="overlay-confirm" class="overlay-confirm d-none"></overlay>
     <dialog id="dlg-box" class="dlg d-none"></dialog>
     <dialog id="alert-overlay" class="overlay d-none"></dialog>
     <dialog id="alert-dlg-box" class="add-contact__dialog d-none"></dialog>
+    <dialog id="dlg-confirm" class="dlg confirm-delete-msg d-none"></dialog>
 </body>
 
 </html>
