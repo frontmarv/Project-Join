@@ -7,6 +7,7 @@
   width: 100%;
   padding-right: 2.5rem;
   box-sizing: border-box;
+  cursor: text;
 }
 
 .add-task__field .custom-date-icon {

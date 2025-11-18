@@ -89,7 +89,7 @@
 }
 
 .task-search-and-add-box {
-  height: 2rem;
+  height: 4rem;
   width: 60%;
   display: flex;
   justify-content: space-evenly;
@@ -238,6 +238,7 @@
   background: transparent;
   opacity: 0.5;
   border-radius: 1.5rem;
+  min-height: 15rem;
 }
 
 .dlg {
