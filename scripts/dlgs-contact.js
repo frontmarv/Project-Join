@@ -149,6 +149,7 @@ async function putNewContactToDB() {
     }else if(emailNotAlreadyTaken !== 0){
         document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
         document.getElementById('email-error-warning').style.opacity = '1';
+        validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
     }
     else {
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
@@ -172,6 +173,7 @@ async function validateAndSaveData() {
     } else if (emailNotAlreadyTaken !== 0) {
         document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
         document.getElementById('email-error-warning').style.opacity = '1';
+        validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
     }
     else {
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
@@ -281,7 +283,6 @@ async function validateInputField(input, validationFn, submit) {
     const value = input.value;
     const wrapper = input.closest('.inputfield__wrapper');
     const infoText = input.closest('.inputfield-section').querySelector('.inputfield_fill-in-info');
-    if (!wrapper) return;
     if (value.length > 0 || submit) {
         if (await validationFn(value)) {
             wrapper.style.borderColor = 'var(--color-success)';
