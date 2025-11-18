@@ -50,11 +50,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transform: translate(-50%, -50%);
   transition: all 300ms ease-in-out;
 }
+
 #task-content {
   display: flex;
   flex-direction: column;
   /* height: calc(100vh - 96px); */
 }
+
 #task-form {
   /* flex: 1; */
   display: flex;
@@ -75,6 +77,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   box-sizing: border-box;
   transition: border-color 0.15s ease;
 }
+
 input[type="date"]:focus,
 .task-content__container input:focus,
 .task-content__container select:focus,
@@ -105,6 +108,7 @@ textarea.input-error:focus,
   margin-top: 0.25rem;
   display: none;
 }
+
 .has-error .field-error {
   display: block;
 }
@@ -142,9 +146,12 @@ textarea.input-error:focus,
 .task-content__container {
   display: flex;
   margin-top: 4rem;
-  flex: 1;                /* nimmt verbleibenden Raum ein */
-  overflow-y: auto;       /* scrollt bei Bedarf */
-  min-height: 0;          /* WICHTIG für korrektes Flex-Scrolling */
+  flex: 1;
+  /* nimmt verbleibenden Raum ein */
+  overflow-y: auto;
+  /* scrollt bei Bedarf */
+  min-height: 0;
+  /* WICHTIG für korrektes Flex-Scrolling */
 
 }
 
@@ -197,51 +204,6 @@ textarea.input-error:focus,
 .dlg-edit__main__category-title {
   color: var(--color-maincolor);
   margin-bottom: 0.5rem;
-}
-
-@media (max-width: 1300px) {
-  .priority-options {
-    flex-direction: column;
-    align-items: center;
-  }
-  .priority-options-btn {
-    width: 10rem !important;
-  }
-}
-
-@media (max-width: 1024px) {
-  .priority-options {
-    flex-direction: row;
-    justify-content: center;
-  }
-  .priority-options-btn {
-    width: 8.5rem !important;
-  }
-}
-
-@media (max-width: 500px) {
-  .priority-options {
-    flex-direction: column;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 500px) {
-  .priority-options-btn {
-    font-weight: 400;
-    padding: 0.75rem 1rem;
-    width: 10rem !important;
-  }
-  .dlg-edit__subtask-list {
-    max-height: 75px;
-    min-height: 75px;
-  }
-}
-
-@media (max-width: 500px) {
-  .task-content__container textarea {
-    height: 100px;
-  }
 }
 
 .grey-seperator {
@@ -488,4 +450,133 @@ textarea.input-error:focus,
 .no-users {
   font-size: 1.25rem;
   margin-left: 0.5rem;
+}
+
+@media (max-width: 1300px) {
+  .priority-options {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .priority-options-btn {
+    width: 10rem !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+
+  #task-content {
+    height: calc(100vh - 260px);
+  }
+
+  .dlg-edit__subtask-list {
+    margin-bottom: 1rem;
+  }
+
+  .required {
+    align-self: flex-start;
+  }
+
+  .priority-options {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .priority-options-btn {
+    width: 8.5rem !important;
+  }
+
+  .task-content__header {
+    margin-top: 1rem;
+    justify-content: center;
+  }
+
+  .task-content__container {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 32px;
+  }
+
+  .add-task__left-column {
+    width: 100%;
+    max-width: 600px;
+    gap: 0px;
+    padding: 0;
+  }
+
+  .add-task__right-column {
+    width: 100%;
+    max-width: 600px;
+    padding-left: 0px;
+  }
+
+  #task-form {
+    height: calc(100vh - 350px);
+    overflow-y: auto;
+  }
+
+  .content {
+    margin-bottom: 0;
+  }
+
+  .task-content__footer {
+    position: fixed;
+    gap: 8px;
+    left: 0;
+    bottom: var(--mobile-nav-height);
+    margin-top: 0;
+    height: fit-content;
+    width: 100%;
+    padding: 16px 16px;
+    background: var(--color-background);
+    margin-bottom: unset;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    z-index: 1001;
+  }
+
+  .task-content__footer-btn {
+    margin: 0 auto;
+    justify-content: center;
+  }
+
+  .grey-seperator {
+    display: none;
+  }
+
+  .dlg-edit__main__assigned-user-container {
+    max-width: 100vw;
+    flex-wrap: wrap;
+  }
+
+  .dlg-edit__main__add-subtask-box {
+    margin-bottom: 24px;
+  }
+
+  #required-mobile {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .priority-options {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .priority-options-btn {
+    font-weight: 400;
+    padding: 0.75rem 1rem;
+    width: 10rem !important;
+  }
+
+  .dlg-edit__subtask-list {
+    max-height: 75px;
+    min-height: 75px;
+  }
+
+  .task-content__container textarea {
+    height: 100px;
+  }
 }
