@@ -189,7 +189,7 @@ async function validateAndSaveData() {
 function styleEmailAlreadyTaken() {
     document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
     document.getElementById('email-error-warning').style.opacity = '1';
-    document.getElementById('contact-dlg-email-input').closest('.inputfield__wrapper').style.borderColor = 'var(--color-error)';
+    document.getElementById('contact-dlg-email-input').closest('.inputfield__wrapper').classList.add('error');
 }
 
 
@@ -217,7 +217,10 @@ async function checkEmailAlreadyExists(data) {
  * @returns {void}
  */
 function resetInputInfo() {
-    document.querySelectorAll('.inputfield__wrapper').forEach(element => element.style.borderColor = 'var(--color-lightgrey)');
+    document.querySelectorAll('.inputfield__wrapper').forEach(element => {
+        element.classList.remove('error');
+        element.classList.remove('success');
+    });
     document.querySelectorAll('.inputfield_fill-in-info').forEach(element => element.style.opacity = '0');
     document.getElementById('email-error-warning').innerHTML = 'Enter a valid e-mail adress';
 }
@@ -302,14 +305,17 @@ async function validateInputField(input, validationFn, submit) {
     const infoText = input.closest('.inputfield-section').querySelector('.inputfield_fill-in-info');
     if (value.length > 0 || submit) {
         if (await validationFn(value)) {
-            wrapper.style.borderColor = 'var(--color-success)';
+            wrapper.classList.remove('error');
+            wrapper.classList.add('success');
             infoText.style.opacity = '0';
         } else {
-            wrapper.style.borderColor = 'var(--color-error)';
+            wrapper.classList.remove('success');
+            wrapper.classList.add('error');
             infoText.style.opacity = '1';
         }
     } else {
-        wrapper.style.borderColor = 'var(--color-lightgrey)';
+        wrapper.classList.remove('error');
+        wrapper.classList.remove('success');
         infoText.style.opacity = '0';
     }
 }
