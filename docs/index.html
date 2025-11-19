@@ -129,83 +129,83 @@ npx serve
 <li>Mobile-responsive contact details view</li>
 </ul>
 <h2>📁 Project Structure</h2>
-<pre class="prettyprint source"><code>Project_Join/					                # Project-Root
-├── .gitignore					                # Git-Ignore-Regeln
-├── README.md					                # Projektbeschreibung und Anleitung
-├── index.html					                # Login / Einstiegspunkt der App
-├── script.js					                # Globale Hilfsfunktionen & ggf. Firebase-Konfiguration
-├── style.css					                # Basisstil / globale CSS-Regeln
-├── jsdoc.json					                # Konfiguration für JSDoc-Generierung
-├── package.json				                # npm Metadaten (Projektinfo & Skripte)
-├── package-lock.json			                # npm Lockfile (Abhängigkeiten gesperrt)
-├── assets/					                # Statische Assets
-│   ├── fonts/					                # Schriftdateien
-│   └── img/					                # Bilder und Icons
-├── docs/						            # Dokumentation / ggf. generierte JSDoc-Ausgabe
-├── pages/						            # HTML-Seiten
-│   ├── add-task-insert.html		            # HTML-Insert/Partial für Add-Task-Komponenten
-│   ├── add-task.html			                # Seite / Formular zum Erstellen von Aufgaben
-│   ├── board.html				                # Kanban-Board Seite (Spalten: To Do / In Progress / Done)
-│   ├── contacts.html			                # Kontaktverwaltung Seite
-│   ├── help.html				                # Hilfeseite / Anleitung
+<pre class="prettyprint source"><code>Project_Join/                              # Projekt-Root
+├── .gitignore                             # Git-Ignore-Regeln
+├── README.md                              # Projektbeschreibung und Anleitung
+├── index.html                             # Login / Einstiegspunkt der App
+├── script.js                              # Globale Hilfsfunktionen & ggf. Firebase-Konfiguration
+├── style.css                              # Basisstil / globale CSS-Regeln
+├── jsdoc.json                             # Konfiguration für JSDoc-Generierung
+├── package.json                           # npm Metadaten (Projektinfo & Skripte)
+├── package-lock.json                      # npm Lockfile (Abhängigkeiten gesperrt)
+├── assets/                                # Statische Assets
+│   ├── fonts/                                  # Schriftdateien
+│   └── img/                                    # Bilder und Icons
+├── docs/                                  # Dokumentation / ggf. generierte JSDoc-Ausgabe
+├── pages/                                 # HTML-Seiten
+│   ├── add-task-insert.html                    # HTML-Insert/Partial für Add-Task-Komponenten
+│   ├── add-task.html                           # Seite / Formular zum Erstellen von Aufgaben
+│   ├── board.html                              # Kanban-Board Seite (Spalten: To Do / In Progress / Done)
+│   ├── contacts.html                           # Kontaktverwaltungsseite
+│   ├── help.html                               # Hilfeseite / Anleitung
 │   ├── legal-notice-external.html              # Externe Version des Impressums
-│   ├── legal-notice.html		                # Impressum / rechtliche Hinweise
+│   ├── legal-notice.html                       # Impressum / rechtliche Hinweise
 │   ├── privacy-policy-external.html            # Externe Version der Datenschutz-Seite
-│   ├── privacy-policy.html		                # Datenschutz / Privacy Policy
-│   ├── sign-up.html			                # Registrierungsseite
-│   └── summary.html			                # Dashboard / Übersicht (Statistiken)
-├── scripts/					            # JavaScript-Module / Seitenlogik
-│   ├── add-task-alert-overlay.js	            # Overlay / Hinweise beim Erstellen von Tasks
-│   ├── add-task-validation.js	                # Validierung für Add-Task-Formular
-│   ├── add-task.js				                # Logik der Add-Task-Seite (Formularverarbeitung)
-│   ├── authentication.js		                # Login-/Session-Prüfung und Auth-Hilfen
-│   ├── board-helper.js			                # Hilfsfunktionen für das Board
-│   ├── board.js				                # Hauptlogik für das Kanban-Board
-│   ├── contacts.js				                # CRUD- und UI-Logik für Kontakte
-│   ├── db.js					                # Firebase / Datenbank-Interaktionen
+│   ├── privacy-policy.html                     # Datenschutz / Privacy Policy
+│   ├── sign-up.html                            # Registrierungsseite
+│   └── summary.html                            # Dashboard / Übersicht (Statistiken)
+├── scripts/                               # JavaScript-Module / Seitenlogik
+│   ├── add-task-alert-overlay.js               # Overlay / Hinweise beim Erstellen von Tasks
+│   ├── add-task-validation.js                  # Validierung für Add-Task-Formular
+│   ├── add-task.js                             # Logik der Add-Task-Seite (Formularverarbeitung)
+│   ├── authentication.js                       # Login-/Session-Prüfung und Auth-Hilfen
+│   ├── board-helper.js                         # Hilfsfunktionen für das Board
+│   ├── board.js                                # Hauptlogik für das Kanban-Board
+│   ├── contacts.js                             # CRUD- und UI-Logik für Kontakte
+│   ├── db.js                                   # Firebase / Datenbank-Interaktionen
 │   ├── dlg-add-task-subtask-handling.js        # Dialog-Logik für Subtasks
-│   ├── dlg-edit-task-assignment.js	            # Dialog zum Zuweisen von Personen zu Tasks
-│   ├── dlg-edit-task.js		                # Dialog-/Editier-Logik für Tasks
-│   ├── dlg-task-info-helper.js	                # Helfer für Task-Info-Dialoge
-│   ├── dlgs-contact.js			                # Kontakt-Dialog-Management
-│   ├── drag-and-drop-helper.js	                # Hilfsfunktionen für Drag & Drop
-│   ├── drag-and-drop.js		                # Drag & Drop Implementierung fürs Board
-│   ├── generate-user-id.js		                # Erzeugung / Verwaltung von User-IDs
-│   ├── load-inserts.js			                # Lädt HTML-Inserts/Partials in Seiten
-│   ├── login.js				                # Login-Seiten-Logik
-│   ├── mail-tld-validator.js	                # Validierung von E-Mail-TLDs
-│   ├── manage-user-profil.js	                # Nutzerprofil-Verwaltung
-│   ├── navigation.js			                # Responsive Navigation / Menüverhalten
-│   ├── search-task.js			                # Such-/Filter-Funktionen für Tasks
-│   ├── sign-up.js				                # Sign-Up / Registrierungs-Logik
-│   ├── summary.js				                # Dashboard-Statistiken & Zusammenfassungen
-│   └── task-card.js			                # Rendering & Verhalten einzelner Task-Karten
-├── templates/					            # Clientseitige HTML-Templates (JS-Module)
-│   ├── tpl-add-task.js			                # Templates für Add-Task-Komponenten
-│   ├── tpl-board.js			                # Templates für Board-Strukturen und Platzhalter
-│   ├── tpl-contacts.js			                # Templates für Kontaktlisten / Einträge
-│   ├── tpl-dialogs.js			                # Templates für verschiedene Dialoge / Modals
-│   ├── tpl-login-sign-up.js	                # Templates für Login- & Signup-Formulare
-│   ├── tpl-navigation.js		                # Templates für Navigation / Sidebar
-│   ├── tpl-task-card.js		                # Template für Task-Karten (Markup)
-│   └── tpl-user-profil-img.js	                # Template / SVG für Benutzer-Avatare
-└── styles/					                # CSS-Dateien nach Seite/Komponente aufgeteilt
-    ├── add-task.css			                # Styles für Add-Task Seite & Dialoge
-    ├── board.css				                # Styles für das Kanban-Board
-    ├── contacts.css			                # Styles für die Kontaktseite
-    ├── dlg-add-task.css		                # Styles für Add-Task-Dialog
-    ├── dlg-contact.css		                    # Styles für Kontakt-Dialoge
-    ├── dlg-edit-task.css		                # Styles für Edit-Task-Dialog
-    ├── dlg-task-info.css		                # Styles für Task-Info-Dialog
-    ├── external.css			                # Externe / gemeinsame Styles (Resets o.ä.)
-    ├── header.css				                # Header / obere Leiste Styles
-    ├── help.css				                # Styles für die Hilfeseite
-    ├── legal-notice.css		                # Styles für Impressum / rechtliche Seiten
-    ├── login-signup.css		                # Styles für Login & Signup Seiten
-    ├── navigation.css			                # Styles für Navigation / Menü
-    ├── privacy-policy.css		                # Styles für Datenschutz-Seite
-    ├── summary.css			                    # Styles für Dashboard / Zusammenfassung
-    └── task-card.css			                # Styles für Task-Karten-Komponenten
+│   ├── dlg-edit-task-assignment.js             # Dialog zum Zuweisen von Personen zu Tasks
+│   ├── dlg-edit-task.js                        # Dialog-/Editier-Logik für Tasks
+│   ├── dlg-task-info-helper.js                 # Helfer für Task-Info-Dialoge
+│   ├── dlgs-contact.js                         # Kontakt-Dialog-Management
+│   ├── drag-and-drop-helper.js                 # Hilfsfunktionen für Drag & Drop
+│   ├── drag-and-drop.js                        # Drag & Drop Implementierung fürs Board
+│   ├── generate-user-id.js                     # Erzeugung / Verwaltung von User-IDs
+│   ├── load-inserts.js                         # Lädt HTML-Inserts/Partials in Seiten
+│   ├── login.js                                # Login-Seiten-Logik
+│   ├── mail-tld-validator.js                   # Validierung von E-Mail-TLDs
+│   ├── manage-user-profil.js                   # Nutzerprofil-Verwaltung
+│   ├── navigation.js                           # Responsive Navigation / Menüverhalten
+│   ├── search-task.js                          # Such-/Filter-Funktionen für Tasks
+│   ├── sign-up.js                              # Sign-Up / Registrierungs-Logik
+│   ├── summary.js                              # Dashboard-Statistiken & Zusammenfassungen
+│   └── task-card.js                            # Rendering & Verhalten einzelner Task-Karten
+├── templates/                             # Clientseitige HTML-Templates (JS-Module)
+│   ├── tpl-add-task.js                         # Templates für Add-Task-Komponenten
+│   ├── tpl-board.js                            # Templates für Board-Strukturen und Platzhalter
+│   ├── tpl-contacts.js                         # Templates für Kontaktlisten / Einträge
+│   ├── tpl-dialogs.js                          # Templates für verschiedene Dialoge / Modals
+│   ├── tpl-login-sign-up.js                    # Templates für Login- & Signup-Formulare
+│   ├── tpl-navigation.js                       # Templates für Navigation / Sidebar
+│   ├── tpl-task-card.js                        # Template für Task-Karten (Markup)
+│   └── tpl-user-profil-img.js                  # Template / SVG für Benutzer-Avatare
+└── styles/                                # CSS-Dateien nach Seite/Komponente aufgeteilt
+    ├── add-task.css                            # Styles für Add-Task Seite & Dialoge
+    ├── board.css                               # Styles für das Kanban-Board
+    ├── contacts.css                            # Styles für die Kontaktseite
+    ├── dlg-add-task.css                        # Styles für Add-Task-Dialog
+    ├── dlg-contact.css                         # Styles für Kontakt-Dialoge
+    ├── dlg-edit-task.css                       # Styles für Edit-Task-Dialog
+    ├── dlg-task-info.css                       # Styles für Task-Info-Dialog
+    ├── external.css                            # Externe / gemeinsame Styles (Resets o.ä.)
+    ├── header.css                              # Header / obere Leiste Styles
+    ├── help.css                                # Styles für die Hilfeseite
+    ├── legal-notice.css                        # Styles für Impressum / rechtliche Seiten
+    ├── login-signup.css                        # Styles für Login & Signup Seiten
+    ├── navigation.css                          # Styles für Navigation / Menü
+    ├── privacy-policy.css                      # Styles für Datenschutz-Seite
+    ├── summary.css                             # Styles für Dashboard / Zusammenfassung
+    └── task-card.css                           # Styles für Task-Karten-Komponenten
 </code></pre>
 <h2>🔧 Technologies</h2>
 <ul>
@@ -305,7 +305,7 @@ npx serve
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Nov 19 2025 14:42:22 GMT+0100 (Mitteleuropäische Normalzeit) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Nov 19 2025 14:50:13 GMT+0100 (Mitteleuropäische Normalzeit) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
