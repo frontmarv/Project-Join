@@ -23,7 +23,6 @@ function showAddTaskDlgWtihAnimation() {
         alertDialog.classList.add('show');
     }, 100);
 
-    // Auto-close after 2 seconds on the Board page
     if (isBoardPage()) {
       setTimeout(() => {
         closeAddTaskDlgWithAnimation();

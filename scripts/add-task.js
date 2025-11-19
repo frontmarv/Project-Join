@@ -22,6 +22,10 @@ async function initAddTask() {
   setColumnWidth();
 }
 
+/**
+ * Adds a predefined width class to both the left and right task form columns.
+ * Used to adjust layout styling dynamically.
+ */
 function setColumnWidth() {
   document.querySelector('.add-task__left-column').classList.add('column-width');
   document.querySelector('.add-task__right-column').classList.add('column-width')
@@ -122,9 +126,7 @@ function resetPriorityButtons() {
 document.addEventListener('click', (e) => {
   const root = e.target.closest('.category-selection');
   if (!root) return closeAllCategories();
-
   if (e.target.closest('.selector')) return toggleCategory(root);
-
   const opt = e.target.closest('.category-options li');
   if (opt) return selectCategoryOption(root, opt);
 });
@@ -241,7 +243,6 @@ function setupCategoryInvalidHandler() {
       root?.classList.add('invalid');
       root?.classList.remove('valid');
     }, true);
-
     updateCategoryValidity();
   });
 }
@@ -272,7 +273,7 @@ function resetCreatedTaskForm(form) {
   updateCategoryValidity();
   resetPriorityButtons?.();
   resetContactList();
-  refreshAssignedUserContainer();
+  refreshAssignedUserContainer(document.getElementById('assigned-user'));
 }
 
 
@@ -337,7 +338,7 @@ function clearTask() {
   updateCategoryValidity();
   dueDateValidation();
   clearAllErrors(form);
-  refreshAssignedUserContainer();
+  refreshAssignedUserContainer(document.getElementById('assigned-user'));
 }
 
 

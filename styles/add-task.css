@@ -52,7 +52,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .add-contact__dialog-board h2 {
   color: var(--color-white) !important;
-
 }
 
 .show {

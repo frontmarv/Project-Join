@@ -12,9 +12,10 @@ function openCustomDatePicker() {
   const input = document.getElementById('due-date');
   input.focus();
   if (input.showPicker) {
-    input.showPicker(); // wird von modernen Browsern unterstützt
+    input.showPicker();
   }
 }
+
 
 /**
  * Focuses the first input with an error style.
