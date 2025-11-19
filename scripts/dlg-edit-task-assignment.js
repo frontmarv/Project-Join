@@ -297,7 +297,7 @@ function refreshAssignedUserContainer(avatarContainer) {
     const shown = getShownUsers(ids);
 
     if (ids.length === 0) {
-        renderNoUsers();
+        renderNoUsers(avatarContainer);
         return;
     }
 
@@ -313,8 +313,8 @@ function getShownUsers(ids) {
         .filter(Boolean);
 }
 
-function renderNoUsers() {
-    document.getElementById('assigned-user').innerHTML = noUsersTemplate();
+function renderNoUsers(avatarContainer) {
+    avatarContainer.innerHTML = noUsersTemplate();
 }
 
 function renderUserAvatars(avatarContainer, shown) {
