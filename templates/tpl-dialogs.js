@@ -150,7 +150,7 @@ function getTaskEditDlgTpl(task) {
                     <span class="dlg-edit__main__subtask-title">Subtasks</span>
 
                     <div class="subtask-input-wrapper">
-                      <input id="subtask-input" class="subtask-input dlg-edit__input-text" type="text" maxlength="50" placeholder="Add new Subtask" />
+                      <input id="subtask-input" class="subtask-input dlg-edit__input-text" type="text" maxlength="80" placeholder="Add new Subtask" />
                       
                       <div class="subtask-input-icons">
                           <img class="subtask-input__cancel-img" src="../assets/img/close-delete-cross.svg" alt="Cancel Subtask" />
