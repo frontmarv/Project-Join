@@ -122,7 +122,7 @@ function getAssignedUserInCardTpl(user) {
       <text x="21" y="23"
             text-anchor="middle"
             dominant-baseline="middle"
-            font-size="12"
+            font-size="14"
             fill="white"
             font-family="sans-serif">${initials}</text>
     </svg>
@@ -143,7 +143,7 @@ function getMoreUsersBadgeTpl(count) {
       <text x="21" y="23"
             text-anchor="middle"
             dominant-baseline="middle"
-            font-size="12"
+            font-size="14"
             fill="white"
             font-family="sans-serif">+${count}</text>
     </svg>
