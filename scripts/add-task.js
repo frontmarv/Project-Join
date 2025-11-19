@@ -35,20 +35,28 @@ const focusOrder = [
   "title", "description", "due-date", "urgent", "medium", "low", "contact-search", "category-proxy", "subtask-input"];
 
 /**
- * Handles Enter key navigation between form inputs.
- * @param {KeyboardEvent} e - The keyboard event.
+ * Global keydown handler that customizes Enter key behavior inside forms.
+ *
+ * Behavior:
+ * - Allows Enter inside the description textarea (creates a new line).
+ * - Allows Enter inside the subtask input (adds a new subtask).
+ * - Prevents Enter from triggering form submission or focus changes
+ *   for all other form inputs.
+ * - Does nothing when Enter is pressed outside of forms.
+ *
+ * @param {KeyboardEvent} e - The keyboard event object.
  */
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Enter") return;
-  if (!e.target.closest("form")) return;
+  if (e.target.id === "description") return;
   if (e.target.id === "subtask-input" || e.target.classList.contains("subtask-input")) {
-    return;}
-  const { id } = e.target;
-  const next = focusOrder[focusOrder.indexOf(id) + 1];
-  if (!next) return;
-  e.preventDefault();
-  document.getElementById(next)?.focus();
+    return;
+  }
+  if (e.target.closest("form")) {
+    e.preventDefault();
+  }
 });
+
 
 /**
  * Waits for a DOM element to appear before resolving.

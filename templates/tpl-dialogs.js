@@ -94,12 +94,12 @@ function getTaskEditDlgTpl(task) {
 
             <div class="dlg-edit__main__title-box">
                 <span class="dlg-edit__main__task-title">Title</span>
-                <input id="title-input" class="title-input dlg-edit__input-text" type="text" placeholder="Enter a Title">
+                <input id="title-input" class="title-input dlg-edit__input-text" type="text" maxlength="100" placeholder="Enter a Title">
             </div>
 
             <div class="dlg-edit__main__description-box">
                 <span class="dlg-edit__main__task-description">Description</span>
-                <textarea id="descriptions-input" class="dlg-edit__textarea" placeholder="Enter a Description"></textarea>
+                <textarea id="descriptions-input" class="dlg-edit__textarea" maxlength="800" placeholder="Enter a Description"></textarea>
             </div>
 
             <div class="dlg-edit__main__due-date-box" onclick="setMinDueDate()">
@@ -137,7 +137,7 @@ function getTaskEditDlgTpl(task) {
 
                 <div class="contacts-selection" id="contact-select">
                   <div class="search-wrapper">
-                    <input type="text" id="contact-search" class="selector" placeholder="Search contacts" autocomplete="off"/>
+                    <input type="text" maxlength="50" id="contact-search" class="selector" placeholder="Search contacts" autocomplete="off"/>
                   </div>
                   <ul class="contact-options"></ul>
                 </div>
@@ -150,7 +150,7 @@ function getTaskEditDlgTpl(task) {
                     <span class="dlg-edit__main__subtask-title">Subtasks</span>
 
                     <div class="subtask-input-wrapper">
-                      <input id="subtask-input" class="subtask-input dlg-edit__input-text" type="text" placeholder="Add new Subtask" />
+                      <input id="subtask-input" class="subtask-input dlg-edit__input-text" type="text" maxlength="50" placeholder="Add new Subtask" />
                       
                       <div class="subtask-input-icons">
                           <img class="subtask-input__cancel-img" src="../assets/img/close-delete-cross.svg" alt="Cancel Subtask" />
@@ -207,7 +207,7 @@ function getSubtaskTpl(value = "") {
 function getEditSubtaskTpl(value = "") {
   return /*html*/ `
     <li class="dlg-edit__main__subtask edit-mode">
-      <input type="text" class="dlg-edit__input-text edit-input" value="${value}" />
+      <input type="text" maxlength="50" class="dlg-edit__input-text edit-input" value="${value}" />
       <div class="subtask-edit-box">
         <img class="subtask-edit-box__delete-img" src="../assets/img/delete.svg" alt="Delete Subtask">
         <div class="separator"></div>

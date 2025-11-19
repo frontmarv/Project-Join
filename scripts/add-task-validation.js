@@ -175,10 +175,17 @@ function validateDate(date, dateErr, valid) {
   if (!date.value.trim()) {
     showError(date, dateErr, 'This field is required');
     return false;
+  } if (v < today) {
+    showError(date, dateErr, 'Please select a current or future date.');
+    return false;
+  } if (v > maxDate) {
+    showError(date, dateErr, 'Please select a date within the next two years.');
+    return false;
   }
   clearError(date, dateErr);
   return valid;
 }
+
 
 
 /**
@@ -210,6 +217,28 @@ function todayLocalISO() {
 
 
 /**
+ * Returns a validation error message for a given due date.
+ *
+ * Rules:
+ * - If the date is before today → returns an error message.
+ * - If the date is more than the allowed maxDate → returns an error message.
+ * - If the date is valid → returns an empty string.
+ *
+ * @param {string} v - The selected date in ISO format (YYYY-MM-DD).
+ * @param {string} today - Today's date in ISO format.
+ * @param {string} maxDate - The maximum allowed date in ISO format.
+ * @returns {string} An error message or an empty string if the date is valid.
+ */
+function getDueDateError(v, today, maxDate) {
+  return v < today
+    ? 'Please select a current or future date.'
+    : v > maxDate
+      ? 'Please select a date within the next two years.'
+      : '';
+}
+
+
+/**
  * Validates the due date field in real time and shows a custom error if it's in the past.
  */
 /**
@@ -218,14 +247,20 @@ function todayLocalISO() {
 function dueDateValidation() {
   const d = document.getElementById('due-date'), err = document.getElementById('date-error');
   if (!d || d.dataset.bound) return; d.dataset.bound = '1';
-  const today = todayLocalISO();
+  const today = todayLocalISO()
+  const maxDate = getMaxDueDateISO(2);
   const validate = () => {
-    const v = d.value.trim();
-    if (!v) return;
-    v < today ? showError(d, err, 'Please select a current or future date.')
-              : clearError(d, err);
+    const v = d.value.trim(), msg = getDueDateError(v, today, maxDate);
+    msg ? showError(d, err, msg) : clearError(d, err);
   };
-  d.addEventListener('input', () => { if (d.value >= today) clearError(d, err); });
+  d.addEventListener('input', validate);
   d.addEventListener('change', validate);
   d.addEventListener('blur', validate);
+}
+
+
+function getMaxDueDateISO(years = 2) {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() + years);
+  return date.toISOString().split("T")[0];
 }

@@ -87,6 +87,10 @@
   user-select: none;
 }
 
+#category-shown:hover {
+  cursor: pointer;
+}
+
 .selector {
   height: 3rem;
   width: 100%;
