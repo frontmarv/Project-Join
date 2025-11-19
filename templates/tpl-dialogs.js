@@ -137,7 +137,7 @@ function getTaskEditDlgTpl(task) {
 
                 <div class="contacts-selection" id="contact-select">
                   <div class="search-wrapper">
-                    <input type="text" maxlength="50" id="contact-search" class="selector" placeholder="Search contacts" autocomplete="off"/>
+                    <input type="text" maxlength="20" id="contact-search" class="selector" placeholder="Search contacts" autocomplete="off"/>
                   </div>
                   <ul class="contact-options"></ul>
                 </div>
@@ -350,14 +350,26 @@ function getAssignedUserSvgTpl(user) {
 
 
 /**
- * Generates a "no users assigned" message element.
+ * Generates a placeholder element if no users are assigned.
+ * It will be desplayed 
  * @returns {string} HTML markup.
  */
 function getNoUsersAssignedTpl() {
   return /*html*/ `
     <div class="dlg__user-box">
-      <span>No users assigned</span>
+      <span>• No users assigned</span>
     </div>`;
+}
+
+/**
+ * Generates a placeholder element if no users are assigned.
+ * It will be displayed on add-task.html and Edit-Task Dialog.
+ * @returns {string} HTML markup.
+ */
+function noUsersTemplate() {
+  return /*html*/ `
+    <p class="no-users">• No users assigned</p>
+  `;
 }
 
 
@@ -398,15 +410,4 @@ function moreUsersTemplate(more) {
     <div class="dlg-edit__user-box" title="+${more} Users">
       ${getMoreUsersSvg(more)}
     </div>`;
-}
-
-
-/**
- * Generates a placeholder text when no users are assigned.
- * @returns {string} HTML markup.
- */
-function noUsersTemplate() {
-  return /*html*/ `
-    <p class="no-users">No user assigned</p>
-  `;
 }

@@ -361,10 +361,6 @@ textarea.input-error:focus,
     flex-wrap: wrap;
   }
 
-  .dlg-edit__main__add-subtask-box {
-    margin-bottom: 24px;
-  }
-
   #required-mobile {
     font-size: 16px;
   }

@@ -5,7 +5,9 @@
 // subtasks, assigned users, and interactive checkbox logic.
 // ======================================================
 
+
 let subtaskActionLock = false;
+
 
 // ======================================================
 // 🔹 USER HELPER FUNCTIONS
@@ -26,6 +28,21 @@ function getUserInitialsById(userId) {
     .filter(Boolean)
     .map(n => n[0].toUpperCase())
     .join("");
+}
+
+
+/**
+ * Renders one assigned user item including avatar and name.
+ * @param {string} id - User ID.
+ * @returns {string} HTML snippet for the assigned user row.
+ */
+function renderAssignedUserItem(id) {
+  const userName = getUserNameById(id);
+  const name = addTagToLoggedInUser(userName);
+  const imgColour = getUserPicById(id);
+  const userInitials = getUserInitialsById(id);
+
+  return assignedUserItemTemplate(imgColour, userInitials, name);
 }
 
 
@@ -69,23 +86,13 @@ function renderAssignedUsers(contacts = []) {
 
 
 /**
- * Normalizes input contacts into a valid array.
+ * Normalizes input contacts into a valid array of IDs.
  * @param {string[]|null|undefined} contacts - Contact list input.
  * @returns {string[]} Filtered contact ID array.
  */
 function normalizeContactList(contacts) {
   if (!Array.isArray(contacts)) return [];
   return contacts.filter(id => id && id.trim() !== "");
-}
-
-
-function renderAssignedUserItem(id) {
-    const userName = getUserNameById(id);
-    const name = addTagToLoggedInUser(userName);
-    const imgColour = getUserPicById(id);
-    const userInitials = getUserInitialsById(id);
-
-    return assignedUserItemTemplate(imgColour, userInitials, name);
 }
 
 
@@ -111,30 +118,30 @@ function getCheckboxImgSrc(isChecked) {
  */
 function renderSubtasks(subtasks = {}, taskId) {
   if (!isValidSubtaskData(subtasks))
-    return /*html*/ `<span class="dlg__main__task-subtask no-subtasks">No subtasks</span>`;
+    return /*html*/ `<span class="dlg__main__task-subtask no-subtasks">• No subtasks</span>`;
 
   const sorted = sortSubtasks(subtasks);
-  return sorted.map(([key, st]) => renderSubtaskItem(key, st, taskId)).join("");
+  return sorted.map(([key, subtask]) => renderSubtaskItem(key, subtask, taskId)).join("");
 }
 
 
 /**
  * Checks whether subtasks data is valid.
- * @param {Object} subtasks - Subtasks object.
- * @returns {boolean} True if valid, false otherwise.
+ * @param {Object} subtask - Subtasks object.
+ * @returns {boolean} True if valid subtasks exist.
  */
-function isValidSubtaskData(subtasks) {
-  return subtasks && typeof subtasks === "object" && Object.keys(subtasks).length > 0;
+function isValidSubtaskData(subtask) {
+  return subtask && typeof subtask === "object" && Object.keys(subtask).length > 0;
 }
 
 
 /**
- * Sorts subtasks by their numeric key index.
- * @param {Object} subtasks - Subtasks object.
+ * Sorts subtasks by numeric index (subtask0, subtask1, ...).
+ * @param {Object} subtask - Subtasks object.
  * @returns {[string, Object][]} Sorted subtasks as entries.
  */
-function sortSubtasks(subtasks) {
-  return Object.entries(subtasks).sort(([a], [b]) => {
+function sortSubtasks(subtask) {
+  return Object.entries(subtask).sort(([a], [b]) => {
     const na = parseInt(a.replace("subtask", ""), 10);
     const nb = parseInt(b.replace("subtask", ""), 10);
     return (isNaN(na) || isNaN(nb)) ? 0 : na - nb;
@@ -142,15 +149,21 @@ function sortSubtasks(subtasks) {
 }
 
 
+/**
+ * Renders one subtask item row.
+ * @param {string} key - Subtask key.
+ * @param {Object} subtask - Subtask object.
+ * @param {string} taskId - Parent task ID.
+ * @returns {string} HTML for this subtask row.
+ */
 function renderSubtaskItem(key, subtask, taskId) {
-    if (!subtask?.task) return "";
+  if (!subtask?.task) return "";
 
-    const checked = !!subtask.taskChecked;
-    const text = subtask.task;
+  const checked = !!subtask.taskChecked;
+  const text = subtask.task;
 
-    return subtaskItemTemplate(key, taskId, checked, text);
+  return subtaskItemTemplate(key, taskId, checked, text);
 }
-
 
 
 // ======================================================
@@ -159,14 +172,16 @@ function renderSubtaskItem(key, subtask, taskId) {
 
 /**
  * Handles subtask row click for toggling checked state.
- * @param {MouseEvent} event - Mouse event object.
+ * @param {MouseEvent} event - Mouse event.
  * @param {string} taskId - Parent task ID.
  * @param {string} subtaskKey - Subtask key.
- * @param {HTMLElement} rowEl - Subtask row element.
+ * @param {HTMLElement} rowEl - The clicked row element.
  */
 function onSubtaskRowMouseDown(event, taskId, subtaskKey, rowEl) {
+  if (event.button !== 0) return;
   if (event.target.closest(".deletebox-wrapper")) return;
   if (subtaskActionLock) return temporarilyLockSubtaskActions();
+
   event.preventDefault();
   event.stopPropagation();
   toggleSubtaskChecked(taskId, subtaskKey, rowEl);
@@ -174,7 +189,8 @@ function onSubtaskRowMouseDown(event, taskId, subtaskKey, rowEl) {
 
 
 /**
- * Temporarily locks subtask actions to prevent double-triggering.
+ * Temporarily locks subtask interactions to avoid double clicks.
+ * @returns {void}
  */
 function temporarilyLockSubtaskActions() {
   subtaskActionLock = true;
@@ -191,7 +207,7 @@ function temporarilyLockSubtaskActions() {
  * @async
  * @param {string} taskId - Parent task ID.
  * @param {string} subtaskKey - Subtask key.
- * @param {HTMLElement} rowEl - Subtask row element.
+ * @param {HTMLElement} rowEl - Subtask element.
  */
 async function toggleSubtaskChecked(taskId, subtaskKey, rowEl) {
   const imgEl = rowEl.querySelector("img.checkbox");
@@ -201,7 +217,10 @@ async function toggleSubtaskChecked(taskId, subtaskKey, rowEl) {
   updateCheckboxUI(imgEl, willBeChecked);
 
   const taskObj = tasks.find(t => t.id === taskId);
-  const text = taskObj?.subtasks?.[subtaskKey]?.task || rowEl.querySelector(".subtask-text")?.textContent?.trim() || "";
+  const text =
+    taskObj?.subtasks?.[subtaskKey]?.task ||
+    rowEl.querySelector(".subtask-text")?.textContent?.trim() ||
+    "";
 
   await updateSubtaskInFirebase(taskId, subtaskKey, text, willBeChecked);
   await refreshTaskInfo(taskId);
@@ -209,9 +228,9 @@ async function toggleSubtaskChecked(taskId, subtaskKey, rowEl) {
 
 
 /**
- * Updates checkbox visual state in the UI.
+ * Updates checkbox image & dataset in UI.
  * @param {HTMLImageElement} imgEl - Checkbox image element.
- * @param {boolean} checked - Whether checkbox is checked.
+ * @param {boolean} checked - New state.
  */
 function updateCheckboxUI(imgEl, checked) {
   imgEl.dataset.checked = String(checked);
@@ -220,7 +239,7 @@ function updateCheckboxUI(imgEl, checked) {
 
 
 /**
- * Sends updated subtask state to Firebase.
+ * Sends updated subtask data to Firebase.
  * @async
  * @param {string} taskId - Task ID.
  * @param {string} subtaskKey - Subtask key.
@@ -229,6 +248,7 @@ function updateCheckboxUI(imgEl, checked) {
  */
 async function updateSubtaskInFirebase(taskId, subtaskKey, text, checked) {
   const url = `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/subtasks/${subtaskKey}.json`;
+
   await fetch(url, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -238,9 +258,9 @@ async function updateSubtaskInFirebase(taskId, subtaskKey, text, checked) {
 
 
 /**
- * Reloads data and re-renders the task info dialog.
+ * Reloads Firebase data and rerenders the task info dialog.
  * @async
- * @param {string} taskId - Task ID to refresh.
+ * @param {string} taskId - Task ID.
  */
 async function refreshTaskInfo(taskId) {
   await getData();
@@ -250,50 +270,70 @@ async function refreshTaskInfo(taskId) {
 }
 
 
+// ======================================================
+// 🔹 FOOTER OPTIONS + DELETE DIALOGS
+// ======================================================
+
+/**
+ * Enables or disables footer option buttons.
+ * @param {boolean} disabled - Whether to disable the buttons.
+ */
 function setFooterOptionsDisabled(disabled) {
-  const optionsBox = document.querySelector('.dlg__footer__options-box');
+  const optionsBox = document.querySelector(".dlg__footer__options-box");
   if (!optionsBox) return;
 
-  optionsBox.classList.toggle('dlg__footer__options-box--disabled', disabled);
+  optionsBox.classList.toggle("dlg__footer__options-box--disabled", disabled);
 }
 
+
+/**
+ * Shows confirmation dialog for deleting a task.
+ * @param {string} taskId - Task ID to delete.
+ */
 function showDeleteTaskConfirm(taskId) {
-    const dlg = document.getElementById("dlg-confirm");
-    const overlay = document.getElementById("overlay-confirm");
+  const dlg = document.getElementById("dlg-confirm");
+  const overlay = document.getElementById("overlay-confirm");
 
-    dlg.innerHTML = getDeleteTaskDlgTpl(taskId);
+  dlg.innerHTML = getDeleteTaskDlgTpl(taskId);
 
-    overlay.classList.remove("d-none");
-    dlg.classList.remove("d-none");
+  overlay.classList.remove("d-none");
+  dlg.classList.remove("d-none");
 
-    overlay.addEventListener("click", hideConfirmDlg, { once: true });
-
-    setTimeout(() => { dlg.classList.add("show") }, 10);
+  overlay.addEventListener("click", hideConfirmDlg, { once: true });
+  setTimeout(() => dlg.classList.add("show"), 10);
 }
 
+
+/**
+ * Shows confirmation dialog for deleting a subtask.
+ * @param {string} taskId - Parent task ID.
+ * @param {string} subtaskKey - Subtask key to delete.
+ */
 function showDeleteSubtaskConfirm(taskId, subtaskKey) {
-    const dlg = document.getElementById("dlg-confirm");
-    const overlay = document.getElementById("overlay-confirm");
+  const dlg = document.getElementById("dlg-confirm");
+  const overlay = document.getElementById("overlay-confirm");
 
-    dlg.innerHTML = getDeleteSubtaskDlgTpl(taskId, subtaskKey);
+  dlg.innerHTML = getDeleteSubtaskDlgTpl(taskId, subtaskKey);
 
-    overlay.classList.remove("d-none");
-    dlg.classList.remove("d-none");
+  overlay.classList.remove("d-none");
+  dlg.classList.remove("d-none");
 
-    overlay.addEventListener("click", hideConfirmDlg, { once: true });
-
-    setTimeout(() => { dlg.classList.add("show") }, 10);
+  overlay.addEventListener("click", hideConfirmDlg, { once: true });
+  setTimeout(() => dlg.classList.add("show"), 10);
 }
 
 
+/**
+ * Hides the active delete confirmation dialog with fade-out animation.
+ */
 function hideConfirmDlg() {
-    const dlg = document.getElementById("dlg-confirm");
-    const overlay = document.getElementById("overlay-confirm");
+  const dlg = document.getElementById("dlg-confirm");
+  const overlay = document.getElementById("overlay-confirm");
 
-    dlg.classList.remove("show");
+  dlg.classList.remove("show");
 
-    setTimeout(() => {
-        dlg.classList.add("d-none");
-        overlay.classList.add("d-none");
-    }, 300);
+  setTimeout(() => {
+    dlg.classList.add("d-none");
+    overlay.classList.add("d-none");
+  }, 300);
 }

@@ -12,7 +12,7 @@
                 </div>
                 <div class="add-task__field">
                     <label for="description">Description</label>
-                    <textarea name="description" id="description" placeholder="Enter a Description"></textarea>
+                    <textarea name="description" maxlength="800" id="description" placeholder="Enter a Description"></textarea>
                 </div>
                 <div class="add-task__field">
                     <label for="due-date" class="required required--after">Due date</label>
@@ -59,7 +59,7 @@
                     <span class="dlg-edit__main__assignments-title">Assigned to</span>
                     <div class="contacts-selection" id="contact-select">
                         <div class="search-wrapper">
-                            <input type="text" id="contact-search" class="selector"
+                            <input type="text" maxlength="20" id="contact-search" class="selector"
                                 placeholder="Search contacts" autocomplete="off" />
                         </div>
                         <ul id="contact-options" class="contact-options"></ul>
@@ -107,7 +107,7 @@
                     <div class="dlg-edit__main__add-subtask-box">
                         <span class="dlg-edit__main__subtask-title">Subtasks</span>
                         <div class="subtask-input-wrapper">
-                            <input id="subtask-input" class="subtask-input dlg-edit__input-text" type="text"
+                            <input id="subtask-input" class="subtask-input dlg-edit__input-text" type="text" maxlength="50"
                                 placeholder="Add new Subtask" />
                             <div class="subtask-input-icons">
                                 <img class="subtask-input__cancel-img" src="../assets/img/close-delete-cross.svg"
