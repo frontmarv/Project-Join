@@ -137,6 +137,10 @@ main {
 .contact-name {
     font-size: 1.25rem;
     color: var(--color-black);
+}
+
+.contact-name,
+.contact-email {
     overflow: hidden;
     text-overflow: ellipsis;
     text-wrap-mode: nowrap;
@@ -144,9 +148,6 @@ main {
 
 .contact-email {
     color: var(--color-email) !important;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-wrap-mode: nowrap;
 }
 
 .content-right {
@@ -156,12 +157,16 @@ main {
     padding-left: 3.4375rem;
 }
 
-.content-right__header {
+.content-right__header,
+.contact-info-card__header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1.875rem;
     flex-wrap: wrap;
+}
+
+.content-right__header {
+    gap: 1.875rem;
     margin-right: 1rem;
 }
 
@@ -189,12 +194,8 @@ main {
 }
 
 .contact-info-card__header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     gap: 3.375rem;
     margin-bottom: 2.5rem;
-    flex-wrap: wrap;
 }
 
 .manage-contact__header {
@@ -244,27 +245,6 @@ main {
 
 .blue-arrow-back {
     display: none;
-}
-
-.create-contact-successful {
-    position: fixed;
-    top: calc(100vh - 100px);
-    left: calc(880px + (100vw - 1430px) * 0.359);
-    transform: translate(-50%, -50%);
-    z-index: 200;
-    height: fit-content;
-    padding: 25px 30px;
-    min-width: 320px;
-    background-color: var(--color-maincolor);
-    font-size: 20px;
-    color: var(--color-white);
-    border-radius: 20px;
-    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.15);
-    transition: all 500ms ease-in-out;
-}
-
-.create-contact-successful.invisible {
-    transform: translate(200vw, 0px);
 }
 
 #add-new-contact-btn {
@@ -405,15 +385,5 @@ main {
 
     .contact-info__details {
         gap: 15px;
-    }
-
-    .create-contact-successful {
-        top: calc(100vh - 300px);
-        left: 50vw;
-        min-width: fit-content;
-    }
-
-    .create-contact-successful.invisible {
-        transform: translate(-50%, 200vh);
     }
 }
