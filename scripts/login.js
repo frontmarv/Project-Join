@@ -1,4 +1,7 @@
-/** @type {HTMLElement} DOM elements for login form */
+/**
+ * DOM elements for the login form
+ * @type {HTMLElement}
+ */
 const email = document.getElementById('email');
 const emailWrapper = document.getElementById('email__wrapper');
 const password = document.getElementById('password');
@@ -11,27 +14,36 @@ const main = document.querySelector('main');
 const footer = document.querySelector('footer');
 const welcomescreenMobile = document.getElementById('welcomescreen-mobile');
 
-/** @type {boolean} Tracks if mobile header has been added */
+/**
+ * Tracks if the mobile header has been dynamically added
+ * @type {boolean}
+ */
 let headerAdded = false;
 
-/** @type {string|null} Tracks if welcome animation was shown */
+/**
+ * Tracks if the welcome animation was previously shown
+ * @type {string|null}
+ */
 let hasShownWelcomeAnimation = sessionStorage.getItem('welcomeAnimationShown');
 
+// -----------------------------------------------------------------------------
+// INITIALIZATION
+// -----------------------------------------------------------------------------
 
 /**
-* Checks whether the welcome animation has been shown in the current session.
-* If not, marks it as shown in session storage to prevent repeat animations.
-  */
+ * Marks welcome animation as shown if not already recorded in session storage.
+ */
 if (!hasShownWelcomeAnimation) {
     sessionStorage.setItem('welcomeAnimationShown', 'true');
 }
 
+
 /**
-* Preloads logo images once the DOM content is fully loaded.
-* This helps prevent flickering during the welcome animation.
-  */
+ * Preloads logo images to avoid flickering during the intro animation.
+ * @listens DOMContentLoaded
+ */
 window.addEventListener("DOMContentLoaded", () => {
-    /** @type {string[]} List of logo image paths to preload. */
+    /** @type {string[]} */
     let animationImages = [
         "./assets/img/logo-black.png",
         "./assets/img/logo-white.png"
@@ -43,81 +55,82 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// -----------------------------------------------------------------------------
+// EVENT LISTENERS
+// -----------------------------------------------------------------------------
+
 /**
-* Clears any displayed login error message when the user starts typing
-* in the email input field.
-@listens {Event} keyup
-  */
+ * Clears login error feedback when typing begins in the email field.
+ * @listens keyup
+ */
 email.addEventListener('keyup', clearLoginError);
 
-
 /**
-* Clears the login error and updates the password lock icon
-* each time a key is released in the password input field.
-@listens {Event} keyup
-  */
+ * Clears error state & updates password lock icon with each keyup.
+ * @listens keyup
+ */
 password.addEventListener('keyup', () => {
     clearLoginError();
     updatePasswordLockIcon();
 });
 
+
 /**
-* Handles screen resizing events to adjust the layout or UI components
-* for different screen sizes dynamically.
- * @listens {Event} resize
-  */
+ * Handles responsive layout adjustments.
+ * @listens resize
+ */
 window.addEventListener("resize", handleResizeScreen);
 
 /**
-* Ensures correct layout adjustments when the page finishes loading.
- * @listens {Event} load
-  */
+ * Ensures correct UI layout when page is fully loaded.
+ * @listens load
+ */
 window.addEventListener("load", handleResizeScreen);
 
 /**
-* Runs the welcome screen animation after the page is fully loaded.
-* The animation type depends on the device width (mobile vs desktop).
-* If the animation has already been shown, a static version is displayed instead.
- * @listens {Event} load
-  */
+ * Controls welcome animation or fallback static state.
+ * @listens load
+ */
 window.addEventListener('load', () => {
     if (!hasShownWelcomeAnimation) {
         if (window.innerWidth < 1025) {
             welcomeScreenAnimationMobile();
-        } else {
-            welcomeScreenAnimationDesktop();
+
+        } else { welcomeScreenAnimationDesktop();
         }
-    } else {
-        welcomeScreenNoAnimation();
+
+    } else { welcomeScreenNoAnimation();
     }
 });
 
 
 /**
-* Detects when the user presses the Enter key in the password input field
-* and triggers the login attempt process.
-* @listens {KeyboardEvent} keydown
-* @param {KeyboardEvent} event - The keyboard event object.
-  */
+ * Detects Enter key in password field and triggers login.
+ * @listens keydown
+ * @param {KeyboardEvent} event
+ */
 password.addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        attemptLogin();
-    }
+    if (event.key === "Enter") { attemptLogin() }
 });
 
+// -----------------------------------------------------------------------------
+// WELCOME SCREEN ANIMATIONS
+// -----------------------------------------------------------------------------
 
 /**
- * Handles the welcome screen animation for desktop devices
+ * General welcome animation logic (desktop & mobile).
  * @returns {void}
  */
 function welcomeScreenAnimation() {
     logo.style.transition = 'none';
     logo.classList.add('start');
     logo.style.visibility = 'visible';
+
     setTimeout(() => {
         logo.style.transition = 'transform 1s ease-in-out';
         logo.classList.remove('start');
     }, 200);
+
     setTimeout(() => {
         footer.classList.remove('invisible');
         main.classList.remove('invisible');
@@ -127,7 +140,7 @@ function welcomeScreenAnimation() {
 
 
 /**
- * Handles the welcome screen animation for desktop devices
+ * Executes desktop variant of welcome animation.
  * @returns {void}
  */
 function welcomeScreenAnimationDesktop() {
@@ -137,23 +150,23 @@ function welcomeScreenAnimationDesktop() {
 
 
 /**
- * Handles the welcome screen animation for mobile devices
+ * Executes mobile welcome animation flow.
  * @returns {void}
  */
 function welcomeScreenAnimationMobile() {
     logo.classList.add('welcome-logo');
-    setTimeout(() => {
-        welcomescreenMobile.classList.add('hidden');
-        welcomeScreenAnimation();
+
+    setTimeout(() => { welcomescreenMobile.classList.add('hidden');
+        welcomeScreenAnimation()
     }, 300);
-    setTimeout(() => {
-        logo.classList.remove('welcome-logo');
+
+    setTimeout(() => { logo.classList.remove('welcome-logo')
     }, 400);
 }
 
 
 /**
- * Handles the welcome screen when there is no welcome animation
+ * Displays static welcome state when animation already occurred.
  * @returns {void}
  */
 function welcomeScreenNoAnimation() {
@@ -164,61 +177,79 @@ function welcomeScreenNoAnimation() {
     headerSignup.classList.remove('invisible');
 }
 
+// -----------------------------------------------------------------------------
+// LOGIN FUNCTIONALITY
+// -----------------------------------------------------------------------------
 
 /**
- * Attempts to log in the user with provided credentials
+ * Attempts to authenticate the user using provided email & password.
+ * @async
  * @returns {Promise<void>}
  */
 async function attemptLogin() {
     let data = await fetchData();
-    let dataArray = Object.values(data)
+    let dataArray = Object.values(data);
     let existingUser = dataArray.find(user => user.email === email.value);
-    let loginIsValid = validateLoginInputs(existingUser);
+
+    let loginIsValid = await validateLoginInputs(existingUser);
+
     if (loginIsValid) {
         getUserIdByEmail(existingUser.email);
         let multipatch = { "loggedIn": true };
         await saveChangesToDB(multipatch);
-        sessionStorage.setItem('loggedIn', 'user')
+        sessionStorage.setItem('loggedIn', 'user');
         window.location.replace("./pages/summary.html");
     }
 }
 
 
 /**
- * Logs out all users by setting their loggedIn status to false in the database.
- * Fetches all users and applies a PATCH operation to set loggedIn: false for each user.
- * Errors are caught and logged to the console.
- * 
+ * Fetches all users from the database.
+ * @async
+ * @returns {Promise<Object>} User object keyed by userId.
+ * @throws {Error} If request fails.
+ */
+async function fetchAllUsersForLogout() {
+    const res = await fetch(DB_URL + "users.json");
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const users = await res.json();
+    if (!users) throw new Error("No users found in database");
+    return users;
+}
+
+
+/**
+ * Sends a multipatch to set loggedIn:false to one user.
+ * @async
+ * @param {string} key - User ID key.
+ * @returns {Promise<Response>}
+ */
+function logoutSingleUser(key) {
+    const multipatch = { loggedIn: false };
+    return fetch(DB_URL + "users/" + key + ".json", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(multipatch)
+    });
+}
+
+
+/**
+ * Logs out all users by setting loggedIn:false for each.
  * @async
  * @returns {Promise<void>}
- * @throws {Error} If the HTTP request fails or no users are found.
  */
 async function logoutAllUsers() {
     try {
-        const res = await fetch(DB_URL + "users.json");
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const users = await res.json();
-        if (!users) throw new Error("No users found in database");
-        const multipatch = { "loggedIn": false };
-        await Promise.all(
-            Object.keys(users).map(key =>
-                fetch(DB_URL + "users/" + key + ".json", {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(multipatch)
-                })
-            )
-        );
-    } catch (error) {
-        console.error("Error applying multipatch to all users:", error);
+        const users = await fetchAllUsersForLogout();
+        await Promise.all(Object.keys(users).map(key => logoutSingleUser(key)));
+    } catch (error) { console.error("Error applying multipatch to all users:", error);
     }
 }
 
 
 /**
- * Initiates a guest login session and redirects to the summary page.
- * Logs out all users, sets session storage to 'guest', and redirects to summary.html.
- * 
+ * Logs in as guest user and redirects to summary page.
  * @async
  * @returns {Promise<void>}
  */
@@ -230,33 +261,43 @@ async function guestLogin() {
 
 
 /**
- * Validates the login input against existing user data
- * @param {Object} existingUser - The user object to validate against
- * @param {string} existingUser.email - User's email
- * @param {string} existingUser.password - User's password
- * @returns {boolean} True if login is valid, false otherwise
+ * Validates login input: checks existing user + password match.
+ * @async
+ * @param {Object|null} existingUser - User object with email & hashed password.
+ * @returns {Promise<boolean>} True if valid login, otherwise false.
  */
-function validateLoginInputs(existingUser) {
-    if (existingUser == undefined || verifyPassword(existingUser) == false) {
-        showLoginError();
+async function validateLoginInputs(existingUser) {
+    if (!existingUser) { showLoginError();
         return false;
-    } else { return true }
+    }
+
+    const passwordMatches = await verifyPassword(existingUser);
+
+    if (!passwordMatches) { showLoginError();
+        return false;
+    }
+
+    return true;
 }
 
 
 /**
- * Verifies if the entered password matches the stored password
- * @param {Object} existingUser - The user object containing the password
- * @param {string} existingUser.password - The stored password to check against
- * @returns {boolean} True if passwords match, false otherwise
+ * Verifies password by hashing entered value and comparing with DB.
+ * @async
+ * @param {Object} existingUser - User object containing hashed password.
+ * @returns {Promise<boolean>} True if passwords match.
  */
-function verifyPassword(existingUser) {
-    return existingUser.password === password.value;
+async function verifyPassword(existingUser) {
+    const enteredHash = await hashPassword(password.value);
+    return existingUser.password === enteredHash;
 }
 
+// -----------------------------------------------------------------------------
+// ERROR DISPLAY & PASSWORD FIELD UI
+// -----------------------------------------------------------------------------
 
 /**
- * Shows error styling for invalid login attempt
+ * Displays visual error styling for invalid login attempt.
  * @returns {void}
  */
 function showLoginError() {
@@ -267,7 +308,7 @@ function showLoginError() {
 
 
 /**
- * Removes error styling from invalid login attempt
+ * Removes error styling from input fields.
  * @returns {void}
  */
 function clearLoginError() {
@@ -278,7 +319,7 @@ function clearLoginError() {
 
 
 /**
- * Toggles password field visibility between text and password
+ * Toggles visibility between password and text input field.
  * @returns {void}
  */
 function togglePasswordVisibility() {
@@ -288,7 +329,7 @@ function togglePasswordVisibility() {
 
 
 /**
- * Updates the password field icon based on field content
+ * Updates lock/visibility icon depending on input state.
  * @returns {void}
  */
 function updatePasswordLockIcon() {
@@ -301,21 +342,23 @@ function updatePasswordLockIcon() {
 
 
 /**
- * Toggles password icon between 2 different imgs
+ * Toggles password field icon depending on current input type.
  * @returns {void}
  */
 function togglePasswordIcon() {
     if (password.type === 'password') {
         passwordIcon.src = './assets/img/pw-not-visible.svg';
-    }
-    else {
+    } else {
         passwordIcon.src = './assets/img/pw-visible.svg';
     }
 }
 
+// -----------------------------------------------------------------------------
+// RESPONSIVE HEADER HANDLING
+// -----------------------------------------------------------------------------
 
 /**
- * Handles screen resize events and updates header accordingly
+ * Handles dynamically rendering or removing mobile header based on screen size.
  * @returns {void}
  */
 function handleResizeScreen() {
@@ -329,10 +372,14 @@ function handleResizeScreen() {
     }
 }
 
+// -----------------------------------------------------------------------------
+// DATABASE FETCHING
+// -----------------------------------------------------------------------------
 
 /**
- * Fetches user data from the database
- * @returns {Promise<Object|null>} The user data or null if fetch fails
+ * Fetches all user data from Firebase.
+ * @async
+ * @returns {Promise<Object|null>} JSON object of users or null on error.
  */
 async function fetchData() {
     try {
@@ -341,9 +388,9 @@ async function fetchData() {
             throw new Error(`Response status: ${response.status}`);
         }
         rawData = await response.json();
-        return rawData
-    } catch (error) {
-        console.error("Error fetching data:", error.message);
+        return rawData;
+
+    } catch (error) { console.error("Error fetching data:", error.message);
         return null;
     }
 }

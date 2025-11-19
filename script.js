@@ -46,8 +46,45 @@ let rawData;
  */
 let isSmallScreen;
 
+
+// -----------------------------------------------------------------------------
+// EVENT LISTENERS
+// -----------------------------------------------------------------------------
+
+
 window.addEventListener("load", getScreenSize);
 window.addEventListener('resize', getScreenSize);
+
+
+if (overlay) {
+    overlay.addEventListener('click', hideDlg);
+}
+
+
+// -----------------------------------------------------------------------------
+// PASSWORD HASHING
+// -----------------------------------------------------------------------------
+
+
+/**
+ * Generates a SHA-256 hash for the given password.
+ * @async
+ * @param {string} password - The plaintext password to hash.
+ * @returns {Promise<string>} A promise resolving to the hex-encoded hash string.
+ */
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    return [...new Uint8Array(hashBuffer)]
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+}
+
+
+// -----------------------------------------------------------------------------
+// VIEWPORT & RESPONSIVENESS
+// -----------------------------------------------------------------------------
 
 /**
  * Updates the responsive flag based on current viewport width.
@@ -59,14 +96,13 @@ function getScreenSize() {
 }
 
 
-if (overlay) {
-    overlay.addEventListener('click', hideDlg);
-}
+// -----------------------------------------------------------------------------
+// UI: MENU & DIALOG CONTROL
+// -----------------------------------------------------------------------------
 
 
 /**
- * Toggles the visibility of the header user dropdown menu
- * by adding/removing the `.d-none` class.
+ * Toggles the visibility of the header user dropdown menu.
  * @returns {void}
  */
 function toggleMenuVisiblity() {
@@ -75,7 +111,8 @@ function toggleMenuVisiblity() {
 
 
 /**
- * Shows the global dialog with a short enter animation and reveals the overlay.
+ * Shows the global dialog with a short fade-in animation
+ * and makes the overlay visible.
  * @returns {void}
  */
 function displayDlg() {
@@ -92,32 +129,38 @@ function displayDlg() {
 
 
 /**
- * Hides the global dialog with a short exit animation, hides the overlay,
- * clears dialog content, and removes the `dlg-add-task` class if present.
+ * Hides the global dialog with an exit animation,
+ * hides the overlay, clears its content,
+ * and removes task-specific dialog classes.
  * @returns {void}
  */
 function hideDlg() {
     const dlg = document.getElementById('dlg-box');
     const overlay = document.getElementById('overlay');
-
     dlg.classList.remove('show');
     const wasAddTask = dlg.classList.contains('dlg-add-task');
     const wasDeleteContact = dlg.classList.contains('delete-contact__dialog');
+
     setTimeout(() => {
         dlg.classList.add('d-none');
         overlay.classList.add('d-none');
-        if (wasDeleteContact) { removeDeleteClass(); }
+        if (wasDeleteContact) removeDeleteClass();
         if (wasAddTask) dlg.classList.remove('dlg-add-task');
         dlg.innerHTML = "";
     }, 300);
 }
 
 
+// -----------------------------------------------------------------------------
+// UTILITY FUNCTIONS
+// -----------------------------------------------------------------------------
+
+
 /**
- * Returns the initials (uppercase) for a given full user name.
- * Splits by spaces and concatenates the first letter of each part.
- * @param {string} userName - The full name to derive initials from.
- * @returns {string} Initials string (e.g., "JD" for "John Doe").
+ * Extracts initials from the given full name.
+ * Uses up to two words and takes the first letter of each.
+ * @param {string} userName - The full name to process.
+ * @returns {string} The derived initials (e.g., "JD").
  */
 function getUserNameInitials(userName) {
     return userName
@@ -130,22 +173,26 @@ function getUserNameInitials(userName) {
 
 
 /**
- * Sets the minimum selectable date of the due-date input to today (YYYY-MM-DD).
+ * Sets the minimum selectable date on the due-date input to today
+ * in YYYY-MM-DD format.
  * @returns {void}
  */
 function setMinDueDate() {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('due-date').setAttribute('min', today);
-};
+}
 
+
+// -----------------------------------------------------------------------------
+// FIREBASE: USER DATA MANAGEMENT
+// -----------------------------------------------------------------------------
 
 /**
- * Partially updates the currently logged-in user's document in Firebase.
- * Uses PATCH with the provided `multipatch` object.
+ * Applies a partial update (PATCH) to the currently logged-in user's document.
  * @async
- * @param {Object} multipatch - Key/value pairs to be patched on the user document.
- * @returns {Promise<void>} Resolves when the request completes successfully.
- * @throws {Error} If no user key is stored or the HTTP request fails.
+ * @param {Object} multipatch - Key/value pairs to update in the user document.
+ * @returns {Promise<void>} Resolves when successful.
+ * @throws {Error} If no user is loaded or the request fails.
  */
 async function saveChangesToDB(multipatch) {
     if (!STORED_USER_KEY) throw new Error('No user key found');
@@ -161,36 +208,37 @@ async function saveChangesToDB(multipatch) {
 
 
 /**
- * Looks up a user's Firebase key by their display name and stores it in `STORED_USER_KEY`.
- * @param {string} userName - The display name to search for.
- * @returns {string|undefined} The found Firebase key, or undefined if not found.
+ * Searches the raw user data for a matching display name
+ * and stores its Firebase key globally in `STORED_USER_KEY`.
+ * @param {string} userName - The display name to match.
+ * @returns {string|undefined} The Firebase key or undefined if not found.
  */
 function getAndStoreUserId(userName) {
     for (const key in rawData) {
         if (rawData[key].name === userName) {
             STORED_USER_KEY = key;
-            return STORED_USER_KEY
+            return STORED_USER_KEY;
         }
     }
 }
 
 
 /**
- * Fetches all users from Firebase and returns them as an array.
- * Also stores the raw keyed object in `rawData`.
+ * Fetches all user objects from Firebase,
+ * stores the raw keyed object into `rawData`,
+ * and returns an array of user objects.
  * @async
- * @returns {Promise<Array<Object>|undefined>} An array of user objects, or undefined on error.
+ * @returns {Promise<Array<Object>|undefined>} An array of user objects.
  */
 async function fetchAllUsers() {
     try {
         let response = await fetch(DB_URL + "users/" + ".json");
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Response status: ${response.status}`);
+
         let data = await response.json();
         rawData = data;
-        let userArray = Object.values(data);
-        return userArray
+
+        return Object.values(data);
     } catch (error) {
         console.error("Error fetching data:", error.message);
     }
@@ -198,45 +246,37 @@ async function fetchAllUsers() {
 
 
 /**
- * Extracts the name of the user with `loggedIn === true` from a user array.
+ * Returns the name of the first user with `loggedIn === true`.
  * @param {Array<Object>} users - Array of user objects.
- * @returns {string|null} The logged-in user's name, or null if none found.
+ * @returns {string|null} The logged-in user's name or null if none.
  */
 function extractActiveUserInfo(users) {
     let userLoggedIn = users.find(user => user.loggedIn === true);
-    if (userLoggedIn !== undefined) {
-        return userLoggedIn.name
-    } else {
-        return null
-    }
+    return userLoggedIn ? userLoggedIn.name : null;
 }
 
 
 /**
- * Appends " (You)" to the given user name if it matches the current `LOGGED_IN_USER`.
- * @param {string} userName - The user name to tag.
- * @returns {string} The possibly tagged display name.
+ * Appends " (You)" to the name if it matches the logged-in user.
+ * @param {string} userName - The user name to check.
+ * @returns {string} The modified name or the original.
  */
 function addTagToLoggedInUser(userName) {
-    if (userName === LOGGED_IN_USER) {
-        let modifiedUserName = userName + ' (You)';
-        return modifiedUserName
-    } else {
-        return userName
-    }
+    return userName === LOGGED_IN_USER ? `${userName} (You)` : userName;
 }
 
 
 /**
- * Looks up a user's Firebase key by their email address and stores it in `STORED_USER_KEY`.
- * @param {string} existingUserMail - The email address to search for.
- * @returns {string|undefined} The found Firebase key, or undefined if not found.
+ * Looks up a user's Firebase key by email
+ * and stores it globally in `STORED_USER_KEY`.
+ * @param {string} existingUserMail - Email address to search.
+ * @returns {string|undefined} The found Firebase key or undefined.
  */
 function getUserIdByEmail(existingUserMail) {
     for (const key in rawData) {
         if (rawData[key].email === existingUserMail) {
             STORED_USER_KEY = key;
-            return STORED_USER_KEY
+            return STORED_USER_KEY;
         }
     }
 }
