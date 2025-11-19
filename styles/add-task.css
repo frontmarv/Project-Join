@@ -147,12 +147,9 @@ textarea.input-error:focus,
   display: flex;
   margin-top: 4rem;
   flex: 1;
-  /* nimmt verbleibenden Raum ein */
   overflow-y: auto;
-  /* scrollt bei Bedarf */
+  scrollbar-width: thin;
   min-height: 0;
-  /* WICHTIG für korrektes Flex-Scrolling */
-
 }
 
 .task-content__container textarea {
