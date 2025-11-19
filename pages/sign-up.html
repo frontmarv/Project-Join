@@ -5,15 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kanban Board</title>
+
     <link rel="icon" href="../assets/img/logo-black.png" type="image/x-icon">
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../styles/login-signup.css">
-    <script src="../scripts/sign-up.js" defer></script>
+
+    <script src="../script.js" defer></script>
+    <script src="../scripts/mail-tld-validator.js" defer></script>
+    <script src="../scripts/generate-user-id.js" defer></script>
     <script src="../templates/tpl-login-sign-up.js" defer></script>
     <script src="../templates/tpl-user-profil-img.js" defer></script>
-    <script src="../scripts/mail-tld-validator.js" defer></script>
-    <script src="../script.js" defer></script>
-    <script src="../scripts/generate-user-id.js"></script>
+    <script src="../scripts/sign-up.js" defer></script>
+
+
 </head>
 
 <body>
@@ -68,7 +72,7 @@
                 <p class="useraccess-form__privacy-policy">
                     <input type="checkbox" id="check" onclick="evaluateFormValidity()" />
                     <label for="check"></label>
-                    <span>I accept the <a href="./privacy-policy-external.html" target="_blank">Privacy Policy</a>
+                    <span>I accept the <a href="../privacy-policy-external.html" target="_blank">Privacy Policy</a>
                     </span>
                 </p>
             </div>
@@ -80,8 +84,8 @@
 
     <footer class="content-wrapper">
         <div class="footer__privacy-legal-box">
-            <a href="./privacy-policy-external.html">Privacy Policy</a>
-            <a href="./legal-notice-external.html">Legal notice</a>
+            <a href="../privacy-policy-external.html">Privacy Policy</a>
+            <a href="../legal-notice-external.html">Legal notice</a>
         </div>
     </footer>
 

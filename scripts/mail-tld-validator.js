@@ -15,7 +15,7 @@ const CACHE_KEY = "iana_tlds";
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 const FALLBACK_TLDS = ["com", "net", "org", "de", "io", "app"];
 
-if (window.location.pathname === '/pages/sign-up.html') {
+if (window.location.pathname.endsWith('sign-up.html')) {
   initEmailValidation();
 }
 // ======================================================
