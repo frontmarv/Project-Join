@@ -74,6 +74,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   overflow: auto;
 }
 
+#title {
+  cursor: text;
+}
+
 .task-content__container input,
 .task-content__container select,
 .task-content__container textarea,
