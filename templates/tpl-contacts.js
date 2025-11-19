@@ -29,7 +29,7 @@ function getAddContactDlgTpl() {
                             <input id="contact-dlg-name-input" type="text" placeholder="Name (and Surname)" aria-label="name" onkeyup="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
-                        <p class="inputfield_fill-in-info">No middlenames, connect double names with "-", max. 50 letters</p>
+                        <p class="inputfield_fill-in-info">Connect double names with "-", max. 50 letters</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
@@ -87,7 +87,7 @@ function getEditContactDlgTpl() {
                             <input id="contact-dlg-name-input" type="text" placeholder="Name (and Surname)" aria-label="name" onkeyup="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
-                        <p class="inputfield_fill-in-info">No middlenames, connect double names with "-", max. 50 letters</p>
+                        <p class="inputfield_fill-in-info">Connect double names with "-", max. 50 letters</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">

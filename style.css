@@ -285,7 +285,7 @@ select {
 .user-initials {
   text-anchor: middle;
   dominant-baseline: middle;
-  font-size: 0.75rem;
+  font-size: 14px;
   font-weight: 400;
   fill: var(--color-white);
   pointer-events: none;
