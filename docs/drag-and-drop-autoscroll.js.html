@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>dlg-edit-task-assignment.js - Documentation</title>
+    <title>drag-and-drop-autoscroll.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">dlg-edit-task-assignment.js</h1>
+    <h1 class="page-title">drag-and-drop-autoscroll.js</h1>
     
 
     
@@ -40,405 +40,338 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>// ======================================================
-// 🔹 GLOBAL STATE &amp; REFERENCES
+// 🔹 DRAG &amp; DROP AUTOSCROLL MODULE
+// ======================================================
+// Beinhaltet die komplette Auto-Scroll Engine:
+//
+// - Automatisches horizontales Scrollen (mobile)
+// - Automatisches vertikales Scrollen (mobile &amp; desktop)
+// - Berechnung der Scroll-Geschwindigkeit
+// - Erkennen der passenden Scroll-Container
+// - Intervallbasierte Scroll-Updates während des Drags
 // ======================================================
 
-let selectRef, searchInputRef, optionsRef, listItemsRef;
-let isDropdownOpen = false;
-
-
 // ======================================================
-// 🔹 DROPDOWN CONTROL
+// 🔹 INTERNAL AUTO-SCROLL STATE
 // ======================================================
 
 /**
- * Toggles the visibility of the dropdown menu.
- * @param {boolean} [forceState] - Optional forced state (true/false).
+ * Interval handle for auto-scrolling.
+ * @type {number|null}
  */
-function toggleDropdown(forceState) {
-  if (typeof forceState === "boolean") {
-    isDropdownOpen = forceState;
+let autoScrollInterval = null;
+
+/**
+ * Last pointer event (needed to update hover column during autoscroll).
+ * @type {PointerEvent|null}
+ */
+let lastPointerEvent = null;
+
+/**
+ * Edge threshold in px where scrolling starts.
+ * @type {number}
+ */
+const AUTO_SCROLL_EDGE = 60;
+
+/**
+ * Maximum scroll speed.
+ * @type {number}
+ */
+const AUTO_SCROLL_SPEED_MAX = 18;
+
+/**
+ * Minimum enforced scroll speed.
+ * @type {number}
+ */
+const AUTO_SCROLL_SPEED_MIN = 4;
+
+/**
+ * Current auto-scroll state object.
+ */
+const autoScrollState = {
+  hSpeed: 0,
+  vSpeed: 0,
+  hContainer: null,
+  vContainer: null,
+};
+
+
+
+// ======================================================
+// 🔹 MAIN AUTO-SCROLL ENGINE
+// ======================================================
+
+/**
+ * Main autoscroll handler. Called on pointermove.
+ * @param {PointerEvent} event - Current pointer event.
+ * @returns {void}
+ */
+function handleAutoScroll(event) {
+  if (!isDragging) return stopAutoScroll();
+
+  const hContainer = isMobileDragMode() ? getHorizontalScrollContainer() : null;
+  const vContainer = getVerticalScrollContainer();
+
+  if (!hContainer &amp;&amp; !vContainer) return stopAutoScroll();
+
+  const { hSpeed, vSpeed } = calculateScrollSpeeds(event, hContainer, vContainer);
+
+  updateAutoScrollState(hSpeed, vSpeed, hContainer, vContainer);
+
+  if (!hSpeed &amp;&amp; !vSpeed) return stopAutoScroll();
+
+  startAutoScroll();
+}
+
+
+/**
+ * Calculates autoscroll speeds horizontally and vertically.
+ * @param {PointerEvent} event
+ * @param {HTMLElement|null} hContainer
+ * @param {HTMLElement|null} vContainer
+ * @returns {{hSpeed:number, vSpeed:number}}
+ */
+function calculateScrollSpeeds(event, hContainer, vContainer) {
+  const { clientX: x, clientY: y } = event;
+  let hSpeed = hContainer ? computeHorizontalSpeed(x, hContainer) : 0;
+  let vSpeed = vContainer ? computeVerticalSpeed(y, vContainer) : 0;
+  return { hSpeed, vSpeed };
+}
+
+
+/**
+ * Computes horizontal scroll intensity based on pointer position.
+ * @param {number} x - Pointer X.
+ * @param {HTMLElement} hContainer
+ * @returns {number}
+ */
+function computeHorizontalSpeed(x, hContainer) {
+  const rect = hContainer.getBoundingClientRect();
+  const distLeft = x - rect.left;
+  const distRight = rect.right - x;
+
+  if (distLeft &lt; AUTO_SCROLL_EDGE) {
+    return -scrollIntensity(distLeft);
+  }
+  if (distRight &lt; AUTO_SCROLL_EDGE) {
+    return scrollIntensity(distRight);
+  }
+  return 0;
+}
+
+
+/**
+ * Computes vertical scroll intensity based on pointer Y.
+ * @param {number} y
+ * @param {HTMLElement} vContainer
+ * @returns {number}
+ */
+function computeVerticalSpeed(y, vContainer) {
+  const { distTop, distBottom } = computeVerticalDistances(y, vContainer);
+
+  if (distTop &lt; AUTO_SCROLL_EDGE) {
+    return -scrollIntensity(distTop);
+  }
+  if (distBottom &lt; AUTO_SCROLL_EDGE) {
+    return scrollIntensity(distBottom);
+  }
+  return 0;
+}
+
+
+/**
+ * Computes distances from pointer to top/bottom edges of container.
+ * @param {number} y
+ * @param {HTMLElement} container
+ * @returns {{distTop:number, distBottom:number}}
+ */
+function computeVerticalDistances(y, container) {
+  const isDoc =
+    container === document.scrollingElement ||
+    container === document.documentElement ||
+    container === document.body;
+
+  if (isDoc) {
+    return { distTop: y, distBottom: window.innerHeight - y };
+  }
+
+  const rect = container.getBoundingClientRect();
+  return { distTop: y - rect.top, distBottom: rect.bottom - y };
+}
+
+
+/**
+ * Computes scroll intensity given distance to scroll edge.
+ * @param {number} distance
+ * @returns {number}
+ */
+function scrollIntensity(distance) {
+  const intensity = 1 - Math.max(distance, 0) / AUTO_SCROLL_EDGE;
+  return Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
+}
+
+
+/**
+ * Updates auto-scroll state to current speeds and containers.
+ * @param {number} hSpeed
+ * @param {number} vSpeed
+ * @param {HTMLElement|null} hContainer
+ * @param {HTMLElement|null} vContainer
+ * @returns {void}
+ */
+function updateAutoScrollState(hSpeed, vSpeed, hContainer, vContainer) {
+  autoScrollState.hSpeed = hSpeed;
+  autoScrollState.vSpeed = vSpeed;
+  autoScrollState.hContainer = hContainer;
+  autoScrollState.vContainer = vContainer;
+}
+
+
+// ======================================================
+// 🔹 SCROLL CONTAINER DETECTION
+// ======================================================
+
+/**
+ * Returns the horizontal scroll container for mobile.
+ * @returns {HTMLElement|null}
+ */
+function getHorizontalScrollContainer() {
+  if (!placeholder) return null;
+  return placeholder.closest(".tasks");
+}
+
+
+/**
+ * Returns vertical scroll container (mobile OR desktop).
+ * @returns {HTMLElement|null}
+ */
+function getVerticalScrollContainer() {
+  if (isMobileDragMode()) {
+    return getMobileVerticalContainer();
+  }
+
+  const col = getColumnVerticalContainer();
+  if (col) return col;
+
+  return getBoardOrDocumentContainer();
+}
+
+
+/**
+ * Column scroll container (desktop).
+ * @returns {HTMLElement|null}
+ */
+function getColumnVerticalContainer() {
+  if (!placeholder) return null;
+  const col = placeholder.closest(".tasks");
+  return isScrollable(col) ? col : null;
+}
+
+
+/**
+ * Returns scroll container for board OR entire document.
+ * @returns {HTMLElement}
+ */
+function getBoardOrDocumentContainer() {
+  const board = document.querySelector(".board-content");
+  if (isScrollable(board)) return board;
+  return document.scrollingElement || document.documentElement;
+}
+
+
+/**
+ * Returns true if element is scrollable.
+ * @param {HTMLElement|null} element
+ * @returns {boolean}
+ */
+function isScrollable(element) {
+  return element &amp;&amp; element.scrollHeight > element.clientHeight + 1;
+}
+
+
+// ======================================================
+// 🔹 SCROLL INTERVAL ENGINE
+// ======================================================
+
+/**
+ * Starts autoscroll loop if not already running.
+ * @returns {void}
+ */
+function startAutoScroll() {
+  if (autoScrollInterval) return;
+
+  autoScrollInterval = setInterval(() => {
+    if (!isDragging) return stopAutoScroll();
+
+    performHorizontalScroll();
+    performVerticalScroll();
+    updateHoverColumnIfNeeded();
+  }, 16); // ≈ 60 FPS
+}
+
+
+/**
+ * Applies horizontal scrolling.
+ * @returns {void}
+ */
+function performHorizontalScroll() {
+  const { hContainer, hSpeed } = autoScrollState;
+  if (hContainer &amp;&amp; hSpeed) {
+    hContainer.scrollLeft += hSpeed;
+  }
+}
+
+
+/**
+ * Applies vertical scrolling.
+ * @returns {void}
+ */
+function performVerticalScroll() {
+  const { vContainer, vSpeed } = autoScrollState;
+  if (!vContainer || !vSpeed) return;
+
+  const isDoc =
+    vContainer === document.scrollingElement ||
+    vContainer === document.documentElement ||
+    vContainer === document.body;
+
+  if (isDoc) {
+    window.scrollBy(0, vSpeed);
   } else {
-    isDropdownOpen = !isDropdownOpen;
-  }
-
-  if (optionsRef) {
-    optionsRef.style.display = isDropdownOpen ? "flex" : "none";
+    vContainer.scrollTop += vSpeed;
   }
 }
 
 
 /**
- * Filters visible contacts in the dropdown based on search input.
- * @param {string} term - Search term entered by the user.
+ * Updates column hover detection after autoscroll.
+ * @returns {void}
  */
-function filterContacts(term) {
-  listItemsRef.forEach(listItem => {
-    const name = listItem.querySelector(".username").textContent.toLowerCase();
-    listItem.style.display = name.includes(term) ? "flex" : "none";
-  });
-}
-
-
-// ======================================================
-// 🔹 CHECKBOX HANDLING
-// ======================================================
-
-/**
- * Updates the visual state of a checkbox depending on hover and checked status.
- * @param {HTMLImageElement} checkbox - The checkbox image element.
- * @param {boolean} isChecked - Whether the checkbox is checked.
- * @param {boolean} isHovering - Whether the user is hovering over it.
- */
-function updateCheckboxVisual(checkbox, isChecked, isHovering) {
-  if (isHovering) {
-    checkbox.src = isChecked
-      ? "../assets/img/checkbox-unchecked-hover.svg"
-      : "../assets/img/checkbox-checked-hover.svg";
-  } else {
-    checkbox.src = isChecked
-      ? "../assets/img/checkbox-checked-white.svg"
-      : "../assets/img/checkbox-unchecked.svg";
+function updateHoverColumnIfNeeded() {
+  if (draggedTask &amp;&amp; lastPointerEvent) {
+    updateHoverColumn(lastPointerEvent);
   }
 }
 
 
 /**
- * Initializes all checkbox event handlers for the list items.
+ * Stops autoscroll and clears state.
+ * @returns {void}
  */
-function initCheckboxHandlers() {
-  listItemsRef.forEach(listItem => {
-    const checkbox = listItem.querySelector(".checkbox");
-    bindCheckboxHoverHandlers(listItem, checkbox);
-    bindCheckboxClickHandler(listItem, checkbox);
-  });
-}
-
-
-/**
- * Binds hover events to update checkbox visuals on mouse enter and leave.
- * @param {HTMLElement} listItem - The list item element.
- * @param {HTMLElement} checkbox - The checkbox element.
- */
-function bindCheckboxHoverHandlers(listItem, checkbox) {
-  listItem.addEventListener("mouseenter", () => {
-    updateCheckboxVisual(checkbox, checkbox.dataset.checked === "true", true);
-  });
-
-  listItem.addEventListener("mouseleave", () => {
-    updateCheckboxVisual(checkbox, checkbox.dataset.checked === "true", false);
-  });
-}
-
-
-/**
- * Binds click handler to toggle checkbox state and update visuals.
- * @param {HTMLElement} listItem - The list item element.
- * @param {HTMLElement} checkbox - The checkbox element.
- */
-function bindCheckboxClickHandler(listItem, checkbox) {
-  listItem.addEventListener("click", event => {
-    event.stopPropagation();
-    toggleCheckboxState(listItem, checkbox);
-  });
-}
-
-
-/**
- * Toggles checkbox checked state and updates related visual/UI states.
- * @param {HTMLElement} listItem - The list item element.
- * @param {HTMLElement} checkbox - The checkbox element.
- */
-function toggleCheckboxState(listItem, checkbox) {
-  const isChecked = checkbox.dataset.checked === "true";
-  checkbox.dataset.checked = (!isChecked).toString();
-  updateCheckboxVisual(checkbox, !isChecked, false);
-  listItem.classList.toggle("active", !isChecked);
-}
-
-
-// ======================================================
-// 🔹 DROPDOWN EVENT HANDLERS
-// ======================================================
-
-/**
- * Initializes all dropdown-related event handlers.
- */
-function initDropdownHandlers() {
-  bindDropdownClickHandler();
-  bindDropdownInputHandler();
-  bindOutsideClickHandler();
-}
-
-
-/**
- * Binds click handler to toggle the dropdown when the input field is clicked.
- */
-function bindDropdownClickHandler() {
-  searchInputRef.addEventListener("click", event => {
-    event.stopPropagation();
-    toggleDropdown();
-  });
-}
-
-
-/**
- * Binds input handler to dynamically filter contacts and open dropdown if closed.
- */
-function bindDropdownInputHandler() {
-  searchInputRef.addEventListener("input", event => {
-    const searchTerm = event.target.value.toLowerCase();
-    if (!isDropdownOpen) toggleDropdown(true);
-    filterContacts(searchTerm);
-  });
-}
-
-
-/**
- * Closes the dropdown when the user clicks outside of it.
- */
-function bindOutsideClickHandler() {
-  document.addEventListener("click", event => {
-    if (!selectRef.contains(event.target)) toggleDropdown(false);
-  });
-}
-
-
-// ======================================================
-// 🔹 CONTACT ASSIGNMENT INITIALIZATION
-// ======================================================
-
-/**
- * Initializes the contact assignment dropdown and checkbox interactions.
- */
-function initContactAssign() {
-  initializeContactRefs();
-  if (!validateContactRefs()) return;
-  initDropdownHandlers();
-  initCheckboxHandlers();
-}
-
-
-/**
- * Initializes all DOM reference variables for contact assignment UI.
- */
-function initializeContactRefs() {
-  selectRef = document.getElementById("contact-select");
-  searchInputRef = document.getElementById("contact-search");
-  optionsRef = selectRef?.querySelector(".contact-options");
-  listItemsRef = optionsRef?.querySelectorAll("li") || [];
-}
-
-
-/**
- * Validates that all required contact assignment elements exist.
- * @returns {boolean} True if valid, false otherwise.
- */
-function validateContactRefs() {
-  const isValid = selectRef &amp;&amp; searchInputRef &amp;&amp; optionsRef &amp;&amp; listItemsRef.length > 0;
-  if (!isValid) {
-    console.warn("ContactAssign: Not initialized – required elements missing");
+function stopAutoScroll() {
+  if (autoScrollInterval) {
+    clearInterval(autoScrollInterval);
+    autoScrollInterval = null;
   }
-  return isValid;
+
+  autoScrollState.hSpeed = 0;
+  autoScrollState.vSpeed = 0;
+  autoScrollState.hContainer = null;
+  autoScrollState.vContainer = null;
 }
 
-
-// ======================================================
-// 🔹 ASSIGNMENT LIST POPULATION
-// ======================================================
-
-/**
- * Populates the assignment list with users and initializes event handlers.
- * @param {Object} task - The task object containing assigned contacts.
- */
-function populateAssignmentListFromFirebase(task) {
-  const contactsDropDownList = document.querySelector('.contact-options');
-  const avatarContainer = document.querySelector('.dlg-edit__main__assigned-user-container');
-  if (!validateAssignmentElements(contactsDropDownList, avatarContainer)) return;
-
-  const assignedIds = getAssignedIds(task);
-  renderAssignmentList(contactsDropDownList, assignedIds);
-  initContactAssign();
-  refreshAssignedUserContainer(avatarContainer);
-  bindAssignmentListEvents(contactsDropDownList, avatarContainer);
-}
-
-
-/**
- * Ensures both dropdown and avatar container exist before rendering.
- * @param {HTMLElement} contactsDropDownList - Dropdown list element.
- * @param {HTMLElement} avatarContainer - Avatar container element.
- * @returns {boolean} True if valid, false otherwise.
- */
-function validateAssignmentElements(contactsDropDownList, avatarContainer) {
-  return contactsDropDownList &amp;&amp; avatarContainer;
-}
-
-
-/**
- * Extracts valid assigned user IDs from a task.
- * @param {Object} task - Task object.
- * @returns {string[]} Array of assigned contact IDs.
- */
-function getAssignedIds(task) {
-  return Array.isArray(task.assignedContacts)
-    ? task.assignedContacts.filter(Boolean)
-    : [];
-}
-
-
-/**
- * Renders user entries inside the dropdown based on assigned IDs.
- * @param {HTMLElement} contactsDropDownList - Dropdown list element.
- * @param {string[]} assignedIds - Array of assigned user IDs.
- */
-function renderAssignmentList(contactsDropDownList, assignedIds) {
-  contactsDropDownList.innerHTML = users
-    .map(user => getAssignmentListUserTpl(user, assignedIds.includes(user.id)))
-    .join('');
-}
-
-
-/**
- * Binds click events to dropdown list items to refresh assigned users.
- * @param {HTMLElement} contactsDropDownList - Dropdown list element.
- * @param {HTMLElement} avatarContainer - Avatar container element.
- */
-function bindAssignmentListEvents(contactsDropDownList, avatarContainer) {
-  contactsDropDownList.querySelectorAll('li').forEach(contact => {
-    contact.addEventListener('click', () => {
-      requestAnimationFrame(() => refreshAssignedUserContainer(avatarContainer));
-    });
-  });
-}
-
-
-// ======================================================
-// 🔹 ASSIGNED USER AVATARS
-// ======================================================
-
-/**
- * Creates an SVG badge showing "+x users".
- * @param {number} count - Number of additional users.
- * @returns {string} SVG markup.
- */
-function getMoreUsersSvg(count) {
-  return /*html*/ `
-    &lt;svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">
-      &lt;circle cx="21" cy="21" r="20" fill="rgb(66, 82, 110)" stroke="white" stroke-width="2"/>
-      &lt;text x="21" y="23" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="400" fill="white">
-        +${count}
-      &lt;/text>
-    &lt;/svg>`;
-}
-
-
-function refreshAssignedUserContainer(avatarContainer) {
-    const ids = getSelectedAssignmentIds();
-    const shown = getShownUsers(ids);
-
-    if (ids.length === 0) {
-        renderNoUsers(avatarContainer);
-        return;
-    }
-
-    renderUserAvatars(avatarContainer, shown);
-    renderMoreUsers(avatarContainer, ids);
-}
-
-function getShownUsers(ids) {
-    const max = 5;
-    return ids
-        .slice(0, max)
-        .map(id => users.find(user => user.id === id))
-        .filter(Boolean);
-}
-
-function renderNoUsers(avatarContainer) {
-    avatarContainer.innerHTML = noUsersTemplate();
-}
-
-function renderUserAvatars(avatarContainer, shown) {
-    avatarContainer.innerHTML = shown
-        .map(user => userAvatarTemplate(user))
-        .join('');
-}
-
-function renderMoreUsers(avatarContainer, ids) {
-    const max = 5;
-    if (ids.length &lt;= max) return;
-
-    const more = ids.length - max;
-    avatarContainer.innerHTML += moreUsersTemplate(more);
-}
-
-
-
-/**
- * Retrieves the correct SVG template for a user's avatar.
- * @param {Object} user - User object.
- * @returns {string} SVG markup.
- */
-function getUserAvatarSvg(user) {
-  if (typeof getAssignedUserSvgTpl === 'function') return getAssignedUserSvgTpl(user);
-  if (typeof getAssignetUserSvgtpl === 'function') return getAssignetUserSvgtpl(user);
-  return '';
-}
-
-
-// ======================================================
-// 🔹 SELECTED USER ID EXTRACTION
-// ======================================================
-
-/**
- * Collects all selected user IDs from the contact assignment list.
- * @returns {string[]} Array of selected user IDs.
- */
-function getSelectedAssignmentIds() {
-  const ul = document.querySelector('.contact-options');
-  if (!ul) return [];
-
-  const items = ul.querySelectorAll('li');
-  return extractSelectedIds(items);
-}
-
-
-/**
- * Extracts user IDs from list items that are either active or checked.
- * @param {NodeListOf&lt;HTMLElement>} items - List of contact list items.
- * @returns {string[]} Array of selected user IDs.
- */
-function extractSelectedIds(items) {
-  const picked = [];
-  items.forEach(li => {
-    const userId = getListItemUserId(li);
-    if (userId &amp;&amp; isListItemSelected(li)) picked.push(userId);
-  });
-  return picked;
-}
-
-
-/**
- * Retrieves the user ID from a list item element.
- * @param {HTMLElement} li - The list item element.
- * @returns {string|null} The user ID or null.
- */
-function getListItemUserId(li) {
-  return li.getAttribute('data-user-id');
-}
-
-
-/**
- * Determines whether a list item is selected or its checkbox is checked.
- * @param {HTMLElement} li - The list item element.
- * @returns {boolean} True if the item is selected.
- */
-function isListItemSelected(li) {
-  const checkbox = li.querySelector('.checkbox');
-  const isActive = li.classList.contains('active');
-  const isChecked = checkbox &amp;&amp; checkbox.dataset.checked === 'true';
-  return isActive || isChecked;
-}
+document.addEventListener("pointerup", stopAutoScroll);
+document.addEventListener("pointercancel", stopAutoScroll);
 </code></pre>
         </article>
     </section>

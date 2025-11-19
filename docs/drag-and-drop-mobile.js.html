@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>dlg-edit-task-assignment.js - Documentation</title>
+    <title>drag-and-drop-mobile.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">dlg-edit-task-assignment.js</h1>
+    <h1 class="page-title">drag-and-drop-mobile.js</h1>
     
 
     
@@ -40,404 +40,109 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>// ======================================================
-// 🔹 GLOBAL STATE &amp; REFERENCES
+// 🔹 DRAG &amp; DROP MOBILE MODULE
 // ======================================================
-
-let selectRef, searchInputRef, optionsRef, listItemsRef;
-let isDropdownOpen = false;
-
-
+// Enthält alles, was NUR für mobile Geräte (&lt;1024px Breite)
+// benötigt wird:
+// - Long-Press Aktivierung
+// - Abbrechen durch PointerUp / Bewegung
+// - Touch-Scroll Unterdrückung
+// - Mobile-spezifische Container-Erkennung
 // ======================================================
-// 🔹 DROPDOWN CONTROL
-// ======================================================
-
-/**
- * Toggles the visibility of the dropdown menu.
- * @param {boolean} [forceState] - Optional forced state (true/false).
- */
-function toggleDropdown(forceState) {
-  if (typeof forceState === "boolean") {
-    isDropdownOpen = forceState;
-  } else {
-    isDropdownOpen = !isDropdownOpen;
-  }
-
-  if (optionsRef) {
-    optionsRef.style.display = isDropdownOpen ? "flex" : "none";
-  }
-}
-
-
-/**
- * Filters visible contacts in the dropdown based on search input.
- * @param {string} term - Search term entered by the user.
- */
-function filterContacts(term) {
-  listItemsRef.forEach(listItem => {
-    const name = listItem.querySelector(".username").textContent.toLowerCase();
-    listItem.style.display = name.includes(term) ? "flex" : "none";
-  });
-}
 
 
 // ======================================================
-// 🔹 CHECKBOX HANDLING
+// 🔹 MOBILE LONG PRESS HANDLING
 // ======================================================
 
 /**
- * Updates the visual state of a checkbox depending on hover and checked status.
- * @param {HTMLImageElement} checkbox - The checkbox image element.
- * @param {boolean} isChecked - Whether the checkbox is checked.
- * @param {boolean} isHovering - Whether the user is hovering over it.
+ * Handles pointer down on mobile devices and triggers
+ * a long-press detection instead of immediate dragging.
+ * @param {HTMLElement} taskCard - Task card element pressed.
+ * @param {PointerEvent} event - Pointer event.
+ * @returns {void}
  */
-function updateCheckboxVisual(checkbox, isChecked, isHovering) {
-  if (isHovering) {
-    checkbox.src = isChecked
-      ? "../assets/img/checkbox-unchecked-hover.svg"
-      : "../assets/img/checkbox-checked-hover.svg";
-  } else {
-    checkbox.src = isChecked
-      ? "../assets/img/checkbox-checked-white.svg"
-      : "../assets/img/checkbox-unchecked.svg";
-  }
+function handleMobilePointerDown(taskCard, event) {
+  taskCard.classList.add("task--pressing");
+
+  startLongPressTimer(taskCard, event);
+  setupMobilePointerUpCancel(taskCard);
+  setupMobileMoveCancel(taskCard);
 }
 
 
 /**
- * Initializes all checkbox event handlers for the list items.
+ * Starts the long-press timer that activates dragging after delay.
+ * @param {HTMLElement} taskCard - The card that is pressed.
+ * @param {PointerEvent} event - Pointer event.
+ * @returns {void}
  */
-function initCheckboxHandlers() {
-  listItemsRef.forEach(listItem => {
-    const checkbox = listItem.querySelector(".checkbox");
-    bindCheckboxHoverHandlers(listItem, checkbox);
-    bindCheckboxClickHandler(listItem, checkbox);
-  });
+function startLongPressTimer(taskCard, event) {
+  longPressTimer = setTimeout(() => {
+    attachDragListeners();
+    startDrag(clickedTask, event);
+    taskCard.classList.remove("task--pressing");
+  }, LONG_PRESS_DELAY);
 }
 
 
 /**
- * Binds hover events to update checkbox visuals on mouse enter and leave.
- * @param {HTMLElement} listItem - The list item element.
- * @param {HTMLElement} checkbox - The checkbox element.
+ * Cancels long-press if pointer is released before activation.
+ * @param {HTMLElement} taskCard - Task card element.
+ * @returns {void}
  */
-function bindCheckboxHoverHandlers(listItem, checkbox) {
-  listItem.addEventListener("mouseenter", () => {
-    updateCheckboxVisual(checkbox, checkbox.dataset.checked === "true", true);
-  });
-
-  listItem.addEventListener("mouseleave", () => {
-    updateCheckboxVisual(checkbox, checkbox.dataset.checked === "true", false);
-  });
+function setupMobilePointerUpCancel(taskCard) {
+  document.addEventListener(
+    "pointerup",
+    () => {
+      if (!isDragging) {
+        cancelLongPress();
+        taskCard.classList.remove("task--pressing");
+      }
+    },
+    { once: true }
+  );
 }
 
 
 /**
- * Binds click handler to toggle checkbox state and update visuals.
- * @param {HTMLElement} listItem - The list item element.
- * @param {HTMLElement} checkbox - The checkbox element.
+ * Cancels long-press if the user moves too far (scroll gesture).
+ * @param {HTMLElement} taskCard - Task card element.
+ * @returns {void}
  */
-function bindCheckboxClickHandler(listItem, checkbox) {
-  listItem.addEventListener("click", event => {
-    event.stopPropagation();
-    toggleCheckboxState(listItem, checkbox);
-  });
-}
+function setupMobileMoveCancel(taskCard) {
+  document.addEventListener(
+    "pointermove",
+    (event) => {
+      if (!isDragging) {
+        const movedDistance = Math.hypot(
+          event.clientX - dragStartX,
+          event.clientY - dragStartY
+        );
 
-
-/**
- * Toggles checkbox checked state and updates related visual/UI states.
- * @param {HTMLElement} listItem - The list item element.
- * @param {HTMLElement} checkbox - The checkbox element.
- */
-function toggleCheckboxState(listItem, checkbox) {
-  const isChecked = checkbox.dataset.checked === "true";
-  checkbox.dataset.checked = (!isChecked).toString();
-  updateCheckboxVisual(checkbox, !isChecked, false);
-  listItem.classList.toggle("active", !isChecked);
+        if (movedDistance > 10) {
+          cancelLongPress();
+          taskCard.classList.remove("task--pressing");
+        }
+      }
+    },
+    { passive: true }
+  );
 }
 
 
 // ======================================================
-// 🔹 DROPDOWN EVENT HANDLERS
+// 🔹 MOBILE SCROLL CONTAINER HANDLING
 // ======================================================
 
 /**
- * Initializes all dropdown-related event handlers.
+ * Returns the vertical scroll container to use on mobile.
+ * @returns {HTMLElement}
  */
-function initDropdownHandlers() {
-  bindDropdownClickHandler();
-  bindDropdownInputHandler();
-  bindOutsideClickHandler();
-}
-
-
-/**
- * Binds click handler to toggle the dropdown when the input field is clicked.
- */
-function bindDropdownClickHandler() {
-  searchInputRef.addEventListener("click", event => {
-    event.stopPropagation();
-    toggleDropdown();
-  });
-}
-
-
-/**
- * Binds input handler to dynamically filter contacts and open dropdown if closed.
- */
-function bindDropdownInputHandler() {
-  searchInputRef.addEventListener("input", event => {
-    const searchTerm = event.target.value.toLowerCase();
-    if (!isDropdownOpen) toggleDropdown(true);
-    filterContacts(searchTerm);
-  });
-}
-
-
-/**
- * Closes the dropdown when the user clicks outside of it.
- */
-function bindOutsideClickHandler() {
-  document.addEventListener("click", event => {
-    if (!selectRef.contains(event.target)) toggleDropdown(false);
-  });
-}
-
-
-// ======================================================
-// 🔹 CONTACT ASSIGNMENT INITIALIZATION
-// ======================================================
-
-/**
- * Initializes the contact assignment dropdown and checkbox interactions.
- */
-function initContactAssign() {
-  initializeContactRefs();
-  if (!validateContactRefs()) return;
-  initDropdownHandlers();
-  initCheckboxHandlers();
-}
-
-
-/**
- * Initializes all DOM reference variables for contact assignment UI.
- */
-function initializeContactRefs() {
-  selectRef = document.getElementById("contact-select");
-  searchInputRef = document.getElementById("contact-search");
-  optionsRef = selectRef?.querySelector(".contact-options");
-  listItemsRef = optionsRef?.querySelectorAll("li") || [];
-}
-
-
-/**
- * Validates that all required contact assignment elements exist.
- * @returns {boolean} True if valid, false otherwise.
- */
-function validateContactRefs() {
-  const isValid = selectRef &amp;&amp; searchInputRef &amp;&amp; optionsRef &amp;&amp; listItemsRef.length > 0;
-  if (!isValid) {
-    console.warn("ContactAssign: Not initialized – required elements missing");
-  }
-  return isValid;
-}
-
-
-// ======================================================
-// 🔹 ASSIGNMENT LIST POPULATION
-// ======================================================
-
-/**
- * Populates the assignment list with users and initializes event handlers.
- * @param {Object} task - The task object containing assigned contacts.
- */
-function populateAssignmentListFromFirebase(task) {
-  const contactsDropDownList = document.querySelector('.contact-options');
-  const avatarContainer = document.querySelector('.dlg-edit__main__assigned-user-container');
-  if (!validateAssignmentElements(contactsDropDownList, avatarContainer)) return;
-
-  const assignedIds = getAssignedIds(task);
-  renderAssignmentList(contactsDropDownList, assignedIds);
-  initContactAssign();
-  refreshAssignedUserContainer(avatarContainer);
-  bindAssignmentListEvents(contactsDropDownList, avatarContainer);
-}
-
-
-/**
- * Ensures both dropdown and avatar container exist before rendering.
- * @param {HTMLElement} contactsDropDownList - Dropdown list element.
- * @param {HTMLElement} avatarContainer - Avatar container element.
- * @returns {boolean} True if valid, false otherwise.
- */
-function validateAssignmentElements(contactsDropDownList, avatarContainer) {
-  return contactsDropDownList &amp;&amp; avatarContainer;
-}
-
-
-/**
- * Extracts valid assigned user IDs from a task.
- * @param {Object} task - Task object.
- * @returns {string[]} Array of assigned contact IDs.
- */
-function getAssignedIds(task) {
-  return Array.isArray(task.assignedContacts)
-    ? task.assignedContacts.filter(Boolean)
-    : [];
-}
-
-
-/**
- * Renders user entries inside the dropdown based on assigned IDs.
- * @param {HTMLElement} contactsDropDownList - Dropdown list element.
- * @param {string[]} assignedIds - Array of assigned user IDs.
- */
-function renderAssignmentList(contactsDropDownList, assignedIds) {
-  contactsDropDownList.innerHTML = users
-    .map(user => getAssignmentListUserTpl(user, assignedIds.includes(user.id)))
-    .join('');
-}
-
-
-/**
- * Binds click events to dropdown list items to refresh assigned users.
- * @param {HTMLElement} contactsDropDownList - Dropdown list element.
- * @param {HTMLElement} avatarContainer - Avatar container element.
- */
-function bindAssignmentListEvents(contactsDropDownList, avatarContainer) {
-  contactsDropDownList.querySelectorAll('li').forEach(contact => {
-    contact.addEventListener('click', () => {
-      requestAnimationFrame(() => refreshAssignedUserContainer(avatarContainer));
-    });
-  });
-}
-
-
-// ======================================================
-// 🔹 ASSIGNED USER AVATARS
-// ======================================================
-
-/**
- * Creates an SVG badge showing "+x users".
- * @param {number} count - Number of additional users.
- * @returns {string} SVG markup.
- */
-function getMoreUsersSvg(count) {
-  return /*html*/ `
-    &lt;svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">
-      &lt;circle cx="21" cy="21" r="20" fill="rgb(66, 82, 110)" stroke="white" stroke-width="2"/>
-      &lt;text x="21" y="23" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="400" fill="white">
-        +${count}
-      &lt;/text>
-    &lt;/svg>`;
-}
-
-
-function refreshAssignedUserContainer(avatarContainer) {
-    const ids = getSelectedAssignmentIds();
-    const shown = getShownUsers(ids);
-
-    if (ids.length === 0) {
-        renderNoUsers(avatarContainer);
-        return;
-    }
-
-    renderUserAvatars(avatarContainer, shown);
-    renderMoreUsers(avatarContainer, ids);
-}
-
-function getShownUsers(ids) {
-    const max = 5;
-    return ids
-        .slice(0, max)
-        .map(id => users.find(user => user.id === id))
-        .filter(Boolean);
-}
-
-function renderNoUsers(avatarContainer) {
-    avatarContainer.innerHTML = noUsersTemplate();
-}
-
-function renderUserAvatars(avatarContainer, shown) {
-    avatarContainer.innerHTML = shown
-        .map(user => userAvatarTemplate(user))
-        .join('');
-}
-
-function renderMoreUsers(avatarContainer, ids) {
-    const max = 5;
-    if (ids.length &lt;= max) return;
-
-    const more = ids.length - max;
-    avatarContainer.innerHTML += moreUsersTemplate(more);
-}
-
-
-
-/**
- * Retrieves the correct SVG template for a user's avatar.
- * @param {Object} user - User object.
- * @returns {string} SVG markup.
- */
-function getUserAvatarSvg(user) {
-  if (typeof getAssignedUserSvgTpl === 'function') return getAssignedUserSvgTpl(user);
-  if (typeof getAssignetUserSvgtpl === 'function') return getAssignetUserSvgtpl(user);
-  return '';
-}
-
-
-// ======================================================
-// 🔹 SELECTED USER ID EXTRACTION
-// ======================================================
-
-/**
- * Collects all selected user IDs from the contact assignment list.
- * @returns {string[]} Array of selected user IDs.
- */
-function getSelectedAssignmentIds() {
-  const ul = document.querySelector('.contact-options');
-  if (!ul) return [];
-
-  const items = ul.querySelectorAll('li');
-  return extractSelectedIds(items);
-}
-
-
-/**
- * Extracts user IDs from list items that are either active or checked.
- * @param {NodeListOf&lt;HTMLElement>} items - List of contact list items.
- * @returns {string[]} Array of selected user IDs.
- */
-function extractSelectedIds(items) {
-  const picked = [];
-  items.forEach(li => {
-    const userId = getListItemUserId(li);
-    if (userId &amp;&amp; isListItemSelected(li)) picked.push(userId);
-  });
-  return picked;
-}
-
-
-/**
- * Retrieves the user ID from a list item element.
- * @param {HTMLElement} li - The list item element.
- * @returns {string|null} The user ID or null.
- */
-function getListItemUserId(li) {
-  return li.getAttribute('data-user-id');
-}
-
-
-/**
- * Determines whether a list item is selected or its checkbox is checked.
- * @param {HTMLElement} li - The list item element.
- * @returns {boolean} True if the item is selected.
- */
-function isListItemSelected(li) {
-  const checkbox = li.querySelector('.checkbox');
-  const isActive = li.classList.contains('active');
-  const isChecked = checkbox &amp;&amp; checkbox.dataset.checked === 'true';
-  return isActive || isChecked;
+function getMobileVerticalContainer() {
+  const board = document.querySelector(".board-content");
+  if (isScrollable(board)) return board;
+  return document.scrollingElement || document.documentElement;
 }
 </code></pre>
         </article>

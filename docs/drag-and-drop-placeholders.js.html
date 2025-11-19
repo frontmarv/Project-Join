@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>dlg-edit-task-assignment.js - Documentation</title>
+    <title>drag-and-drop-placeholders.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">dlg-edit-task-assignment.js</h1>
+    <h1 class="page-title">drag-and-drop-placeholders.js</h1>
     
 
     
@@ -40,404 +40,248 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>// ======================================================
-// 🔹 GLOBAL STATE &amp; REFERENCES
+// 🔹 DRAG &amp; DROP PLACEHOLDERS &amp; VISUALS MODULE
+// ======================================================
+// Enthält:
+//
+// - Column Hover Logic
+// - "No Tasks" Placeholder Handling
+// - Drag Placeholder (Task-Space-Holder)
+// - Visual Styling während des Drags
+// - Board-basierte Placeholder-Aktualisierung
 // ======================================================
 
-let selectRef, searchInputRef, optionsRef, listItemsRef;
-let isDropdownOpen = false;
-
 
 // ======================================================
-// 🔹 DROPDOWN CONTROL
+// 🔹 COLUMN HOVER LOGIC
 // ======================================================
 
 /**
- * Toggles the visibility of the dropdown menu.
- * @param {boolean} [forceState] - Optional forced state (true/false).
+ * Updates the currently hovered column during dragging.
+ * Sets `lastHoverCol` and triggers placeholder refresh.
+ * @param {PointerEvent} event - Pointer event.
+ * @returns {void}
  */
-function toggleDropdown(forceState) {
-  if (typeof forceState === "boolean") {
-    isDropdownOpen = forceState;
+function updateHoverColumn(event) {
+  const underPointer = document.elementFromPoint(event.clientX, event.clientY);
+  const col = underPointer?.closest(".tasks") || null;
+
+  if (col !== lastHoverCol) {
+    handleColumnChange(col);
+  }
+}
+
+
+/**
+ * Handles switching between columns during dragging:
+ * - move drag placeholder to new column
+ * - update "no tasks" placeholders in both old and new column
+ * @param {HTMLElement|null} col - Column currently hovered.
+ * @returns {void}
+ */
+function handleColumnChange(col) {
+  // Entering NEW column
+  if (col) {
+    handleNewHoverColumn(col);
+    showNoTasksPlaceholderIfEmpty(col);
+  }
+
+  // Leaving OLD column
+  if (lastHoverCol &amp;&amp; lastHoverCol !== col) {
+    showNoTasksPlaceholderIfEmpty(lastHoverCol);
+  }
+
+  lastHoverCol = col;
+}
+
+
+/**
+ * Handles entering a new column during dragging:
+ * - hides the general "no tasks" placeholder
+ * - moves the drag placeholder into that column
+ * @param {HTMLElement} col - Hovered tasks column.
+ * @returns {void}
+ */
+function handleNewHoverColumn(col) {
+  hideNoTasksPlaceholder(col);
+
+  if (placeholder &amp;&amp; !col.contains(placeholder)) {
+    col.appendChild(placeholder);
+  }
+}
+
+
+// ======================================================
+// 🔹 "NO TASKS" PLACEHOLDER HANDLING
+// ======================================================
+
+/**
+ * Hides the "No tasks" placeholder inside a column.
+ * @param {HTMLElement} col - Column element.
+ * @returns {void}
+ */
+function hideNoTasksPlaceholder(col) {
+  const pl = col?.querySelector(".no-tasks-placeholder");
+  if (pl) pl.style.display = "none";
+}
+
+
+/**
+ * Ensures correct display of the "No tasks" placeholder
+ * depending on whether the column contains tasks.
+ * @param {HTMLElement} col - Column element.
+ * @returns {void}
+ */
+function showNoTasksPlaceholderIfEmpty(col) {
+  if (!col) return;
+
+  const hasDragPlaceholder = col.querySelector(".task--placeholder");
+  if (hasDragPlaceholder) {
+    hideExistingPlaceholder(col);
+    return;
+  }
+
+  const hasRealTask = col.querySelector(".task:not(.task--placeholder):not(.dragging)");
+
+  if (hasRealTask) {
+    hideExistingPlaceholder(col);
   } else {
-    isDropdownOpen = !isDropdownOpen;
-  }
-
-  if (optionsRef) {
-    optionsRef.style.display = isDropdownOpen ? "flex" : "none";
+    ensureNoTasksPlaceholder(col);
   }
 }
 
 
 /**
- * Filters visible contacts in the dropdown based on search input.
- * @param {string} term - Search term entered by the user.
+ * Hides an existing placeholder element inside a given column.
+ * @param {HTMLElement} col - Column element.
+ * @returns {void}
  */
-function filterContacts(term) {
-  listItemsRef.forEach(listItem => {
-    const name = listItem.querySelector(".username").textContent.toLowerCase();
-    listItem.style.display = name.includes(term) ? "flex" : "none";
-  });
+function hideExistingPlaceholder(col) {
+  const existing = col.querySelector(".no-tasks-placeholder");
+  if (existing) existing.style.display = "none";
 }
 
 
-// ======================================================
-// 🔹 CHECKBOX HANDLING
-// ======================================================
-
 /**
- * Updates the visual state of a checkbox depending on hover and checked status.
- * @param {HTMLImageElement} checkbox - The checkbox image element.
- * @param {boolean} isChecked - Whether the checkbox is checked.
- * @param {boolean} isHovering - Whether the user is hovering over it.
+ * Ensures that a "No tasks" placeholder exists and is visible.
+ * Creates one if necessary.
+ * @param {HTMLElement} col - Column element.
+ * @returns {void}
  */
-function updateCheckboxVisual(checkbox, isChecked, isHovering) {
-  if (isHovering) {
-    checkbox.src = isChecked
-      ? "../assets/img/checkbox-unchecked-hover.svg"
-      : "../assets/img/checkbox-checked-hover.svg";
-  } else {
-    checkbox.src = isChecked
-      ? "../assets/img/checkbox-checked-white.svg"
-      : "../assets/img/checkbox-unchecked.svg";
+function ensureNoTasksPlaceholder(col) {
+  let pl = col.querySelector(".no-tasks-placeholder");
+
+  if (!pl) {
+    const wrap = document.createElement("div");
+    wrap.innerHTML = getPlaceholderTpl();
+    pl = wrap.firstElementChild;
+    col.appendChild(pl);
   }
-}
 
-
-/**
- * Initializes all checkbox event handlers for the list items.
- */
-function initCheckboxHandlers() {
-  listItemsRef.forEach(listItem => {
-    const checkbox = listItem.querySelector(".checkbox");
-    bindCheckboxHoverHandlers(listItem, checkbox);
-    bindCheckboxClickHandler(listItem, checkbox);
-  });
-}
-
-
-/**
- * Binds hover events to update checkbox visuals on mouse enter and leave.
- * @param {HTMLElement} listItem - The list item element.
- * @param {HTMLElement} checkbox - The checkbox element.
- */
-function bindCheckboxHoverHandlers(listItem, checkbox) {
-  listItem.addEventListener("mouseenter", () => {
-    updateCheckboxVisual(checkbox, checkbox.dataset.checked === "true", true);
-  });
-
-  listItem.addEventListener("mouseleave", () => {
-    updateCheckboxVisual(checkbox, checkbox.dataset.checked === "true", false);
-  });
-}
-
-
-/**
- * Binds click handler to toggle checkbox state and update visuals.
- * @param {HTMLElement} listItem - The list item element.
- * @param {HTMLElement} checkbox - The checkbox element.
- */
-function bindCheckboxClickHandler(listItem, checkbox) {
-  listItem.addEventListener("click", event => {
-    event.stopPropagation();
-    toggleCheckboxState(listItem, checkbox);
-  });
-}
-
-
-/**
- * Toggles checkbox checked state and updates related visual/UI states.
- * @param {HTMLElement} listItem - The list item element.
- * @param {HTMLElement} checkbox - The checkbox element.
- */
-function toggleCheckboxState(listItem, checkbox) {
-  const isChecked = checkbox.dataset.checked === "true";
-  checkbox.dataset.checked = (!isChecked).toString();
-  updateCheckboxVisual(checkbox, !isChecked, false);
-  listItem.classList.toggle("active", !isChecked);
+  pl.style.display = "flex";
 }
 
 
 // ======================================================
-// 🔹 DROPDOWN EVENT HANDLERS
+// 🔹 DRAG PLACEHOLDER (Space-holder for dragged task)
 // ======================================================
 
 /**
- * Initializes all dropdown-related event handlers.
+ * Creates a placeholder matching the dragged task’s size
+ * to preserve layout while dragging.
+ * @param {HTMLElement} taskCard - Dragged task card.
+ * @returns {void}
  */
-function initDropdownHandlers() {
-  bindDropdownClickHandler();
-  bindDropdownInputHandler();
-  bindOutsideClickHandler();
+function createPlaceholder(taskCard) {
+  const rect = taskCard.getBoundingClientRect();
+
+  placeholder = document.createElement("div");
+  placeholder.className = "task task--placeholder";
+  placeholder.style.width = `${rect.width}px`;
+  placeholder.style.height = `${rect.height}px`;
+
+  taskCard.parentNode.insertBefore(placeholder, taskCard);
 }
 
 
 /**
- * Binds click handler to toggle the dropdown when the input field is clicked.
+ * Inserts the dragged task into the placeholder’s position.
+ * @returns {void}
  */
-function bindDropdownClickHandler() {
-  searchInputRef.addEventListener("click", event => {
-    event.stopPropagation();
-    toggleDropdown();
-  });
-}
-
-
-/**
- * Binds input handler to dynamically filter contacts and open dropdown if closed.
- */
-function bindDropdownInputHandler() {
-  searchInputRef.addEventListener("input", event => {
-    const searchTerm = event.target.value.toLowerCase();
-    if (!isDropdownOpen) toggleDropdown(true);
-    filterContacts(searchTerm);
-  });
-}
-
-
-/**
- * Closes the dropdown when the user clicks outside of it.
- */
-function bindOutsideClickHandler() {
-  document.addEventListener("click", event => {
-    if (!selectRef.contains(event.target)) toggleDropdown(false);
-  });
-}
-
-
-// ======================================================
-// 🔹 CONTACT ASSIGNMENT INITIALIZATION
-// ======================================================
-
-/**
- * Initializes the contact assignment dropdown and checkbox interactions.
- */
-function initContactAssign() {
-  initializeContactRefs();
-  if (!validateContactRefs()) return;
-  initDropdownHandlers();
-  initCheckboxHandlers();
-}
-
-
-/**
- * Initializes all DOM reference variables for contact assignment UI.
- */
-function initializeContactRefs() {
-  selectRef = document.getElementById("contact-select");
-  searchInputRef = document.getElementById("contact-search");
-  optionsRef = selectRef?.querySelector(".contact-options");
-  listItemsRef = optionsRef?.querySelectorAll("li") || [];
-}
-
-
-/**
- * Validates that all required contact assignment elements exist.
- * @returns {boolean} True if valid, false otherwise.
- */
-function validateContactRefs() {
-  const isValid = selectRef &amp;&amp; searchInputRef &amp;&amp; optionsRef &amp;&amp; listItemsRef.length > 0;
-  if (!isValid) {
-    console.warn("ContactAssign: Not initialized – required elements missing");
+function moveTaskToPlaceholder() {
+  if (placeholder &amp;&amp; placeholder.parentNode) {
+    placeholder.parentNode.insertBefore(draggedTask, placeholder);
   }
-  return isValid;
+
+  placeholder?.remove();
+  placeholder = null;
 }
 
 
 // ======================================================
-// 🔹 ASSIGNMENT LIST POPULATION
+// 🔹 VISUAL STYLING OF DRAGGED TASK
 // ======================================================
 
 /**
- * Populates the assignment list with users and initializes event handlers.
- * @param {Object} task - The task object containing assigned contacts.
+ * Applies fixed-position styling and transform effects
+ * to visually separate the dragged task from the layout.
+ * @param {HTMLElement} taskCard - Dragged task card.
+ * @param {PointerEvent} event - Pointer event.
+ * @returns {void}
  */
-function populateAssignmentListFromFirebase(task) {
-  const contactsDropDownList = document.querySelector('.contact-options');
-  const avatarContainer = document.querySelector('.dlg-edit__main__assigned-user-container');
-  if (!validateAssignmentElements(contactsDropDownList, avatarContainer)) return;
+function prepareTaskForDragging(taskCard, event) {
+  const rect = taskCard.getBoundingClientRect();
 
-  const assignedIds = getAssignedIds(task);
-  renderAssignmentList(contactsDropDownList, assignedIds);
-  initContactAssign();
-  refreshAssignedUserContainer(avatarContainer);
-  bindAssignmentListEvents(contactsDropDownList, avatarContainer);
-}
-
-
-/**
- * Ensures both dropdown and avatar container exist before rendering.
- * @param {HTMLElement} contactsDropDownList - Dropdown list element.
- * @param {HTMLElement} avatarContainer - Avatar container element.
- * @returns {boolean} True if valid, false otherwise.
- */
-function validateAssignmentElements(contactsDropDownList, avatarContainer) {
-  return contactsDropDownList &amp;&amp; avatarContainer;
-}
-
-
-/**
- * Extracts valid assigned user IDs from a task.
- * @param {Object} task - Task object.
- * @returns {string[]} Array of assigned contact IDs.
- */
-function getAssignedIds(task) {
-  return Array.isArray(task.assignedContacts)
-    ? task.assignedContacts.filter(Boolean)
-    : [];
-}
-
-
-/**
- * Renders user entries inside the dropdown based on assigned IDs.
- * @param {HTMLElement} contactsDropDownList - Dropdown list element.
- * @param {string[]} assignedIds - Array of assigned user IDs.
- */
-function renderAssignmentList(contactsDropDownList, assignedIds) {
-  contactsDropDownList.innerHTML = users
-    .map(user => getAssignmentListUserTpl(user, assignedIds.includes(user.id)))
-    .join('');
-}
-
-
-/**
- * Binds click events to dropdown list items to refresh assigned users.
- * @param {HTMLElement} contactsDropDownList - Dropdown list element.
- * @param {HTMLElement} avatarContainer - Avatar container element.
- */
-function bindAssignmentListEvents(contactsDropDownList, avatarContainer) {
-  contactsDropDownList.querySelectorAll('li').forEach(contact => {
-    contact.addEventListener('click', () => {
-      requestAnimationFrame(() => refreshAssignedUserContainer(avatarContainer));
-    });
+  Object.assign(taskCard.style, {
+    position: "fixed",
+    left: `${event.clientX - offsetX}px`,
+    top: `${event.clientY - offsetY}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    zIndex: "10000",
+    pointerEvents: "none"
   });
+
+  taskCard.classList.add("dragging");
+  taskCard.style.transform = "rotate(2deg) scale(1.02)";
 }
 
 
 // ======================================================
-// 🔹 ASSIGNED USER AVATARS
+// 🔹 BOARD PLACEHOLDER UPDATE
 // ======================================================
 
-/**
- * Creates an SVG badge showing "+x users".
- * @param {number} count - Number of additional users.
- * @returns {string} SVG markup.
- */
-function getMoreUsersSvg(count) {
-  return /*html*/ `
-    &lt;svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">
-      &lt;circle cx="21" cy="21" r="20" fill="rgb(66, 82, 110)" stroke="white" stroke-width="2"/>
-      &lt;text x="21" y="23" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="400" fill="white">
-        +${count}
-      &lt;/text>
-    &lt;/svg>`;
-}
-
-
-function refreshAssignedUserContainer(avatarContainer) {
-    const ids = getSelectedAssignmentIds();
-    const shown = getShownUsers(ids);
-
-    if (ids.length === 0) {
-        renderNoUsers(avatarContainer);
-        return;
-    }
-
-    renderUserAvatars(avatarContainer, shown);
-    renderMoreUsers(avatarContainer, ids);
-}
-
-function getShownUsers(ids) {
-    const max = 5;
-    return ids
-        .slice(0, max)
-        .map(id => users.find(user => user.id === id))
-        .filter(Boolean);
-}
-
-function renderNoUsers(avatarContainer) {
-    avatarContainer.innerHTML = noUsersTemplate();
-}
-
-function renderUserAvatars(avatarContainer, shown) {
-    avatarContainer.innerHTML = shown
-        .map(user => userAvatarTemplate(user))
-        .join('');
-}
-
-function renderMoreUsers(avatarContainer, ids) {
-    const max = 5;
-    if (ids.length &lt;= max) return;
-
-    const more = ids.length - max;
-    avatarContainer.innerHTML += moreUsersTemplate(more);
-}
-
-
 
 /**
- * Retrieves the correct SVG template for a user's avatar.
- * @param {Object} user - User object.
- * @returns {string} SVG markup.
+ * Updates the "no tasks" placeholder for all board columns,
+ * based on the board's internal `columnMap`.
+ * @returns {void}
  */
-function getUserAvatarSvg(user) {
-  if (typeof getAssignedUserSvgTpl === 'function') return getAssignedUserSvgTpl(user);
-  if (typeof getAssignetUserSvgtpl === 'function') return getAssignetUserSvgtpl(user);
-  return '';
-}
-
-
-// ======================================================
-// 🔹 SELECTED USER ID EXTRACTION
-// ======================================================
-
-/**
- * Collects all selected user IDs from the contact assignment list.
- * @returns {string[]} Array of selected user IDs.
- */
-function getSelectedAssignmentIds() {
-  const ul = document.querySelector('.contact-options');
-  if (!ul) return [];
-
-  const items = ul.querySelectorAll('li');
-  return extractSelectedIds(items);
+function updateAllPlaceholders() {
+  Object.values(columnMap).forEach(updateColumnPlaceholder);
 }
 
 
 /**
- * Extracts user IDs from list items that are either active or checked.
- * @param {NodeListOf&lt;HTMLElement>} items - List of contact list items.
- * @returns {string[]} Array of selected user IDs.
+ * Shows or removes a "no tasks" placeholder for a specific column
+ * based on presence of tasks and using board templates.
+ * @param {string} columnId - ID of the column.
+ * @returns {void}
  */
-function extractSelectedIds(items) {
-  const picked = [];
-  items.forEach(li => {
-    const userId = getListItemUserId(li);
-    if (userId &amp;&amp; isListItemSelected(li)) picked.push(userId);
-  });
-  return picked;
-}
+function updateColumnPlaceholder(columnId) {
+  const col = document.getElementById(columnId);
+  const hasTask = col.querySelector(".task");
+  const placeholder = col.querySelector(".no-tasks-placeholder");
 
+  if (hasTask &amp;&amp; placeholder) {
+    placeholder.remove();
+  }
 
-/**
- * Retrieves the user ID from a list item element.
- * @param {HTMLElement} li - The list item element.
- * @returns {string|null} The user ID or null.
- */
-function getListItemUserId(li) {
-  return li.getAttribute('data-user-id');
-}
-
-
-/**
- * Determines whether a list item is selected or its checkbox is checked.
- * @param {HTMLElement} li - The list item element.
- * @returns {boolean} True if the item is selected.
- */
-function isListItemSelected(li) {
-  const checkbox = li.querySelector('.checkbox');
-  const isActive = li.classList.contains('active');
-  const isChecked = checkbox &amp;&amp; checkbox.dataset.checked === 'true';
-  return isActive || isChecked;
+  if (!hasTask &amp;&amp; !placeholder) {
+    const div = document.createElement("div");
+    div.innerHTML = getPlaceholderTpl();
+    col.appendChild(div.firstElementChild);
+  }
 }
 </code></pre>
         </article>
