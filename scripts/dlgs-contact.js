@@ -97,11 +97,7 @@ function setMultipatch() {
  */
 async function saveDataEditContactDlg(data) {
     removeAnimationClass();
-    const multipatch = {
-        "name": data.name,
-        "email": data.email,
-        "phone": data.phone
-    };
+    const multipatch = {"name": data.name, "email": data.email, "phone": data.phone};
     await saveChangesToDB(multipatch);
     await renderContactList();
     const userName = rawData[STORED_USER_KEY].name;

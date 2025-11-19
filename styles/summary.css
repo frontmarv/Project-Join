@@ -45,9 +45,8 @@ h3 {
 .summary-content__metrics {
     display: flex;
     flex-direction: row;
-
     align-items: center;
-    margin-top: 4rem;
+    padding-top: 4rem;
     gap: 4rem;
     padding-bottom: 1rem;
     overflow-y: auto;
