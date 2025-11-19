@@ -94,11 +94,10 @@ function onPointerDown(event) {
   event.preventDefault();
   initializePointerDownState(event, taskCard);
 
-  if (isMobileDragMode()) {
-    handleMobilePointerDown(taskCard, event);
-  } else {
-    attachDragListeners();
-  }
+  if (isMobileDragMode()) {handleMobilePointerDown(taskCard, event);
+  } 
+    else {attachDragListeners();
+    }
 }
 
 
@@ -141,9 +140,9 @@ function setupMobilePointerUpCancel(taskCard) {
 
 
 function setupMobileMoveCancel(taskCard) {
-  document.addEventListener("pointermove", (e) => {
+  document.addEventListener("pointermove", (event) => {
     if (!isDragging) {
-      const movedDistance = Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY);
+      const movedDistance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
       if (movedDistance > 10) {
         cancelLongPress();
         taskCard.classList.remove("task--pressing");
@@ -190,38 +189,46 @@ function setPointerOffsets(event, taskCard) {
 // 🔹 POINTER MOVE
 // ======================================================
 
-/**
- * Handles pointer move events for dragging logic.
- * @param {PointerEvent} event - Pointer event.
- */
 function onPointerMove(event) {
-  if (!clickedTask) return;
-  if (isMobileDragMode() && !isDragging && longPressTimer) return;
+    if (!clickedTask) return;
+    if (isMobileDragMode() && !isDragging && longPressTimer) return;
 
-  const distance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
-  const primaryButtonStillPressed = event.buttons === 1;
+    handleDesktopDragStart(event);
+    handleDraggingMovement(event);
+    handleEmptyColumnPlaceholder();
+}
 
-  if (!isDragging && distance > DRAG_THRESHOLD && primaryButtonStillPressed && !isMobileDragMode()) {
-    startDrag(clickedTask, event);
-  }
+function handleDesktopDragStart(event) {
+    const distance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
+    const primaryButtonStillPressed = event.buttons === 1;
 
-  if (isDragging && primaryButtonStillPressed) {
+    if (!isDragging &&
+        distance > DRAG_THRESHOLD &&
+        primaryButtonStillPressed &&
+        !isMobileDragMode()) {
+        startDrag(clickedTask, event);
+    }
+}
+
+function handleDraggingMovement(event) {
+    if (!isDragging || event.buttons !== 1) return;
+
     updateDraggingPosition(event);
     lastPointerEvent = event;
-    handleAutoScroll(event);  // jetzt für Mobile + Desktop zuständig
-  }
+    handleAutoScroll(event);
+}
 
-  // 🆕 ALWAYS check if start column became empty while dragging
-  if (isDragging && startCol && placeholder) {
+function handleEmptyColumnPlaceholder() {
+    if (!isDragging || !startCol || !placeholder) return;
+
     const hasRealTask = startCol.querySelector(".task:not(.task--placeholder):not(.dragging)");
     const hasDragPlaceholder = startCol.querySelector(".task--placeholder");
 
-    // Wenn die Start-Spalte leer geworden ist → "No tasks"-Placeholder anzeigen
     if (!hasRealTask && !hasDragPlaceholder) {
         showNoTasksPlaceholderIfEmpty(startCol);
     }
 }
-}
+
 
 
 /**
@@ -232,7 +239,6 @@ function onPointerMove(event) {
  */
 function startDrag(taskCard, event) {
   draggedTask = taskCard;
-
   taskCard.classList.remove("task--pressing");
 
   createPlaceholder(taskCard);
@@ -243,7 +249,6 @@ function startDrag(taskCard, event) {
   }
 
   document.addEventListener("touchmove", preventTouchScroll, { passive: false });
-
   isDragging = true;
 }
 
@@ -273,29 +278,36 @@ function updateDraggingPosition(event) {
 // 🔹 POINTER UP (DROP HANDLING)
 // ======================================================
 
-/**
- * Handles pointer release event (drop or click detection).
- * Detects whether the interaction was a click or a drag,
- * and restores scroll behavior afterwards.
- * @param {PointerEvent} event - Pointer event.
- */
 async function onPointerUp(event) {
-  cancelLongPress();
-  document.removeEventListener("touchmove", preventTouchScroll);
-  removeDragListeners();
+    cancelLongPress();
+    cleanupTouchScroll();
+    removeDragListeners();
 
-  const movedDistance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
-  const wasClick = movedDistance < DRAG_THRESHOLD && event.timeStamp - dragStartTime < 500;
+    const wasClick = checkIfWasClick(event);
 
-  if (isDragging) {
-    await stopDragging(event);
-  }
+    if (isDragging) {
+        await stopDragging(event);
+    }
 
-  if (wasClick && clickedTask && !isDragging && !wasDroppedInSameColumn) {
+    handlePossibleClick(wasClick);
+    resetDragState();
+}
+
+function cleanupTouchScroll() {
+    document.removeEventListener("touchmove", preventTouchScroll);
+}
+
+function checkIfWasClick(event) {
+    const movedDistance = Math.hypot(event.clientX - dragStartX, event.clientY - dragStartY);
+    const shortTime = event.timeStamp - dragStartTime < 500;
+    return movedDistance < DRAG_THRESHOLD && shortTime;
+}
+
+function handlePossibleClick(wasClick) {
+    if (!wasClick) return;
+    if (!clickedTask || isDragging || wasDroppedInSameColumn) return;
+
     handleTaskClick(clickedTask);
-  }
-
-  resetDragState();
 }
 
 
@@ -331,48 +343,53 @@ function handleTaskClick(task) {
 // ======================================================
 
 async function stopDragging(event) {
-  if (!draggedTask) return;
+    if (!draggedTask) return;
 
-  document.removeEventListener("touchmove", preventTouchScroll);
-  setClickSuppression(300);
+    cleanupTouchScroll();
+    setClickSuppression(300);
 
-  const { id, newState, oldState, isValidDrop } = getDragContextData();
+    const context = getDragContextData();
 
-  finalizeDraggedTaskStyle(event);
+    finalizeDraggedTaskStyle(event);
+    handleDrop(context);
+    await updateTaskStateIfChanged(context);
+    showEmptyPlaceholderIfNeeded();
+    resetDragReferences();
+}
 
-  if (!isValidDrop) {
-    // 🛑 Ungültiges Ziel → zurück zum Start
-    startCol.insertBefore(draggedTask, placeholder);
-  } else {
-    // ✔ Valides Ziel → auf Placeholder ablegen
-    moveTaskToPlaceholder();
-  }
+function handleDrop({ isValidDrop }) {
+    if (!isValidDrop) {
+        startCol.insertBefore(draggedTask, placeholder);
+    } else {
+        moveTaskToPlaceholder();
+    }
+    placeholder?.remove();
+    placeholder = null;
+}
 
-  // Entferne Placeholder
-  placeholder?.remove();
-  placeholder = null;
+async function updateTaskStateIfChanged({ isValidDrop, id, newState, oldState }) {
+    if (!isValidDrop) return;
+    if (!id || !newState || !oldState) return;
+    if (newState === oldState) return;
 
-  // Firebase-Update nur, wenn Ziel gültig & wirklich geändert
-  if (isValidDrop && id && newState && oldState && newState !== oldState) {
     await updateTaskState(id, newState);
     await refreshBoard();
-  }
+}
 
-  if (startCol) {
-    showNoTasksPlaceholderIfEmpty(startCol);
-  }
-
-  resetDragReferences();
+function showEmptyPlaceholderIfNeeded() {
+    if (startCol) {
+        showNoTasksPlaceholderIfEmpty(startCol);
+    }
 }
 
 
 
 function getDragContextData() {
   const taskId = draggedTask.getAttribute("data-task-id");
-  const dropCol = placeholder?.closest(".tasks");  // nur echte Tasks-Spalten
+  const dropCol = placeholder?.closest(".tasks");
   const newState = dropCol ? mapColumnIdToTaskState(dropCol.id) : null;
   const oldState = startCol ? mapColumnIdToTaskState(startCol.id) : null;
-  const isValidDrop = !!dropCol;  // 🎯 gültig NUR wenn eine .tasks Spalte getroffen wurde
+  const isValidDrop = !!dropCol;
   return { id: taskId, newState, oldState, isValidDrop };
 }
 
@@ -416,8 +433,7 @@ function finalizeDraggedTaskStyle(event) {
     zIndex: "",
     pointerEvents: ""
   });
-  try {
-    draggedTask.releasePointerCapture(event.pointerId);
+  try { draggedTask.releasePointerCapture(event.pointerId);
   } catch {}
 }
 
@@ -510,9 +526,9 @@ async function refreshBoard() {
 let autoScrollInterval = null;
 let lastPointerEvent = null;
 
-const AUTO_SCROLL_EDGE = 60;       // Abstand zum Rand (px), ab dem gescrollt wird
-const AUTO_SCROLL_SPEED_MAX = 18;  // max. Speed
-const AUTO_SCROLL_SPEED_MIN = 4;   // min. Speed
+const AUTO_SCROLL_EDGE = 60;
+const AUTO_SCROLL_SPEED_MAX = 18;
+const AUTO_SCROLL_SPEED_MIN = 4;
 
 const autoScrollState = {
   hSpeed: 0,
@@ -521,176 +537,164 @@ const autoScrollState = {
   vContainer: null,
 };
 
-/**
- * Wird bei jedem pointermove aufgerufen, wenn isDragging == true.
- * Berechnet horizontale (nur Mobile) und vertikale Scroll-Geschwindigkeit.
- */
 function handleAutoScroll(event) {
-  if (!isDragging) {
-    stopAutoScroll();
-    return;
-  }
+    if (!isDragging) return stopAutoScroll();
 
-  // Horizontal nur im Mobile-Layout
-  const hContainer = isMobileDragMode() ? getHorizontalScrollContainer() : null;
+    const hContainer = isMobileDragMode() ? getHorizontalScrollContainer() : null;
+    const vContainer = getVerticalScrollContainer();
 
-  // Vertikal: entweder .board-content (wenn wirklich scrollbar),
-  // sonst das Dokument (Seite)
-  const vContainer = getVerticalScrollContainer();
+    if (!hContainer && !vContainer) return stopAutoScroll();
 
-  if (!hContainer && !vContainer) {
-    stopAutoScroll();
-    return;
-  }
+    const { hSpeed, vSpeed } = calculateScrollSpeeds(event, hContainer, vContainer);
 
-  const { clientX: x, clientY: y } = event;
-  let hSpeed = 0;
-  let vSpeed = 0;
+    updateAutoScrollState(hSpeed, vSpeed, hContainer, vContainer);
 
-  // ---------- Horizontal (Mobile, .tasks Row) ----------
-  if (hContainer) {
+    if (!hSpeed && !vSpeed) return stopAutoScroll();
+
+    startAutoScroll();
+}
+
+function calculateScrollSpeeds(event, hContainer, vContainer) {
+    const { clientX: x, clientY: y } = event;
+    let hSpeed = hContainer ? computeHorizontalSpeed(x, hContainer) : 0;
+    let vSpeed = vContainer ? computeVerticalSpeed(y, vContainer) : 0;
+    return { hSpeed, vSpeed };
+}
+
+function computeHorizontalSpeed(x, hContainer) {
     const rect = hContainer.getBoundingClientRect();
     const distLeft = x - rect.left;
     const distRight = rect.right - x;
 
     if (distLeft < AUTO_SCROLL_EDGE) {
-      const intensity = 1 - Math.max(distLeft, 0) / AUTO_SCROLL_EDGE;
-      hSpeed = -Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
-    } else if (distRight < AUTO_SCROLL_EDGE) {
-      const intensity = 1 - Math.max(distRight, 0) / AUTO_SCROLL_EDGE;
-      hSpeed = Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
+        return -scrollIntensity(distLeft);
     }
-  }
-
-  // ---------- Vertikal (Board / Seite) ----------
-  if (vContainer) {
-    let distTop, distBottom;
-
-    const isDoc =
-      vContainer === document.scrollingElement ||
-      vContainer === document.documentElement ||
-      vContainer === document.body;
-
-    if (isDoc) {
-      // relativ zum Viewport
-      distTop = y;
-      distBottom = window.innerHeight - y;
-    } else {
-      const rectV = vContainer.getBoundingClientRect();
-      distTop = y - rectV.top;
-      distBottom = rectV.bottom - y;
+    if (distRight < AUTO_SCROLL_EDGE) {
+        return scrollIntensity(distRight);
     }
+    return 0;
+}
+
+function computeVerticalSpeed(y, vContainer) {
+    const { distTop, distBottom } = computeVerticalDistances(y, vContainer);
 
     if (distTop < AUTO_SCROLL_EDGE) {
-      const intensity = 1 - Math.max(distTop, 0) / AUTO_SCROLL_EDGE;
-      vSpeed = -Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
-    } else if (distBottom < AUTO_SCROLL_EDGE) {
-      const intensity = 1 - Math.max(distBottom, 0) / AUTO_SCROLL_EDGE;
-      vSpeed = Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
+        return -scrollIntensity(distTop);
     }
-  }
+    if (distBottom < AUTO_SCROLL_EDGE) {
+        return scrollIntensity(distBottom);
+    }
+    return 0;
+}
 
-  autoScrollState.hSpeed = hSpeed;
-  autoScrollState.vSpeed = vSpeed;
-  autoScrollState.hContainer = hContainer;
-  autoScrollState.vContainer = vContainer;
+function computeVerticalDistances(y, container) {
+    const isDoc = container === document.scrollingElement ||
+                  container === document.documentElement ||
+                  container === document.body;
 
-  if (!hSpeed && !vSpeed) {
-    stopAutoScroll();
-    return;
-  }
+    if (isDoc) {
+        return { distTop: y, distBottom: window.innerHeight - y };
+    }
 
-  startAutoScroll();
+    const rect = container.getBoundingClientRect();
+    return { distTop: y - rect.top, distBottom: rect.bottom - y };
+}
+
+function scrollIntensity(distance) {
+    const intensity = 1 - Math.max(distance, 0) / AUTO_SCROLL_EDGE;
+    return Math.max(AUTO_SCROLL_SPEED_MIN, AUTO_SCROLL_SPEED_MAX * intensity);
+}
+
+function updateAutoScrollState(hSpeed, vSpeed, hContainer, vContainer) {
+    autoScrollState.hSpeed = hSpeed;
+    autoScrollState.vSpeed = vSpeed;
+    autoScrollState.hContainer = hContainer;
+    autoScrollState.vContainer = vContainer;
 }
 
 
-/**
- * .tasks-Container, in dem der Placeholder gerade hängt
- * (für horizontalen Scroll im Mobile-Layout).
- */
 function getHorizontalScrollContainer() {
   if (!placeholder) return null;
   return placeholder.closest(".tasks");
 }
 
 
-/**
- * Vertikal scrollbarer Container:
- *  - Mobile: bevorzugt .board-content (ganzes Board)
- *  - Desktop: bevorzugt die aktuelle .tasks-Spalte (Spalten-Scroll)
- *  - Fallback: document.scrollingElement (Seite)
- */
 function getVerticalScrollContainer() {
-  // 📱 MOBILE: Board scrollt vertikal
-  if (isMobileDragMode()) {
+    if (isMobileDragMode()) {
+        return getMobileVerticalContainer();
+    }
+
+    const col = getColumnVerticalContainer();
+    if (col) return col;
+
+    return getBoardOrDocumentContainer();
+}
+
+function getMobileVerticalContainer() {
     const board = document.querySelector(".board-content");
-    if (board && board.scrollHeight > board.clientHeight + 1) {
-      return board;
-    }
+    if (isScrollable(board)) return board;
     return document.scrollingElement || document.documentElement;
-  }
+}
 
-  // 🖥 DESKTOP: Spalte (.tasks) scrollt vertikal
-  if (placeholder) {
+function getColumnVerticalContainer() {
+    if (!placeholder) return null;
     const col = placeholder.closest(".tasks");
-    if (col && col.scrollHeight > col.clientHeight + 1) {
-      return col;
-    }
-  }
+    return isScrollable(col) ? col : null;
+}
 
-  // Fallback: falls Spalte nicht scrollen kann, Board oder Seite scrollen
-  const board = document.querySelector(".board-content");
-  if (board && board.scrollHeight > board.clientHeight + 1) {
-    return board;
-  }
+function getBoardOrDocumentContainer() {
+    const board = document.querySelector(".board-content");
+    if (isScrollable(board)) return board;
+    return document.scrollingElement || document.documentElement;
+}
 
-  return document.scrollingElement || document.documentElement;
+function isScrollable(element) {
+    return element && element.scrollHeight > element.clientHeight + 1;
 }
 
 
 
-/**
- * Startet das Autoscroll-Interval (falls noch nicht aktiv).
- * Speed & Container werden auf jedem Tick aus autoScrollState gelesen,
- * damit Richtungswechsel jederzeit funktionieren.
- */
 function startAutoScroll() {
-  if (autoScrollInterval) return;
+    if (autoScrollInterval) return;
 
-  autoScrollInterval = setInterval(() => {
-    const { hContainer, vContainer, hSpeed, vSpeed } = autoScrollState;
+    autoScrollInterval = setInterval(() => {
+        if (!isDragging) return stopAutoScroll();
 
-    if (!isDragging) {
-      stopAutoScroll();
-      return;
-    }
+        performHorizontalScroll();
+        performVerticalScroll();
+        updateHoverColumnIfNeeded();
+    }, 16);
+}
 
+function performHorizontalScroll() {
+    const { hContainer, hSpeed } = autoScrollState;
     if (hContainer && hSpeed) {
-      hContainer.scrollLeft += hSpeed;
+        hContainer.scrollLeft += hSpeed;
     }
+}
 
-    if (vContainer && vSpeed) {
-      const isDoc =
+function performVerticalScroll() {
+    const { vContainer, vSpeed } = autoScrollState;
+    if (!vContainer || !vSpeed) return;
+
+    const isDoc =
         vContainer === document.scrollingElement ||
         vContainer === document.documentElement ||
         vContainer === document.body;
 
-      if (isDoc) {
+    if (isDoc) {
         window.scrollBy(0, vSpeed);
-      } else {
+    } else {
         vContainer.scrollTop += vSpeed;
-      }
     }
-
-    // Nach Scroll: Hover/Placeholder aktualisieren
-    if (draggedTask && lastPointerEvent) {
-      updateHoverColumn(lastPointerEvent);
-    }
-  }, 16); // ~60fps
 }
 
+function updateHoverColumnIfNeeded() {
+    if (draggedTask && lastPointerEvent) {
+        updateHoverColumn(lastPointerEvent);
+    }
+}
 
-/** Stoppt AutoScroll komplett */
 function stopAutoScroll() {
   if (autoScrollInterval) {
     clearInterval(autoScrollInterval);
@@ -702,6 +706,5 @@ function stopAutoScroll() {
   autoScrollState.vContainer = null;
 }
 
-// Sicherheitshalber beim Loslassen immer stoppen
 document.addEventListener("pointerup", stopAutoScroll);
 document.addEventListener("pointercancel", stopAutoScroll);

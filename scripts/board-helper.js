@@ -149,39 +149,44 @@ function initCustomSortSelect() {
     const dropdown = wrapper.querySelector(".custom-sort-options");
     const trigger = wrapper.querySelector(".custom-sort-selected");
 
+    initSortTrigger(wrapper, dropdown, trigger);
+    initSortOptions(wrapper, dropdown, display);
+    initSortOutsideClose(wrapper, dropdown);
+    initSortActiveState(wrapper, display);
+}
+
+function initSortTrigger(wrapper, dropdown, trigger) {
     trigger.addEventListener("click", () => {
         const isHidden = dropdown.classList.contains("d-none");
-
-        if (isHidden) {
-            dropdown.classList.remove("d-none");
-            wrapper.classList.add("is-open");
-        } else {
-            dropdown.classList.add("d-none");
-            wrapper.classList.remove("is-open");
-        }
+        dropdown.classList.toggle("d-none", !isHidden);
+        wrapper.classList.toggle("is-open", isHidden);
     });
+}
 
+function initSortOptions(wrapper, dropdown, display) {
     wrapper.querySelectorAll("li").forEach(option => {
         option.addEventListener("click", () => {
             const val = option.dataset.value;
             const text = option.innerText;
-
             display.innerText = text;
             currentSortMode = val;
-
             dropdown.classList.add("d-none");
             wrapper.classList.remove("is-open");
             loadTasks();
         });
     });
+}
 
+function initSortOutsideClose(wrapper, dropdown) {
     document.addEventListener("click", (event) => {
         if (!wrapper.contains(event.target)) {
             dropdown.classList.add("d-none");
             wrapper.classList.remove("is-open");
         }
     });
+}
 
+function initSortActiveState(wrapper, display) {
     const activeOption = wrapper.querySelector(`li[data-value="${currentSortMode}"]`);
     if (activeOption) display.innerText = activeOption.innerText;
 }
@@ -294,7 +299,6 @@ function showPopupMsgChangesSaved() {
   if (!popupEl) return;
 
   setDialogActionsDisabled(true);
-
   requestAnimationFrame(() => popupEl.classList.add('show'));
 
   setTimeout(() => {

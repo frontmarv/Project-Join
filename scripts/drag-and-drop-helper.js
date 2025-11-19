@@ -109,21 +109,17 @@ function hideNoTasksPlaceholder(col) {
 function showNoTasksPlaceholderIfEmpty(col) {
   if (!col) return;
 
-  // ❗ NEW: Wenn ein DRAG-PLACEHOLDER in der Spalte ist → NICHT leer!
   const hasDragPlaceholder = col.querySelector(".task--placeholder");
-  if (hasDragPlaceholder) {
-    hideExistingPlaceholder(col);
+  if (hasDragPlaceholder) { hideExistingPlaceholder(col);
     return;
   }
 
-  // Normale Task-Suche (ohne Drag-Placeholder)
   const hasRealTask = col.querySelector(".task:not(.task--placeholder):not(.dragging)");
 
-  if (hasRealTask) {
-    hideExistingPlaceholder(col);
-  } else {
-    ensureNoTasksPlaceholder(col);
-  }
+  if (hasRealTask) {hideExistingPlaceholder(col);
+  } 
+    else { ensureNoTasksPlaceholder(col);
+    }
 }
 
 /**
@@ -183,7 +179,6 @@ function createPlaceholder(taskCard) {
  */
 function prepareTaskForDragging(taskCard, event) {
   const rect = taskCard.getBoundingClientRect();
-
   Object.assign(taskCard.style, {
     position: "fixed",
     left: `${event.clientX - offsetX}px`,

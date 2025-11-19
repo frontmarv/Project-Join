@@ -18,7 +18,7 @@ let subtaskActionLock = false;
  * @returns {string} The uppercase initials of the user, or "?" if not found.
  */
 function getUserInitialsById(userId) {
-  const user = users?.find(u => u.id === userId);
+  const user = users?.find(user => user.id === userId);
   if (!user || !user.name) return "?";
 
   return user.name
@@ -79,47 +79,13 @@ function normalizeContactList(contacts) {
 }
 
 
-/**
- * Returns HTML template for "no users assigned" message.
- * @returns {string} HTML markup.
- */
-function getNoUsersAssignedTpl() {
-  return /*html*/ `<div class="dlg__user-box"><span>No users assigned</span></div>`;
-}
-
-
-/**
- * Returns full HTML markup for a list of assigned users.
- * @param {string[]} contacts - Array of user IDs.
- * @returns {string} HTML markup of assigned users.
- */
-function getAssignedUsersListTpl(contacts) {
-  return /*html*/ `
-    <div id="assigned-user-list">
-      ${contacts.map(renderAssignedUserItem).join("")}
-    </div>
-  `;
-}
-
-
-/**
- * Returns HTML for a single assigned user.
- * @param {string} id - The user ID.
- * @returns {string} HTML markup for a single assigned user item.
- */
 function renderAssignedUserItem(id) {
-  const userName = getUserNameById(id);
-  const name = addTagToLoggedInUser(userName);
-  const imgColour = getUserPicById(id);
-  const userInitials = getUserInitialsById(id);
-  return /*html*/ `
-    <div class="task__assignments__user-dates">
-      <div class="task__assignments-circle" style="background-color:${imgColour}">
-        ${userInitials}
-      </div>
-      <div class="assigned-user-name">${name}</div>
-    </div>
-  `;
+    const userName = getUserNameById(id);
+    const name = addTagToLoggedInUser(userName);
+    const imgColour = getUserPicById(id);
+    const userInitials = getUserInitialsById(id);
+
+    return assignedUserItemTemplate(imgColour, userInitials, name);
 }
 
 
@@ -176,40 +142,15 @@ function sortSubtasks(subtasks) {
 }
 
 
-/**
- * Renders a single subtask row.
- * @param {string} key - Subtask key.
- * @param {Object} st - Subtask data.
- * @param {string} taskId - Parent task ID.
- * @returns {string} HTML markup for a subtask.
- */
-function renderSubtaskItem(key, st, taskId) {
-  if (!st?.task) return "";
-  const checked = !!st.taskChecked;
-  return /*html*/ `
-    <div class="dlg__main__task-subtask"
-      data-subtask-key="${key}"
-      data-task-id="${taskId}"
-      onmousedown="onSubtaskRowMouseDown(event, '${taskId}', '${key}', this)">
+function renderSubtaskItem(key, subtask, taskId) {
+    if (!subtask?.task) return "";
 
-      <div class="subtask-wrapper">
-        <img class="checkbox"
-          src="${getCheckboxImgSrc(checked)}"
-          data-checked="${checked}"
-          alt="checkbox">
-        <span class="subtask-text">${st.task}</span>
-      </div>
+    const checked = !!subtask.taskChecked;
+    const text = subtask.task;
 
-      <div class="deletebox-wrapper">
-        <div class="separator"></div>
-        <img class="subtask-delete-btn"
-            src="../assets/img/delete.svg"
-            alt="delete subtask"
-            onmousedown="event.preventDefault(); showDeleteSubtaskConfirm('${taskId}', '${key}')">
-      </div>
-    </div>
-  `;
+    return subtaskItemTemplate(key, taskId, checked, text);
 }
+
 
 
 // ======================================================
@@ -230,22 +171,6 @@ function onSubtaskRowMouseDown(event, taskId, subtaskKey, rowEl) {
   event.stopPropagation();
   toggleSubtaskChecked(taskId, subtaskKey, rowEl);
 }
-
-
-/**
- * Handles delete button click for a subtask.
- * @param {MouseEvent} event - Mouse event object.
- * @param {string} taskId - Parent task ID.
- * @param {string} subtaskKey - Subtask key.
- * @param {HTMLElement} btnEl - Delete button element.
- */
-// function onDeleteSubtaskMouseDown(event, taskId, subtaskKey, btnEl) {
-//   if (subtaskActionLock) return temporarilyLockSubtaskActions();
-//   event.preventDefault();
-//   event.stopPropagation();
-//   const row = btnEl.closest(".dlg__main__task-subtask");
-//   deleteSubtask(taskId, subtaskKey, row);
-// }
 
 
 /**
@@ -343,9 +268,7 @@ function showDeleteTaskConfirm(taskId) {
 
     overlay.addEventListener("click", hideConfirmDlg, { once: true });
 
-    setTimeout(() => {
-        dlg.classList.add("show");
-    }, 10);
+    setTimeout(() => { dlg.classList.add("show") }, 10);
 }
 
 function showDeleteSubtaskConfirm(taskId, subtaskKey) {
@@ -359,9 +282,7 @@ function showDeleteSubtaskConfirm(taskId, subtaskKey) {
 
     overlay.addEventListener("click", hideConfirmDlg, { once: true });
 
-    setTimeout(() => {
-        dlg.classList.add("show");
-    }, 10);
+    setTimeout(() => { dlg.classList.add("show") }, 10);
 }
 
 

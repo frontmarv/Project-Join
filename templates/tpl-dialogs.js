@@ -207,6 +207,33 @@ function getEditSubtaskTpl(value = "") {
     </li>`;
 }
 
+function subtaskItemTemplate(key, taskId, checked, text) {
+    return /*html*/ `
+        <div class="dlg__main__task-subtask"
+            data-subtask-key="${key}"
+            data-task-id="${taskId}"
+            onmousedown="onSubtaskRowMouseDown(event, '${taskId}', '${key}', this)">
+
+            <div class="subtask-wrapper">
+                <img class="checkbox"
+                    src="${getCheckboxImgSrc(checked)}"
+                    data-checked="${checked}"
+                    alt="checkbox">
+                <span class="subtask-text">${text}</span>
+            </div>
+
+            <div class="deletebox-wrapper">
+                <div class="separator"></div>
+                <img class="subtask-delete-btn"
+                    src="../assets/img/delete.svg"
+                    alt="delete subtask"
+                    onmousedown="event.preventDefault(); showDeleteSubtaskConfirm('${taskId}', '${key}')">
+            </div>
+        </div>
+    `;
+}
+
+
 
 // ======================================================
 // 🔹 ADD TASK DIALOG
@@ -261,6 +288,17 @@ function getAssignmentListUserTpl(user, checked = false) {
   `;
 }
 
+function assignedUserItemTemplate(imgColour, userInitials, name) {
+    return /*html*/ `
+        <div class="task__assignments__user-dates">
+            <div class="task__assignments-circle" style="background-color:${imgColour}">
+                ${userInitials}
+            </div>
+            <div class="assigned-user-name">${name}</div>
+        </div>
+    `;
+}
+
 
 /**
  * Returns an SVG avatar for an assigned user.
@@ -278,4 +316,52 @@ function getAssignedUserSvgTpl(user) {
       <text x="21" y="23" text-anchor="middle" dominant-baseline="middle" font-size="12" fill="white" font-family="sans-serif">${initials}</text>
     </svg>
   `;
+}
+
+/**
+ * Returns HTML template for "no users assigned" message.
+ * @returns {string} HTML markup.
+ */
+function getNoUsersAssignedTpl() {
+  return /*html*/ `
+    <div class="dlg__user-box">
+      <span>No users assigned</span>
+    </div>`;
+}
+
+
+/**
+ * Returns full HTML markup for a list of assigned users.
+ * @param {string[]} contacts - Array of user IDs.
+ * @returns {string} HTML markup of assigned users.
+ */
+function getAssignedUsersListTpl(contacts) {
+  return /*html*/ `
+    <div id="assigned-user-list">
+      ${contacts.map(renderAssignedUserItem).join("")}
+    </div>
+  `;
+}
+
+
+function userAvatarTemplate(user) {
+    return /*html*/ `
+        <div class="dlg-edit__user-box" title="${user.name}">
+            ${getUserAvatarSvg(user)}
+        </div>
+    `;
+}
+
+function moreUsersTemplate(more) {
+    return /*html*/ `
+        <div class="dlg-edit__user-box" title="+${more} Users">
+            ${getMoreUsersSvg(more)}
+        </div>
+    `;
+}
+
+function noUsersTemplate() {
+    return /*html*/ `
+    <p class="no-users">No user assigned</p>
+    `;
 }

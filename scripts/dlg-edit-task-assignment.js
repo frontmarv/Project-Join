@@ -264,8 +264,8 @@ function renderAssignmentList(contactsDropDownList, assignedIds) {
  * @param {HTMLElement} avatarContainer - Avatar container element.
  */
 function bindAssignmentListEvents(contactsDropDownList, avatarContainer) {
-  contactsDropDownList.querySelectorAll('li').forEach(li => {
-    li.addEventListener('click', () => {
+  contactsDropDownList.querySelectorAll('li').forEach(contact => {
+    contact.addEventListener('click', () => {
       requestAnimationFrame(() => refreshAssignedUserContainer(avatarContainer));
     });
   });
@@ -292,32 +292,45 @@ function getMoreUsersSvg(count) {
 }
 
 
-/**
- * Renders up to 5 assigned user avatars and adds a "+x" SVG if more are selected.
- * @param {HTMLElement} c - The container element where avatars are rendered.
- */
-function refreshAssignedUserContainer(c) {
-  const ids = getSelectedAssignmentIds(), max = 5;
-  const shown = ids.slice(0, max).map(id => users.find(u => u.id === id)).filter(Boolean);
-  if (ids.length === 0) {
-    document.getElementById('assigned-user').innerHTML = `
-    <p class="no-users">No user assigned</p>
-  `;
-  return;
-  }
-  else {
-  c.innerHTML = shown.map(u => `
-    <div class="dlg-edit__user-box" title="${u.name}">
-      ${getUserAvatarSvg(u)}
-    </div>`).join('');
-  if (ids.length > max) {
-    const more = ids.length - max;
-    c.innerHTML += `
-      <div class="dlg-edit__user-box" title="+${more} Users">
-        ${getMoreUsersSvg(more)}
-      </div>`;
-  } }
+function refreshAssignedUserContainer(avatarContainer) {
+    const ids = getSelectedAssignmentIds();
+    const shown = getShownUsers(ids);
+
+    if (ids.length === 0) {
+        renderNoUsers();
+        return;
+    }
+
+    renderUserAvatars(avatarContainer, shown);
+    renderMoreUsers(avatarContainer, ids);
 }
+
+function getShownUsers(ids) {
+    const max = 5;
+    return ids
+        .slice(0, max)
+        .map(id => users.find(user => user.id === id))
+        .filter(Boolean);
+}
+
+function renderNoUsers() {
+    document.getElementById('assigned-user').innerHTML = noUsersTemplate();
+}
+
+function renderUserAvatars(avatarContainer, shown) {
+    avatarContainer.innerHTML = shown
+        .map(user => userAvatarTemplate(user))
+        .join('');
+}
+
+function renderMoreUsers(avatarContainer, ids) {
+    const max = 5;
+    if (ids.length <= max) return;
+
+    const more = ids.length - max;
+    avatarContainer.innerHTML += moreUsersTemplate(more);
+}
+
 
 
 /**
