@@ -119,17 +119,19 @@ textarea.input-error:focus,
   font-size: 0.875rem;
   line-height: 1.2;
   margin-top: 0.25rem;
-  display: none;
+  display: block;
+  visibility: hidden;
+  height: 20px;
 }
 
 .has-error .field-error {
-  display: block;
+  visibility: visible;
 }
 
 .add-task__field {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .required {
@@ -432,18 +434,6 @@ textarea.input-error:focus,
   height: 100%;
   opacity: 0;
   pointer-events: none;
-}
-
-.field-error {
-  color: var(--color-error);
-  font-size: 0.875rem;
-  line-height: 1.2;
-  margin-top: 0.25rem;
-  display: none;
-}
-
-.has-error .field-error {
-  display: block;
 }
 
 .task-content__container input.input-error,
