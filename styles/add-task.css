@@ -126,6 +126,7 @@ textarea.input-error:focus,
 
 .has-error .field-error {
   visibility: visible;
+  margin-left: 0.2rem;
 }
 
 .add-task__field {
