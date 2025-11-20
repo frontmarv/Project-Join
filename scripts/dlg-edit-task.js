@@ -190,10 +190,13 @@ async function saveEditedTask(taskId) {
   const titleInput = document.getElementById('title-input');
   const titleBox = titleInput?.closest('.dlg-edit__main__title-box');
   resetTitleInputErrors(titleInput, titleBox);
-
   const title = titleInput?.value.trim();
   if (!title) return showTitleError(titleInput, titleBox);
-
+  const dateInput = document.getElementById('due-date');
+  const dateErr = document.getElementById('date-error');
+  if (!validateDate(dateInput, dateErr, true)) {
+    dateInput.focus();
+    return;}
   const oldTask = tasks.find(task => task.id === taskId) || {};
   const merged = await buildUpdatedTaskObject(oldTask, title);
   await persistUpdatedTask(taskId, merged);

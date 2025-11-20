@@ -165,27 +165,58 @@ function validateTitle(title, titleErr, valid) {
 
 
 /**
- * Validates the due date input for submit-level validation.
- * @param {HTMLInputElement} date - Date input element.
- * @param {HTMLElement} dateErr - Date error element.
- * @param {boolean} valid - Current validation state.
- * @returns {boolean}
+ * Applies validation rules to a due-date input field.
+ *
+ * Behavior:
+ * - If the field is empty:
+ *     - Shows a "required" error when `required` is true.
+ *     - Otherwise clears errors without blocking submission.
+ * - If the field has a value:
+ *     - Checks whether the date is before today or beyond the allowed max date.
+ *     - Displays the appropriate error message if invalid.
+ *     - Clears errors when valid.
+ *
+ * Used by both live-validation (non-critical) and submit-validation (critical).
+ *
+ * @param {HTMLInputElement} inputEl - The date input element.
+ * @param {HTMLElement|null} errorEl - The error message element (may be null).
+ * @param {{required: boolean, valid: boolean}} options - Validation options.
+ * @returns {boolean} `false` when invalid, otherwise returns the provided `valid` flag.
  */
-function validateDate(date, dateErr, valid) {
-  const v = date.value.trim();
-  const today = todayLocalISO();
-  const maxDate = getMaxDueDateISO(2);
+function applyDueDateValidation(inputEl, errorEl, { required, valid }) {
+  const v = inputEl.value.trim(),
+        today = todayLocalISO(),
+        maxDate = getMaxDueDateISO(2);
   if (!v) {
-    showError(date, dateErr, 'This field is required');
-    return false;
+    return required
+      ? (showError(inputEl, errorEl, 'This field is required'), false)
+      : (clearError(inputEl, errorEl), valid);
   }
   const msg = getDueDateError(v, today, maxDate);
-  if (msg) {
-    showError(date, dateErr, msg);
-    return false;
-  }
-  clearError(date, dateErr);
-  return valid;
+  return msg
+    ? (showError(inputEl, errorEl, msg), false)
+    : (clearError(inputEl, errorEl), valid);
+}
+
+
+/**
+ * Performs submit-level validation for the due-date field.
+ *
+ * This function enforces all required validation rules:
+ * - The field must not be empty.
+ * - The selected date must not be in the past.
+ * - The selected date must not exceed the maximum allowed date range.
+ *
+ * It delegates the actual logic to `applyDueDateValidation` with
+ * `required: true`, ensuring the field is treated as mandatory.
+ *
+ * @param {HTMLInputElement} date - The date input element being validated.
+ * @param {HTMLElement} dateErr - The associated error message element.
+ * @param {boolean} valid - The current accumulated validation state.
+ * @returns {boolean} Updated validation state (`false` if invalid).
+ */
+function validateDate(date, dateErr, valid) {
+  return applyDueDateValidation(date, dateErr, { required: true, valid });
 }
 
 

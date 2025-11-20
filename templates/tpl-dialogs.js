@@ -105,6 +105,7 @@ function getTaskEditDlgTpl(task) {
             <div class="dlg-edit__main__due-date-box" onclick="setMinDueDate()">
                 <span class="dlg-edit__main__due-date-title">Due Date</span>
                 <input type="date" maxlength="10" id="due-date" class="dlg-edit__input-text">
+                <p id="date-error" class="field-error"></p>
             </div>
 
             <div class="dlg-edit__main__task-priority-options-box">

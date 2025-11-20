@@ -76,6 +76,10 @@ function setupTaskEditDialog(task) {
  * @returns {void}
  */
 function initializeTaskEditFeatures(task) {
+  const dlg = document.getElementById('dlg-box');
+  if (dlg) {
+    initDueDateValidationDelegated(dlg);
+  }
   preloadPopupMsg();
   initSubtaskInput();
   initSubtaskIconButtons();

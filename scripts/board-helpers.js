@@ -116,14 +116,27 @@ function initDueDateValidationDelegated(scope) {
 
 
 /**
- * Event handler for due-date input validation.
+ * Live validation handler for the due-date input field.
  *
- * @param {Event} event - Input/change/blur event object.
+ * This function runs on `input`, `change`, and `blur` events and applies
+ * non-blocking validation rules for the due-date field. It uses
+ * `applyDueDateValidation` with `required: false`, meaning:
+ *
+ * - Empty fields do NOT trigger a "required" error here (that happens on submit).
+ * - Invalid dates (past / beyond max range) immediately display an error message.
+ * - Valid dates clear the error state in real time.
+ *
+ * This function does not prevent form submission.
+ *
+ * @param {Event} event - The event triggered by the user interaction.
  * @returns {void}
  */
 function onDueDateEvent(event) {
   if (!event.target.matches('#due-date')) return;
-  syncValidityClass(event.target);
+  const input = event.target;
+  const form = input.closest('form') || document;
+  const errorEl = form.querySelector('#date-error');
+  applyDueDateValidation(input, errorEl, { required: false, valid: true });
 }
 
 
