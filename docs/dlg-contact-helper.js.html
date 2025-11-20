@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>board-dom.js - Documentation</title>
+    <title>dlg-contact-helper.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">board-dom.js</h1>
+    <h1 class="page-title">dlg-contact-helper.js</h1>
     
 
     
@@ -39,193 +39,150 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// ======================================================
-// 🔹 DIALOGS &amp; DOM-BEZOGENE FUNKTIONEN
-// ======================================================
-
-/**
- * Opens and displays the task info dialog for the given task ID.
- * Fetches fresh task data and restores scroll position after rendering.
- *
- * @async
- * @param {string} taskId - The unique ID of the task to display.
- * @returns {Promise&lt;void>}
- */
-async function renderTaskInfoDlg(taskId) {
-  await getData();
-  const task = tasks.find(task => task.id === taskId);
-  if (!task) return;
-
-  const savedScroll = saveScrollPositions(['.dlg__main']);
-  setupTaskInfoDialog(task);
-  displayDlg();
-  requestAnimationFrame(() => restoreScrollPositions(savedScroll));
-}
-
-
-/**
- * Generates the task info dialog markup and injects it into the DOM.
- *
- * @param {Object} task - Task object containing all task details.
- * @returns {HTMLElement} The rendered dialog container element.
- */
-function setupTaskInfoDialog(task) {
-  const dlgBox = document.getElementById("dlg-box");
-  dlgBox.classList.remove("dlg-add-task");
-  dlgBox.innerHTML = getTaskInfoDlgTpl(task);
-  return dlgBox;
-}
-
-
-/**
- * Opens the edit dialog for a specific task, allowing updates to its details.
- *
- * @async
- * @param {string} taskId - The unique ID of the task to edit.
- * @returns {Promise&lt;void>}
- */
-async function renderTaskEditDlg(taskId) {
-  await getData();
-  const task = tasks.find(task => task.id === taskId);
-  if (!task) return;
-
-  setupTaskEditDialog(task);
-  displayDlg();
-  initializeTaskEditFeatures(task);
-}
-
-
-/**
- * Generates and injects the edit dialog HTML for a given task.
- *
- * @param {Object} task - Task object with current task data.
- * @returns {HTMLElement} The rendered dialog container element.
- */
-function setupTaskEditDialog(task) {
-  const dlgBox = document.getElementById("dlg-box");
-  dlgBox.classList.remove("dlg-add-task");
-  dlgBox.innerHTML = getTaskEditDlgTpl(task);
-  return dlgBox;
-}
-
-
-/**
- * Initializes the interactive features within the edit dialog:
- * subtasks, contact assignment, and priority selection.
- *
- * @param {Object} task - Task object being edited.
+            <pre class="prettyprint source linenums"><code>/**
+ * Applies success styling to an input field wrapper.
+ * Removes error class, adds success class, and hides the info text.
+ * @param {HTMLElement} wrapper - The input field wrapper element
+ * @param {HTMLElement} infoText - The info text element to hide
  * @returns {void}
  */
-function initializeTaskEditFeatures(task) {
-  const dlg = document.getElementById('dlg-box');
-  if (dlg) {
-    initDueDateValidationDelegated(dlg);
-  }
-  preloadPopupMsg();
-  initSubtaskInput();
-  initSubtaskIconButtons();
-  initSubtaskHandlers();
-  fillEditFormWithTaskData(task);
-  populateAssignmentListFromFirebase(task);
+function styleInputsSuccess(wrapper, infoText) {
+    wrapper.classList.remove('error');
+    wrapper.classList.add('success');
+    infoText.style.opacity = '0';
 }
 
-
 /**
- * Opens the "Add Task" dialog or redirects to the mobile page,
- * depending on the current viewport size.
- *
- * @async
- * @param {string} [defaultTaskState="to-do"] - Default task state.
- * @returns {Promise&lt;void>}
- */
-async function renderAddTaskDlg(defaultTaskState = "to-do") {
-  if (shouldRedirectToMobile()) return redirectToAddTaskPage();
-  const dlg = setupAddTaskDialog(defaultTaskState);
-  await loadAddTaskContent(dlg);
-  initializeAddTaskFeatures(dlg);
-  dueDateValidation();
-  bindLiveRequiredClear('title', 'title-error');
-  showAddTaskDialog(dlg);
-}
-
-
-/**
- * Determines if the user should be redirected to the mobile Add Task page.
- *
- * @returns {boolean} True if viewport width is below 1025px.
- */
-function shouldRedirectToMobile() {
-  return window.innerWidth &lt; 1025;
-}
-
-
-/**
- * Redirects the user to the standalone "Add Task" page for mobile view.
- *
+ * Applies error styling to an input field wrapper.
+ * Removes success class, adds error class, and shows the info text.
+ * @param {HTMLElement} wrapper - The input field wrapper element
+ * @param {HTMLElement} infoText - The info text element to show
  * @returns {void}
  */
-function redirectToAddTaskPage() {
-  window.location.replace('../pages/add-task.html');
+function styleInputsError(wrapper, infoText) {
+    wrapper.classList.remove('success');
+    wrapper.classList.add('error');
+    infoText.style.opacity = '1';
 }
 
 
 /**
- * Generates and injects the Add Task dialog HTML into the DOM.
- *
- * @param {string} defaultTaskState - Initial task state (e.g. "to-do").
- * @returns {HTMLElement} The dialog element.
- */
-function setupAddTaskDialog(defaultTaskState) {
-  const dlg = document.getElementById("dlg-box");
-  dlg.classList.add("dlg-add-task");
-  dlg.innerHTML = getAddTaskDlgTpl(defaultTaskState);
-  return dlg;
-}
-
-
-/**
- * Loads and initializes dynamic content for the Add Task dialog,
- * including contacts and subtask lists.
- *
- * @async
- * @param {HTMLElement} dlg - The dialog container element.
- * @returns {Promise&lt;void>}
- */
-async function loadAddTaskContent(dlg) {
-  await InsertLoader.loadInsertByElement(dlg.querySelector("[data-insert]"));
-  await waitFor(".contact-options");
-  populateAssignmentListFromFirebase({ assignedContacts: [] });
-  await waitFor(".dlg-edit__subtask-list");
-}
-
-
-/**
- * Initializes input fields and button handlers in the Add Task dialog.
- *
- * @param {HTMLElement} dlg - The dialog element.
+ * Applies neutral styling to an input field wrapper.
+ * Removes both error and success classes and hides the info text.
+ * @param {HTMLElement} wrapper - The input field wrapper element
+ * @param {HTMLElement} infoText - The info text element to hide
  * @returns {void}
  */
-function initializeAddTaskFeatures(dlg) {
-  initSubtaskInput();
-  initSubtaskHandlers();
-  initSubtaskIconButtons();
+function styleInputsNeutral(wrapper, infoText) {
+    wrapper.classList.remove('error');
+    wrapper.classList.remove('success');
+    infoText.style.opacity = '0';
 }
 
 
 /**
- * Displays the Add Task dialog with entry animation and validation setup.
- *
- * @async
- * @param {HTMLElement} dlg - The dialog container.
- * @returns {Promise&lt;void>}
+ * Styles the email input field to indicate the email is already taken.
+ * Updates error message text, shows the warning, and applies error border color.
+ * @returns {void}
  */
-async function showAddTaskDialog(dlg) {
-  dlg.classList.remove("d-none");
-  document.getElementById('overlay').classList.remove('d-none');
-  setTimeout(() => dlg.classList.add("show"), 10);
-  await waitFor('#due-date');
-  initDueDateValidationDelegated(dlg);
-  resetAddTaskFormValidation(dlg);
+function styleEmailAlreadyTaken() {
+    document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
+    document.getElementById('email-error-warning').style.opacity = '1';
+    document.getElementById('contact-dlg-email-input').closest('.inputfield__wrapper').classList.add('error');
+}
+
+
+/**
+ * Styles the name input field to indicate the name is already taken.
+ * Updates error message text, shows the warning, and applies error border color.
+ * @returns {void}
+ */
+function styleNameAlreadyTaken() {
+    document.getElementById('name-error-warning').innerHTML = 'Name is already taken';
+    document.getElementById('name-error-warning').style.opacity = '1';
+    document.getElementById('contact-dlg-name-input').closest('.inputfield__wrapper').classList.add('error');
+}
+
+
+/**
+ * Marks the specified contact as selected in the contact list.
+ * Applies selected styling to matching contact list item.
+ * @param {string} userName - Name of the contact to mark as selected
+ * @returns {void}
+ */
+function markStoredContactAsSelected(userName) {
+    const nodelist = document.querySelectorAll('.contact-list__item');
+    nodelist.forEach(item => {
+        if (item.querySelector('.contact-name').innerHTML === userName) {
+            styleContactSelected(item);
+        }
+    });
+}
+
+
+/**
+ * Animates a success dialog into view and removes it after delay.
+ * Inserts dialog into DOM, fades it in, then fades out and removes after 1.5 seconds.
+ * @param {string} successDlg - HTML string containing the success dialog markup
+ * @returns {void}
+ */
+function animationDlg(successDlg) {
+    document.body.insertAdjacentHTML('beforeend', successDlg);
+    const successDlgElement = document.querySelector('.create-contact-successful');
+    requestAnimationFrame(() => successDlgElement.classList.remove('invisible'));
+    setTimeout(() => {
+        successDlgElement.classList.add('invisible');
+        setTimeout(() => successDlgElement.remove(), 300);
+    }, 2000);
+}
+
+
+/**
+ * Displays dialog with fade-in animation.
+ * Shows dialog overlay and applies animation class after short delay.
+ * @returns {void}
+ */
+function showDlgWtihAnimation() {
+    displayDlg();
+    setTimeout(() => {
+        dialog.classList.add('show');
+    }, 100);
+}
+
+
+/**
+ * Hides dialog with fade-out animation.
+ * Removes animation class and hides dialog after transition completes.
+ * @returns {void}
+ */
+function removeAnimationClass() {
+    dialog.classList.remove('show');
+    setTimeout(() => {
+        removeDeleteClass();
+        hideDlg();
+    }, 300);
+}
+
+
+/**
+ * Displays a success message dialog after adding a contact.
+ * Shows animated dialog for 1.5 seconds then removes it.
+ * @returns {void}
+ */
+function addContactSuccessDlg() {
+    const successDlg = getAddUserSuccessDlg();
+    animationDlg(successDlg);
+}
+
+
+/**
+ * Displays a success message dialog after editing a contact.
+ * Shows animated dialog for 1.5 seconds then removes it.
+ * @returns {void}
+ */
+function editContactSuccessDlg() {
+    const successDlg = getEditContactSuccessDlg();
+    animationDlg(successDlg);
 }
 </code></pre>
         </article>
