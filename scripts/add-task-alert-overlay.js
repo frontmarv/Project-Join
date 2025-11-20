@@ -23,11 +23,11 @@ function showAddTaskDlgWtihAnimation() {
         alertDialog.classList.add('show');
     }, 100);
 
-    if (isBoardPage()) {
-      setTimeout(() => {
-        closeAddTaskDlgWithAnimation();
-      }, 1500);
-    }
+    // if (isBoardPage()) {
+    //   setTimeout(() => {
+    //     closeAddTaskDlgWithAnimation();
+    //   }, 2000);
+    // }
 }
 
 
@@ -50,7 +50,7 @@ function closeAddTaskDlgWithAnimation() {
         if (isBoardPage() && typeof initBoard === 'function') {
             initBoard();
         }
-    }, 300);
+    }, 500);
 }
 
 
@@ -60,7 +60,7 @@ function closeAddTaskDlgWithAnimation() {
  */
 function showTaskAddedAlert() {
     alertDialog.innerHTML = getTaskAddDlg();
-    alertDialog.classList.add('alert-overlay');
+    alertDialog.classList.add('alert-dialog');
     alertDialog.classList.remove('hide');
     showAddTaskDlgWtihAnimation();
 }
@@ -91,7 +91,7 @@ function closeBoardAddTaskDialogIfExists() {
  *     - "Add more tasks"
  *     - "Go to Board"
  * - On board.html → no buttons are rendered and the dialog receives a
- *     special CSS class ("add-contact__dialog-board") applied to
+ *     special CSS class ("alert-dialog-board") applied to
  *     the container element with ID "alert-dlg-box".
  *
  * Note:
@@ -104,21 +104,19 @@ function closeBoardAddTaskDialogIfExists() {
 function getTaskAddDlg() {
     const onBoard = isBoardPage();
   if (onBoard) {
-    document.getElementById('alert-dlg-box').classList.add('add-contact__dialog-board');
+    document.getElementById('alert-dlg-box').classList.remove('alert-dialog');
+    document.getElementById('alert-dlg-box').classList.add('alert-msg-board');
   }
     return /*html*/ `
       <div class="alert-overlay ${onBoard ? "alert-overlay-board" : ""}">
         <h2 id="alert-message">Task added to board</h2>
-        <div class="alert-buttons ${onBoard ? "alert-buttons-board" : ""}">
+      <div class="alert-buttons ${onBoard ? "alert-buttons-board" : ""}">
           
-          ${
-            onBoard
-              ? ""
-              : `
-                <button id="alert-ok" class="empty-btn" onclick="closeAddTaskDlgWithAnimation()">Add more tasks</button>
-                <button id="alert-board" class="filled-btn" onclick="goToBoard()">Go to Board</button>
-              `
-          }
+      ${onBoard ? ""
+                : /*html*/ `
+                  <button id="alert-ok" class="empty-btn" onclick="closeAddTaskDlgWithAnimation()">Add more tasks</button>
+                  <button id="alert-board" class="filled-btn" onclick="goToBoard()">Go to Board</button>
+                  `}
         </div>
       </div>
     `;
