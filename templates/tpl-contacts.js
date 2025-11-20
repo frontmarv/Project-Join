@@ -91,7 +91,7 @@ function getEditContactDlgTpl() {
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-email-input" type="email" maxlength="50" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
+                            <input id="contact-dlg-email-input" type="email" maxlength="60" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
                         <p class="inputfield_fill-in-info" id="email-error-warning">Enter a valid e-mail adress</p>
