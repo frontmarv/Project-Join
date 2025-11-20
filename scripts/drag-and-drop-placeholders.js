@@ -23,10 +23,15 @@
  */
 function updateHoverColumn(event) {
   const underPointer = document.elementFromPoint(event.clientX, event.clientY);
-  const col = underPointer?.closest(".tasks") || null;
 
-  if (col !== lastHoverCol) {
-    handleColumnChange(col);
+  let col = underPointer?.closest(".tasks");
+
+  if (!col) {
+    const colContainer = underPointer?.closest(".board__table__column");
+    if (colContainer) { col = colContainer.querySelector(".tasks") }
+  }
+
+  if (col !== lastHoverCol) {handleColumnChange(col);
   }
 }
 
@@ -95,17 +100,14 @@ function showNoTasksPlaceholderIfEmpty(col) {
   if (!col) return;
 
   const hasDragPlaceholder = col.querySelector(".task--placeholder");
-  if (hasDragPlaceholder) {
-    hideExistingPlaceholder(col);
+  const realTasks = col.querySelectorAll(".task:not(.task--placeholder):not(.dragging)");
+
+  if (hasDragPlaceholder) {hideExistingPlaceholder(col);
     return;
   }
 
-  const hasRealTask = col.querySelector(".task:not(.task--placeholder):not(.dragging)");
-
-  if (hasRealTask) {
-    hideExistingPlaceholder(col);
-  } else {
-    ensureNoTasksPlaceholder(col);
+  if (realTasks.length === 0) {ensureNoTasksPlaceholder(col);
+  } else {hideExistingPlaceholder(col);
   }
 }
 
