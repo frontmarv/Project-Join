@@ -80,18 +80,6 @@
   justify-content: space-around;
 }
 
-@media (max-width: 580px) {
-  .dlg-edit__main__task-priority-btn-box {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .dlg-edit__main__task-priority-btn-box .priority-options-btn {
-    width: 80%;
-  }
-}
-
 .priority-options-btn {
   width: 8.5rem;
 }
@@ -225,15 +213,6 @@
   min-height: 9rem;
   overflow-y: auto;
   scrollbar-width: thin;
-  hyphens: auto;
-}
-
-
-@media (max-width: 500px) {
-  .dlg-edit__subtask-list {
-    max-height: 75px;
-    min-height: 75px;
-  }
 }
 
 .dlg-edit__subtask-list li {
@@ -242,6 +221,7 @@
   height: 2.2rem;
   align-items: center;
   font-size: 1rem;
+  word-break: break-all;
 }
 
 .dlg-edit__main__subtask {
@@ -290,7 +270,7 @@
   content: url('../assets/img/check-hover.svg');
 }
 
-.subtask-input:focus+.subtask-input-icons {
+.subtask-input:focus + .subtask-input-icons {
   display: flex;
 }
 
@@ -317,29 +297,6 @@
   width: fit-content;
 }
 
-@media (max-width: 470px) {
-
-  .dlg-edit__footer__discard-btn,
-  .dlg-edit__footer__save-btn {
-    width: fit-content;
-    height: 3rem;
-    font-size: 1rem;
-    padding: 0.5rem;
-  }
-}
-
-@media (max-width: 380px) {
-
-  .dlg-edit__footer__discard-btn,
-  .dlg-edit__footer__save-btn {
-    width: 6rem;
-    height: 3rem;
-    font-size: 0rem;
-    padding: 0.5rem;
-    padding-right: 0.9rem;
-  }
-}
-
 .dlg-edit__main__subtask:hover:not(.edit-mode) {
   background-color: var(--color-lightergrey);
   cursor: pointer;
@@ -347,6 +304,7 @@
 
 .subtask-edit-box {
   display: none;
+  flex-direction: row;
   align-items: center;
   height: 1.5rem;
   gap: 0.5rem;
@@ -382,7 +340,7 @@
 }
 
 .dlg-edit__main__subtask:hover .subtask-edit-box {
-  display: flex;
+  display: inline-flex;
 }
 
 .subtask-edit-box__edit-img:hover,
@@ -436,17 +394,94 @@
   .dlg-edit__main__due-date-title,
   .dlg-edit__main__task-priority-title,
   .dlg-edit__main__assignments-title,
-  .dlg-edit__main__subtask-title,
+  .dlg-edit__main__subtask-title {
+    font-size: 1.2rem;
+  }
   .dlg-edit__main__assigned-user-container p,
   .dlg-edit__textarea,
   .dlg-edit__input-text,
-  .dlg-edit__footer__discard-btn, 
-  .dlg-edit__footer__save-btn,
-  .priority-options-btn {
-    font-size: 16px;
+  input::placeholder {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 580px) {
+  .dlg-edit__main__task-priority-btn-box {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
   }
 
-  input::placeholder {
-    font-size: 16px;
+  .dlg-edit__main__task-priority-btn-box .priority-options-btn {
+    width: 80%;
+  }
+}
+
+@media (max-width: 500px) {
+  .dlg-edit__subtask-list {
+    max-height: 6rem;
+    min-height: 6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dlg-edit__subtask-list li {
+    height: 3.5rem;
+  }
+
+  .subtask-edit-box {
+    gap: unset;
+  }
+}
+
+@media (max-width: 470px) {
+
+  .dlg-edit__footer__discard-btn,
+  .dlg-edit__footer__save-btn {
+    width: fit-content;
+    height: 3rem;
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 380px) {
+
+  .dlg-edit__footer__discard-btn,
+  .dlg-edit__footer__save-btn {
+    width: 6rem;
+    height: 3rem;
+    font-size: 0rem;
+    padding: 0.5rem;
+    padding-right: 0.9rem;
+  }
+
+  .dlg-edit__main__assigned-user-container svg {
+    flex: 0 0 auto;
+    margin-left: -0.75rem;
+    transition: transform 0.2s ease-in-out;
+    object-fit: cover;
+  }
+ 
+  .dlg-edit__user-box:first-child svg {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 355px) {
+  .dlg-edit__subtask-list li {
+    height: 4.5rem;
+  }
+
+  .subtask-edit-box {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 1.5rem;
+  }
+
+  .separator {
+    height: unset;
+    width: 100%;
   }
 }
