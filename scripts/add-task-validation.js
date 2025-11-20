@@ -165,27 +165,28 @@ function validateTitle(title, titleErr, valid) {
 
 
 /**
- * Validates the due date input.
- * @param {HTMLElement} date - Date input element.
+ * Validates the due date input for submit-level validation.
+ * @param {HTMLInputElement} date - Date input element.
  * @param {HTMLElement} dateErr - Date error element.
  * @param {boolean} valid - Current validation state.
  * @returns {boolean}
  */
 function validateDate(date, dateErr, valid) {
-  if (!date.value.trim()) {
+  const v = date.value.trim();
+  const today = todayLocalISO();
+  const maxDate = getMaxDueDateISO(2);
+  if (!v) {
     showError(date, dateErr, 'This field is required');
     return false;
-  } if (v < today) {
-    showError(date, dateErr, 'Please select a current or future date.');
-    return false;
-  } if (v > maxDate) {
-    showError(date, dateErr, 'Please select a date within the next two years.');
+  }
+  const msg = getDueDateError(v, today, maxDate);
+  if (msg) {
+    showError(date, dateErr, msg);
     return false;
   }
   clearError(date, dateErr);
   return valid;
 }
-
 
 
 /**
@@ -213,6 +214,14 @@ function todayLocalISO() {
   const d = new Date();
   d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
   return d.toISOString().split('T')[0];
+}
+
+
+
+function getMaxDueDateISO(years = 2) {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() + years);
+  return date.toISOString().split("T")[0];
 }
 
 
@@ -256,11 +265,4 @@ function dueDateValidation() {
   d.addEventListener('input', validate);
   d.addEventListener('change', validate);
   d.addEventListener('blur', validate);
-}
-
-
-function getMaxDueDateISO(years = 2) {
-  const date = new Date();
-  date.setFullYear(date.getFullYear() + years);
-  return date.toISOString().split("T")[0];
 }

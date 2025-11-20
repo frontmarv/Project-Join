@@ -37,14 +37,14 @@
 
             <div class="form__inputfields">
                 <div id="name__wrapper" class="inputfield__wrapper">
-                    <input id="name" type="text" placeholder="Name and Surname" aria-label="name"
+                    <input id="name" type="text" maxlength="50" placeholder="Name and Surname" aria-label="name"
                         onkeyup="handleNameValidation(this)">
                     <img src="../assets/img/person.svg" alt="icon of an person">
                     <p id="name-error-warning" class="name-error-warning">Connect double names with "-", max. 50 letters</p>
                 </div>
 
                 <div id="valid-email" class="inputfield__wrapper">
-                    <input id="email" type="email" placeholder="E-Mail">
+                    <input id="email" type="email" maxlength="50" placeholder="E-Mail">
                     <small id="msg" style="color: var(--color-error); display:none; width: 12rem;"> ❌ invalid
                         E-Mail</small>
                     <img src="../assets/img/mail.svg" alt="icon of an email">

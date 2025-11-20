@@ -103,3 +103,19 @@ function getMobileVerticalContainer() {
   if (isScrollable(board)) return board;
   return document.scrollingElement || document.documentElement;
 }
+
+
+// ======================================================
+// 🔹 MANUAL MOVE / FIREBASE UPDATE
+// ======================================================
+
+/**
+ * Moves a task manually to a new column (used in info view).
+ * @param {string} taskId - Task ID.
+ * @param {string} newStateUpperCase - Target state (capitalized).
+ */
+async function manualMoveTaskToNewColmn(taskId, newStateUpperCase) {
+  const newState = newStateUpperCase.charAt(0).toLowerCase() + newStateUpperCase.slice(1);
+  await updateTaskState(taskId, newState);
+  await refreshBoard();
+}

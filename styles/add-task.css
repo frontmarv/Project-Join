@@ -361,10 +361,6 @@ textarea.input-error:focus,
     flex-wrap: wrap;
   }
 
-  .dlg-edit__main__add-subtask-box {
-    margin-bottom: 24px;
-  }
-
   #required-mobile {
     font-size: 16px;
   }
@@ -475,8 +471,9 @@ textarea.input-error:focus,
     align-items: center;
   }
 
-  .priority-options-btn {
-    width: 10rem !important;
+  .priority-options .priority-options-btn {
+    width: 10rem;
+    width: 80%;
   }
 }
 
@@ -499,8 +496,8 @@ textarea.input-error:focus,
     justify-content: center;
   }
 
-  .priority-options-btn {
-    width: 8.5rem !important;
+  .priority-options .priority-options-btn {
+    width: 8.5rem;
   }
 
   .task-content__header {
@@ -567,10 +564,6 @@ textarea.input-error:focus,
     flex-wrap: wrap;
   }
 
-  .dlg-edit__main__add-subtask-box {
-    margin-bottom: 24px;
-  }
-
   #required-mobile {
     font-size: 16px;
   }
@@ -582,10 +575,9 @@ textarea.input-error:focus,
     justify-content: center;
   }
 
-  .priority-options-btn {
-    font-weight: 400;
-    padding: 0.75rem 1rem;
-    width: 10rem !important;
+  .priority-options .priority-options-btn {
+    width: 10rem;
+    width: 80%;
   }
 
   .dlg-edit__subtask-list {

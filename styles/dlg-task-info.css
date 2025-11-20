@@ -78,6 +78,10 @@
   align-items: center;
 }
 
+.subtask-text {
+  hyphens: auto;
+}
+
 .deletebox-wrapper {
   display: flex;
   height: 1.5rem;
@@ -126,7 +130,9 @@
 }
 
 .dlg__footer__options-box {
-  display: flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .dlg__footer__options-box img {
