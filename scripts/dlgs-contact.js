@@ -41,32 +41,6 @@ function renderEditContactDlg() {
 }
 
 
-/**
- * Displays dialog with fade-in animation.
- * Shows dialog overlay and applies animation class after short delay.
- * @returns {void}
- */
-function showDlgWtihAnimation() {
-    displayDlg();
-    setTimeout(() => {
-        dialog.classList.add('show');
-    }, 100);
-}
-
-
-/**
- * Hides dialog with fade-out animation.
- * Removes animation class and hides dialog after transition completes.
- * @returns {void}
- */
-function removeAnimationClass() {
-    dialog.classList.remove('show');
-    setTimeout(() => {
-        removeDeleteClass();
-        hideDlg();
-    }, 300);
-}
-
 
 /**
  * Creates a data patch object from contact form inputs.
@@ -97,7 +71,7 @@ function setMultipatch() {
  */
 async function saveDataEditContactDlg(data) {
     removeAnimationClass();
-    const multipatch = {"name": data.name, "email": data.email, "phone": data.phone};
+    const multipatch = { "name": data.name, "email": data.email, "phone": data.phone };
     await saveChangesToDB(multipatch);
     await renderContactList();
     const userName = rawData[STORED_USER_KEY].name;
@@ -112,22 +86,6 @@ async function saveDataEditContactDlg(data) {
 
 
 /**
- * Marks the specified contact as selected in the contact list.
- * Applies selected styling to matching contact list item.
- * @param {string} userName - Name of the contact to mark as selected
- * @returns {void}
- */
-function markStoredContactAsSelected(userName) {
-    const nodelist = document.querySelectorAll('.contact-list__item');
-    nodelist.forEach(item => {
-        if (item.querySelector('.contact-name').innerHTML === userName) {
-            styleContactSelected(item);
-        }
-    });
-}
-
-
-/**
  * Validates and saves new contact to database.
  * Collects form data, validates input, pushes to database, and updates UI.
  * @async
@@ -135,19 +93,19 @@ function markStoredContactAsSelected(userName) {
  */
 async function putNewContactToDB() {
     const { key, data, addUserName } = collectDataFromDlg();
-    const validInput = await validateInputfieldsDlg(addUserName, data);
-    const emailNotAlreadyTaken = await checkEmailAlreadyExists(data)
-    if (validInput && emailNotAlreadyTaken === 0) {
-        await pushDataToDB(key, data);
-        removeAnimationClass();
-        renderContactList();
-        setContactCardtoInvisible();
-        addContactSuccessDlg();
-    } else if (emailNotAlreadyTaken !== 0) {
+    const validation = await performContactValidation(addUserName, data);
+    if (validation.isValid) {
+        successfulValidationFlow(key, data);
+    } else if (!validation.emailNotAlreadyTaken && !validation.nameNotAlreadyTaken) {
+        styleNameAlreadyTaken();
+        styleEmailAlreadyTaken();
+    } else if (!validation.emailNotAlreadyTaken) {
         styleEmailAlreadyTaken();
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
-    }
-    else {
+    } else if (!validation.nameNotAlreadyTaken) {
+        styleNameAlreadyTaken();
+        validateInputField(document.getElementById('contact-dlg-email-input'), isValidEmail, true);
+    } else {
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
         validateInputField(document.getElementById('contact-dlg-email-input'), isValidEmail, true);
     }
@@ -161,16 +119,20 @@ async function putNewContactToDB() {
  */
 async function validateAndSaveData() {
     const { key, data, addUserName } = collectDataFromDlg();
-    const validInput = await validateInputfieldsDlg(addUserName, data);
-    const emailNotAlreadyTaken = await checkEmailAlreadyExists(data)
-    if (validInput && emailNotAlreadyTaken === 0) {
+    const validation = await performContactValidation(addUserName, data);
+    if (validation.isValid) {
         saveDataEditContactDlg(data);
         editContactSuccessDlg();
-    } else if (emailNotAlreadyTaken !== 0) {
+    } else if (!validation.emailNotAlreadyTaken && !validation.nameNotAlreadyTaken) {
+        styleNameAlreadyTaken();
+        styleEmailAlreadyTaken();
+    } else if (!validation.emailNotAlreadyTaken) {
         styleEmailAlreadyTaken();
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
-    }
-    else {
+    } else if (!validation.nameNotAlreadyTaken) {
+        styleNameAlreadyTaken();
+        validateInputField(document.getElementById('contact-dlg-email-input'), isValidEmail, true);
+    } else {
         validateInputField(document.getElementById('contact-dlg-name-input'), isValidUsername, true);
         validateInputField(document.getElementById('contact-dlg-email-input'), isValidEmail, true);
     }
@@ -178,34 +140,58 @@ async function validateAndSaveData() {
 
 
 /**
- * Styles the email input field to indicate the email is already taken.
- * Updates error message text, shows the warning, and applies error border color.
- * @returns {void}
+ * Handles successful contact validation and database operations.
+ * Pushes new contact to database, closes dialog, refreshes contact list, and shows success message.
+ * @async
+ * @param {string} key - The generated unique user ID
+ * @param {Object} data - Contact data object to be saved
+ * @returns {Promise<void>}
  */
-function styleEmailAlreadyTaken() {
-    document.getElementById('email-error-warning').innerHTML = 'Email is already taken';
-    document.getElementById('email-error-warning').style.opacity = '1';
-    document.getElementById('contact-dlg-email-input').closest('.inputfield__wrapper').classList.add('error');
+async function successfulValidationFlow(key, data) {
+    await pushDataToDB(key, data);
+    removeAnimationClass();
+    renderContactList();
+    setContactCardtoInvisible();
+    addContactSuccessDlg();
 }
 
 
 /**
  * Checks if an email address already exists in the database.
- * Fetches all users and returns all users with matching email address.
+ * Fetches all users and returns count of users with matching email (case-insensitive).
  * @async
  * @param {Object} data - Contact data object
  * @param {string} data.email - Email address to check
- * @returns {Promise<Array>} Array of user objects with matching email, empty array if none found
+ * @returns {Promise<number>} Count of existing users with matching email
  */
 async function checkEmailAlreadyExists(data) {
-    let fetchedData = await fetchData();
+    let fetchedData = await fetchUsers();
     let dataArray = Object.values(fetchedData);
     let existingUsers = dataArray.filter(user =>
-        user.email === data.email && user.name !== data.name
+        user.email.toLowerCase() === data.email.toLowerCase() &&
+        user.name.toLowerCase() !== data.name.toLowerCase()
     );
     return existingUsers.length;
 }
 
+
+/**
+ * Checks if a name already exists in the database.
+ * Fetches all users and returns count of users with matching name (case-insensitive).
+ * @async
+ * @param {Object} data - Contact data object
+ * @param {string} data.name - Name to check
+ * @returns {Promise<number>} Count of existing users with matching name
+ */
+async function checkNameAlreadyExists(data) {
+    let fetchedData = await fetchUsers();
+    let dataArray = Object.values(fetchedData);
+    let existingUsers = dataArray.filter(user =>
+        user.name.toLowerCase() === data.name.toLowerCase() &&
+        user.email.toLowerCase() !== data.email.toLowerCase()
+    );
+    return existingUsers.length;
+}
 
 /**
  * Resets all input field styling to default state.
@@ -219,6 +205,7 @@ function resetInputInfo() {
     });
     document.querySelectorAll('.inputfield_fill-in-info').forEach(element => element.style.opacity = '0');
     document.getElementById('email-error-warning').innerHTML = 'Enter a valid e-mail adress';
+    document.getElementById('name-error-warning').innerHTML = 'Connect double names with "-", max. 50 letter';
 }
 
 
@@ -301,18 +288,12 @@ async function validateInputField(input, validationFn, submit) {
     const infoText = input.closest('.inputfield-section').querySelector('.inputfield_fill-in-info');
     if (value.length > 0 || submit) {
         if (await validationFn(value)) {
-            wrapper.classList.remove('error');
-            wrapper.classList.add('success');
-            infoText.style.opacity = '0';
+            styleInputsSuccess(wrapper, infoText);
         } else {
-            wrapper.classList.remove('success');
-            wrapper.classList.add('error');
-            infoText.style.opacity = '1';
+            styleInputsError(wrapper, infoText);
         }
     } else {
-        wrapper.classList.remove('error');
-        wrapper.classList.remove('success');
-        infoText.style.opacity = '0';
+        styleInputsNeutral(wrapper, infoText);
     }
 }
 
@@ -377,39 +358,32 @@ function createDataObjectAddContact(addUserName, addEmail, addPhone) {
 
 
 /**
- * Displays a success message dialog after adding a contact.
- * Shows animated dialog for 1.5 seconds then removes it.
- * @returns {void}
+ * Performs comprehensive validation checks for contact form data.
+ * Validates input fields, checks for duplicate emails and names, and validates phone number.
+ * @async
+ * @param {string} addUserName - The username to validate
+ * @param {Object} data - Contact data object
+ * @param {string} data.email - Email address to validate
+ * @param {string} data.phone - Phone number to validate
+ * @param {string} data.name - Name to validate
+ * @returns {Promise<Object>} Validation results object
+ * @returns {boolean} return.validInput - True if username and email are valid
+ * @returns {boolean} return.emailNotAlreadyTaken - True if email doesn't exist in database
+ * @returns {boolean} return.nameNotAlreadyTaken - True if name doesn't exist in database
+ * @returns {boolean} return.validPhone - True if phone is empty or valid format
+ * @returns {boolean} return.isValid - True if all validation checks pass
  */
-function addContactSuccessDlg() {
-    const successDlg = getAddUserSuccessDlg();
-    animationDlg(successDlg);
-}
+async function performContactValidation(addUserName, data) {
+    const validInput = await validateInputfieldsDlg(addUserName, data);
+    const emailNotAlreadyTaken = await checkEmailAlreadyExists(data) === 0;
+    const nameNotAlreadyTaken = await checkNameAlreadyExists(data) === 0;
+    const validPhone = data.phone === "" || isValidPhone(data.phone);
 
-
-/**
- * Displays a success message dialog after editing a contact.
- * Shows animated dialog for 1.5 seconds then removes it.
- * @returns {void}
- */
-function editContactSuccessDlg() {
-    const successDlg = getEditContactSuccessDlg();
-    animationDlg(successDlg);
-}
-
-
-/**
- * Animates a success dialog into view and removes it after delay.
- * Inserts dialog into DOM, fades it in, then fades out and removes after 1.5 seconds.
- * @param {string} successDlg - HTML string containing the success dialog markup
- * @returns {void}
- */
-function animationDlg(successDlg) {
-    document.body.insertAdjacentHTML('beforeend', successDlg);
-    const successDlgElement = document.querySelector('.create-contact-successful');
-    requestAnimationFrame(() => successDlgElement.classList.remove('invisible'));
-    setTimeout(() => {
-        successDlgElement.classList.add('invisible');
-        setTimeout(() => successDlgElement.remove(), 300);
-    }, 2000);
+    return {
+        validInput,
+        emailNotAlreadyTaken,
+        nameNotAlreadyTaken,
+        validPhone,
+        isValid: validInput && emailNotAlreadyTaken && nameNotAlreadyTaken && validPhone
+    };
 }

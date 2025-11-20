@@ -124,16 +124,20 @@ async function pushDataToDB(key, data) {
  * @returns {Promise<void>}
  */
 async function sendSignupForm() {
-    const userAlreadyExists = await checkEmailAlreadyExists();
-
-    if (!userAlreadyExists) {
+    const { existingUserEmail, existingUserName } = await NameAndEmailAlreadyExist();
+    if (existingUserEmail && existingUserName) {
+        emailTakenStyling();
+        nameTakenStyling();
+    } else if (existingUserEmail) {
+        emailTakenStyling();
+    } else if (existingUserName) {
+        nameTakenStyling();
+    } else {
         let key = generateUserId(nameInput.value);
         let data = await createDataObject();
         await pushDataToDB(key, data);
         showSuccessfulSignUpMessage();
         redirectToLoginAfterDelay();
-    } else {
-        emailTakenStyling();
     }
 }
 
@@ -159,9 +163,32 @@ function emailTakenStyling() {
     document.getElementById('check').checked = false;
     formState.isCheckboxChecked = false;
     disableSignUpBtn();
-
     setTimeout(() => {
         document.getElementById('email-error-warning').style.visibility = 'hidden';
+    }, 2000);
+}
+
+
+/**
+ * Applies visual styling and UI feedback when the signup name is already taken.
+ * - Shows "This name already exists" error message
+ * - Highlights name field in error color
+ * - Unchecks the privacy checkbox
+ * - Disables sign-up button
+ * - Auto-hides error message and resets text after 2 seconds
+ * @returns {void}
+ */
+function nameTakenStyling() {
+    document.getElementById('name__wrapper').classList.remove('valid-input');
+    document.getElementById('name-error-warning').innerHTML = "This name already exists";
+    document.getElementById('name-error-warning').style.visibility = 'visible';
+    document.getElementById('name__wrapper').classList.add('error');
+    document.getElementById('check').checked = false;
+    formState.isCheckboxChecked = false;
+    disableSignUpBtn();
+    setTimeout(() => {
+        document.getElementById('name-error-warning').style.visibility = 'hidden';
+        document.getElementById('name-error-warning').innerHTML = 'Connect double names with "-", max. 50 letters';
     }, 2000);
 }
 
@@ -176,7 +203,7 @@ function emailTakenStyling() {
  * @async
  * @returns {Promise<Object|null>} The users object, or null on failure.
  */
-async function fetchData() {
+async function fetchUsers() {
     try {
         const response = await fetch(DB_URL + "users/" + ".json");
         if (!response.ok) {

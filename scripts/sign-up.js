@@ -84,11 +84,11 @@ function handlePasswordInputChange(element) {
 function isValidFullName(element) {
     let inputName = element.value.trim();
     if (!inputName) return false;
-    
+
     const testResult = nameInputRegex.test(inputName);
     const letterCount = (inputName.match(/[a-zA-ZäöüÄÖÜß]/g) || []).length;
     const wordCount = inputName.split(/\s+/).filter(word => word.length > 0).length;
-    
+
     return testResult && letterCount >= 2 && wordCount <= 2;
 }
 
@@ -102,7 +102,7 @@ function handleNameValidation(element) {
     let validInput = isValidFullName(element);
     if (element.value === "") {
         nameWrapper.classList.remove('error', 'valid-input');
-        nameErrorWarning.style.visibility= "hidden";
+        nameErrorWarning.style.visibility = "hidden";
     } else {
         setWrapperColor(validInput, nameWrapper);
     }
@@ -120,11 +120,11 @@ function setWrapperColor(validInput, elementById) {
     elementById.classList.remove('error', 'valid-input');
     if (!validInput) {
         elementById.classList.add('error');
-        nameErrorWarning.style.visibility= "visible";
+        nameErrorWarning.style.visibility = "visible";
         formState.isNameValid = false;
     } else {
         elementById.classList.add('valid-input');
-        nameErrorWarning.style.visibility= "hidden";
+        nameErrorWarning.style.visibility = "hidden";
         formState.isNameValid = true;
     }
 }
@@ -258,14 +258,19 @@ function evaluateFormValidity() {
 
 
 /**
- * Checks if an email address already exists in the database.
- * Fetches all users and searches for a matching email address.
+ * Checks if a name and/or email already exist in the database.
+ * Fetches all users and searches for matching name and email addresses (case-insensitive).
  * @async
- * @returns {Promise<Object|undefined>} The existing user object if found, undefined otherwise
+ * @returns {Promise<Object>} Object containing existence check results
+ * @returns {Object|undefined} return.existingUserEmail - User object if email exists, undefined otherwise
+ * @returns {Object|undefined} return.existingUserName - User object if name exists, undefined otherwise
  */
-async function checkEmailAlreadyExists() {
-    let data = await fetchData();
+async function NameAndEmailAlreadyExist() {
+    let data = await fetchUsers();
     let dataArray = Object.values(data)
-    let existingUser = dataArray.find(user => user.email === email.value);
-    return existingUser
+    let existingUserEmail = dataArray.find(user => user.email.toLowerCase() === email.value.toLowerCase());
+    let existingUserName = dataArray.find(user =>
+        user.name.toLowerCase() === nameInput.value.toLowerCase()
+    );
+    return { existingUserEmail, existingUserName };
 }

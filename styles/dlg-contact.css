@@ -281,8 +281,7 @@
 
     .profil-img__wrapper {
         position: absolute;
-        top: calc(-40px - 0.0303 * (100vw - 300px));
-        ;
+        top: -40px;
     }
 
     .filled-btn {
@@ -310,10 +309,10 @@
     }
 
     .profil-img__wrapper img {
-        min-width: 80px;
-        max-width: 7.5rem;
+        min-width: 90px;
+        max-width: 110px;
         aspect-ratio: 1 / 1;
-        width: 15vw;
+        width: 14vw;
         height: unset;
     }
 
@@ -328,16 +327,16 @@
     }
 
     .scalable-profil-img {
-        width: 10vh;
-        min-width: 40px;
-        max-width: 70px;
-        font-size: max(16px, 4vw);
+        width: 15vh;
+        min-width: 70px;
+        max-width: 90px;
+        font-size: clamp(16px, 3vh, 2rem);
     }
 
     .create-contact-successful {
         top: calc(100vh - 300px);
         left: 50vw;
-        min-width: fit-content;
+        min-width: 320px;
     }
 
     .create-contact-successful.invisible {

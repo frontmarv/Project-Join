@@ -187,7 +187,7 @@ function welcomeScreenNoAnimation() {
  * @returns {Promise<void>}
  */
 async function attemptLogin() {
-    let data = await fetchData();
+    let data = await fetchUsers();
     let dataArray = Object.values(data);
     let existingUser = dataArray.find(user => user.email === email.value);
 
@@ -381,7 +381,7 @@ function handleResizeScreen() {
  * @async
  * @returns {Promise<Object|null>} JSON object of users or null on error.
  */
-async function fetchData() {
+async function fetchUsers() {
     try {
         const response = await fetch(DB_URL + "users/" + ".json");
         if (!response.ok) {
