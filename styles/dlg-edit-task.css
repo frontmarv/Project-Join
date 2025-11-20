@@ -13,9 +13,11 @@
   justify-content: flex-end;
 }
 
-.dlg-edit__close-btn:hover {
-  content: url(../assets/img/close-delete-cross-hover.svg);
-  cursor: pointer;
+@media (hover: hover) {
+  .dlg-edit__close-btn:hover {
+    content: url(../assets/img/close-delete-cross-hover.svg);
+    cursor: pointer;
+  }
 }
 
 .dlg-edit__main__title-box,
@@ -84,16 +86,14 @@
     align-items: center;
     gap: 1rem;
   }
+
+  .dlg-edit__main__task-priority-btn-box .priority-options-btn {
+    width: 80%;
+  }
 }
 
 .priority-options-btn {
   width: 8.5rem;
-}
-
-@media (max-width: 580px) {
-  .dlg-edit__main__task-priority-btn-box .priority-options-btn {
-    width: 80%;
-  }
 }
 
 .contacts-selection {
@@ -111,9 +111,7 @@
   border: 1px solid var(--color-lightgrey);
   border-radius: 0.5rem;
   padding: 0 2.5rem 0 1rem;
-  background: var(--color-white)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23888' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
-    no-repeat right 1rem center;
+  background: var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23888' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 1rem center;
   background-size: 1rem;
   cursor: text;
   outline: none;
@@ -174,7 +172,7 @@
   height: 2rem;
   min-width: 2rem;
   border-radius: 50%;
-  border: 0.125rem solid #fff; 
+  border: 0.125rem solid #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,9 +231,9 @@
 
 @media (max-width: 500px) {
   .dlg-edit__subtask-list {
-  max-height: 75px;
-  min-height: 75px;
-}
+    max-height: 75px;
+    min-height: 75px;
+  }
 }
 
 .dlg-edit__subtask-list li {
@@ -292,7 +290,7 @@
   content: url('../assets/img/check-hover.svg');
 }
 
-.subtask-input:focus + .subtask-input-icons {
+.subtask-input:focus+.subtask-input-icons {
   display: flex;
 }
 
@@ -320,6 +318,7 @@
 }
 
 @media (max-width: 470px) {
+
   .dlg-edit__footer__discard-btn,
   .dlg-edit__footer__save-btn {
     width: fit-content;
@@ -330,6 +329,7 @@
 }
 
 @media (max-width: 380px) {
+
   .dlg-edit__footer__discard-btn,
   .dlg-edit__footer__save-btn {
     width: 6rem;
@@ -427,4 +427,23 @@
   border-radius: 50%;
   width: 40px;
   height: 40px;
+}
+
+@media screen and (max-width: 1024px) {
+
+  .dlg-edit__main__task-title,
+  .dlg-edit__main__task-description,
+  .dlg-edit__main__due-date-title,
+  .dlg-edit__main__task-priority-title,
+  .dlg-edit__main__assignments-title,
+  .dlg-edit__main__subtask-title,
+  .dlg-edit__main__assigned-user-container p,
+  .dlg-edit__textarea,
+  .dlg-edit__input-text {
+    font-size: 16px;
+  }
+
+  input::placeholder {
+    font-size: 16px;
+  }
 }

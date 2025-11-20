@@ -4,14 +4,15 @@
   align-items: center;
 }
 
-.dlg__close-btn:hover {
-  content: url(../assets/img/close-delete-cross-hover.svg);
-  cursor: pointer;
+@media (hover: hover) {
+  .dlg__close-btn:hover {
+    content: url(../assets/img/close-delete-cross-hover.svg);
+    cursor: pointer;
+  }
 }
 
 .dlg__main {
   overflow-y: auto;
-  scrollbar-width: none;
   gap: 1.5rem;
   padding: 0 0.5rem;
   width: initial;
@@ -38,6 +39,7 @@
   align-items: center;
   gap: 2rem;
 }
+
 .dlg__main__task__due-date-label,
 .dlg__main__task-priority-title {
   color: var(--color-maincolor);
@@ -130,9 +132,9 @@
 }
 
 .dlg__footer__options-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dlg__footer__options-box img {
@@ -147,12 +149,35 @@
   width: 3.875rem;
 }
 
-.delete-btn:hover {
-  content: url(../assets/img/delete-with-text-hover.svg);
-  cursor: pointer;
+@media (hover: hover) {
+  .delete-btn:hover {
+    content: url(../assets/img/delete-with-text-hover.svg);
+    cursor: pointer;
+  }
+
+  .edit-btn:hover {
+    content: url(../assets/img/edit-with-text-hover.svg);
+    cursor: pointer;
+  }
 }
 
-.edit-btn:hover {
-  content: url(../assets/img/edit-with-text-hover.svg);
-  cursor: pointer;
+@media screen and (max-width: 1024px) {
+
+  .dlg__main__task-title {
+    font-size: 36px;
+  }
+
+  .dlg {
+    font-size: 16px;
+    height: 90vh;
+    padding: 6vw 6vw;
+  }
+
+  .dlg_main_task-priority {
+    height: 28px;
+  }
+
+  .subtask-input {
+    max-width: 100%;
+  }
 }
