@@ -26,41 +26,56 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .alert-dialog {
-  display: flex;
-  flex-direction: row;
-  min-height: 500px;
-  height: 50vh;
-  max-height: 43.75rem;
-  width: 90vw;
-  max-width: 93.75rem;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  border-radius: 1rem;
-  background-color: var(--color-white);
-  padding: 0rem;
-  z-index: 2000;
-  opacity: 0;
-  transform: translate(100vw, -50%);
-  transition: all 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: fixed;
+    text-align: center;
+    padding: 3rem 2rem;
+    height: fit-content;
+    width: fit-content;
+    top: 50%;
+    left: 50%;
+    border-radius: 1.5rem;
+    background-color: var(--color-white);
+    z-index: 2000;
+    opacity: 0;
+    transform: translate(100vw, -50%);
+    transition: all 0.5s ease-in-out;
+}
+
+.alert-dialog .empty-btn {
+  font-size: 1.25rem;
+}
+
+.alert-dialog .filled-btn {
+  width: 12rem;
 }
 
 .alert-msg-board {
   display: flex;
-  padding: 0.5rem;
+  align-items: center;
+  padding: 1rem 1.5rem;
   width: fit-content;
   height: 4.5rem;
   position: fixed;
   top: 95%;
   left: 50%;
+  border-radius: 1.25rem;
   background-color: var(--color-maincolor);
   font-size: 1.25rem;
-  color: var(--color-white) !important;
+  color: var(--color-white);
   text-wrap: nowrap;
   transform: translate(100vw, -50%);
   transition: all 0.5s ease-in-out;
   z-index: 2000;
   opacity: 0;
+}
+
+.alert-msg-board h2 {
+  color: var(--color-white);
+  font-size: 1.25rem;
+  font-weight: 400;
 }
 
 .show {
@@ -272,9 +287,9 @@ textarea.input-error:focus,
 }
 
 .alert-overlay {
-  width: fit-content;
-  height: fit-content;
-  min-height: unset;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .alert-overlay-board {
@@ -299,8 +314,7 @@ textarea.input-error:focus,
 .alert-buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
+  gap: 4rem;
 }
 
 .alert-buttons-board {
@@ -478,7 +492,6 @@ textarea.input-error:focus,
 }
 
 @media screen and (max-width: 1024px) {
-
   #task-content {
     height: calc(100vh - 260px);
   }
