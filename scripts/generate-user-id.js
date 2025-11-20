@@ -67,14 +67,14 @@ function getRandomColor() {
  * @returns {Promise<Object>} A complete user data object.
  */
 async function createDataObject() {
-    let userName = capitalizeInitials(nameInput.value);
+    let userName = capitalizeInitials(nameInput.value.trim());
     let color = getRandomColor();
 
     const hashedPw = await hashPassword(password.value);
 
     return {
         name: userName,
-        email: email.value,
+        email: email.value.trim(),
         password: hashedPw,
         phone: "",
         profilImgColor: color,
@@ -133,7 +133,7 @@ async function sendSignupForm() {
     } else if (existingUserName) {
         nameTakenStyling();
     } else {
-        let key = generateUserId(nameInput.value);
+        let key = generateUserId(nameInput.value.trim());
         let data = await createDataObject();
         await pushDataToDB(key, data);
         showSuccessfulSignUpMessage();
