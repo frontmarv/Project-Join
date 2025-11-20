@@ -115,11 +115,11 @@ async function pushDataToDB(key, data) {
 
 /**
  * Handles the signup form submission process.
- * - Checks if email already exists
- * - Generates user ID
- * - Creates user data object
- * - Writes data to Firebase
- * - Shows success UI message
+ * Validates that email and name are unique in the database before proceeding with signup.
+ * - Checks if both email and name already exist
+ * - Checks if only email exists
+ * - Checks if only name exists
+ * - Proceeds with valid form submission if neither exists
  * @async
  * @returns {Promise<void>}
  */
@@ -133,14 +133,25 @@ async function sendSignupForm() {
     } else if (existingUserName) {
         nameTakenStyling();
     } else {
-        let key = generateUserId(nameInput.value.trim());
-        let data = await createDataObject();
-        await pushDataToDB(key, data);
-        showSuccessfulSignUpMessage();
-        redirectToLoginAfterDelay();
+        sendValidForm();
     }
 }
 
+
+/**
+ * Processes a valid signup form and creates new user account.
+ * Generates unique user ID, creates user data object, saves to database,
+ * displays success message, and redirects to login page.
+ * @async
+ * @returns {Promise<void>}
+ */
+async function sendValidForm() {
+    let key = generateUserId(nameInput.value.trim());
+    let data = await createDataObject();
+    await pushDataToDB(key, data);
+    showSuccessfulSignUpMessage();
+    redirectToLoginAfterDelay();
+}
 
 // -----------------------------------------------------------------------------
 // ERROR HANDLING / UI
@@ -212,7 +223,8 @@ async function fetchUsers() {
         rawData = await response.json();
         return rawData;
 
-    } catch (error) { console.error("Error fetching data:", error.message);
+    } catch (error) {
+        console.error("Error fetching data:", error.message);
         return null;
     }
 }
