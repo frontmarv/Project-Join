@@ -73,6 +73,8 @@
   border: 1px solid var(--color-lightgrey);
   padding: 0.75rem 1.25rem;
   font-size: 1.25rem;
+  hyphens: auto;
+  text-align: justify;
 }
 
 .dlg-edit__main__task-priority-btn-box {
@@ -221,7 +223,8 @@
   height: 2.2rem;
   align-items: center;
   font-size: 1rem;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .dlg-edit__main__subtask {
@@ -427,6 +430,7 @@
 @media (max-width: 480px) {
   .dlg-edit__subtask-list li {
     height: 3.5rem;
+    padding-left: 0.25rem;
   }
 
   .subtask-edit-box {

@@ -34,6 +34,11 @@
   word-wrap: break-word;
 }
 
+.dlg__main__task-description {
+  hyphens: auto;
+  text-align: justify;
+}
+
 .dlg__main__task__due-date,
 .dlg__main_task-priority-box {
   display: flex;
@@ -82,9 +87,8 @@
 }
 
 .subtasks-text {
+  word-break: break-word;
   hyphens: auto;
-  word-break: normal;
-  overflow-wrap: break-word;
 }
 
 .deletebox-wrapper {
@@ -166,16 +170,16 @@
 
 @media screen and (max-width: 1024px) {
   .dlg__main__task-title {
-    font-size: 36px;
+    font-size: 2.25rem;
   }
 
   .dlg {
-    font-size: 16px;
-    height: 90vh;
+    font-size: 1rem;
+    height: 80vh;
   }
 
   .dlg_main_task-priority {
-    height: 28px;
+    height: 1.75rem;
   }
 
   .subtask-input {
