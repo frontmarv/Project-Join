@@ -46,6 +46,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .alert-msg-board {
+  display: flex;
   padding: 0.5rem;
   width: fit-content;
   height: 4.5rem;

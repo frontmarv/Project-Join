@@ -60,7 +60,6 @@ function closeAddTaskDlgWithAnimation() {
  */
 function showTaskAddedAlert() {
     alertDialog.innerHTML = getTaskAddDlg();
-    alertDialog.classList.add('alert-dialog');
     alertDialog.classList.remove('hide');
     showAddTaskDlgWtihAnimation();
 }
