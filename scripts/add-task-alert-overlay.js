@@ -108,8 +108,8 @@ function getTaskAddDlg() {
   }
     return /*html*/ `
       <div class="alert-overlay ${onBoard ? "alert-overlay-board" : ""}">
-        <h2 id="alert-message">Task added successfully!</h2>
-        <div class="alert-buttons">
+        <h2 id="alert-message">Task added to board</h2>
+        <div class="alert-buttons ${onBoard ? "alert-buttons-board" : ""}">
           
           ${
             onBoard
