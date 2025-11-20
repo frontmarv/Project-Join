@@ -78,8 +78,22 @@
   justify-content: space-around;
 }
 
+@media (max-width: 580px) {
+  .dlg-edit__main__task-priority-btn-box {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
 .priority-options-btn {
   width: 8.5rem;
+}
+
+@media (max-width: 580px) {
+  .dlg-edit__main__task-priority-btn-box .priority-options-btn {
+    width: 80%;
+  }
 }
 
 .contacts-selection {
@@ -303,6 +317,27 @@
 
 .dlg-edit__footer__save-btn {
   width: fit-content;
+}
+
+@media (max-width: 470px) {
+  .dlg-edit__footer__discard-btn,
+  .dlg-edit__footer__save-btn {
+    width: fit-content;
+    height: 3rem;
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .dlg-edit__footer__discard-btn,
+  .dlg-edit__footer__save-btn {
+    width: 6rem;
+    height: 3rem;
+    font-size: 0rem;
+    padding: 0.5rem;
+    padding-right: 0.9rem;
+  }
 }
 
 .dlg-edit__main__subtask:hover:not(.edit-mode) {
