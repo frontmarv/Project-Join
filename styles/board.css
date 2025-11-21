@@ -307,6 +307,7 @@
   font-weight: 400;
   gap: 1.5rem;
   height: 80vh;
+  max-height: 70rem;
   width: 33rem;
   padding: 3rem 2rem;
   border-radius: 1.875rem;

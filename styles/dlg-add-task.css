@@ -25,3 +25,7 @@
 .task-content__footer {
   padding: 0;
 }
+
+.dlg-add-task #task-form {
+  height: calc(100vh - 30rem);
+}

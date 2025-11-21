@@ -92,6 +92,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  height: calc(100vh - 20rem);
   overflow: auto;
 }
 

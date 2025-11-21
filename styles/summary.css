@@ -291,8 +291,12 @@ h3 {
     .summary-content__metrics.content-wrapper {
         margin-top: unset;
         justify-content: center;
-        height: calc(100vh - 380px);
+        height: calc(100vh - 19rem);
         margin-bottom: 6.25rem;
+    }
+
+    .summary-content__metrics {
+        padding-top: 0;
     }
 
     .summary-content__metrics-row {
