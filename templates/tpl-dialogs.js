@@ -99,7 +99,7 @@ function getTaskEditDlgTpl(task) {
 
             <div class="dlg-edit__main__description-box">
                 <span class="dlg-edit__main__task-description">Description</span>
-                <textarea id="descriptions-input" class="dlg-edit__textarea" maxlength="800" placeholder="Enter a Description"></textarea>
+                <textarea id="descriptions-input" class="dlg-edit__textarea" maxlength="500" placeholder="Enter a Description"></textarea>
             </div>
 
             <div class="dlg-edit__main__due-date-box" onclick="setMinDueDate()">
