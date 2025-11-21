@@ -262,6 +262,7 @@ input[type="checkbox"]:checked+label:hover {
 .footer__privacy-legal-box {
     display: flex;
     padding-bottom: 2.5rem;
+    padding-top: 1rem;
     gap: 1rem;
 }
 
@@ -321,12 +322,12 @@ input[type="checkbox"]:checked+label:hover {
     position: absolute;
     left: 0;
     top: 53px;
-    font-size: 0.875rem;
+    font-size: 16px;
     color: var(--color-error);
 }
 
-@media screen and (max-width: 1024px) {
 
+@media screen and (max-width: 1024px) {
     #msg {
         display: none !important;
     }
@@ -357,7 +358,6 @@ input[type="checkbox"]:checked+label:hover {
 
     .useraccess-form {
         padding: 32px calc(-29px + 14vw);
-        margin-bottom: 10%;
         gap: 1rem;
     }
 

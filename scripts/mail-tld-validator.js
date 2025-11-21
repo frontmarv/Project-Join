@@ -15,9 +15,21 @@ const CACHE_KEY = "iana_tlds";
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 const FALLBACK_TLDS = ["com", "net", "org", "de", "io", "app"];
 
+
+/**
+ * Initializes email validation event listeners for the sign-up page.
+ * Resets validation UI on click and sets up live email validation.
+ * @listens {Event} click - Resets border and error message on email input click
+ */
 if (window.location.pathname.endsWith('sign-up.html')) {
+  document.getElementById("email").addEventListener("click", () => {
+    document.getElementById("valid-email").style.border = "";
+    document.getElementById("msg").style.display = "none";
+  });
   initEmailValidation();
 }
+
+
 // ======================================================
 // 🔹 FETCHING TLD DATA
 // ======================================================
@@ -133,15 +145,7 @@ function bindEmailInputHandler(email, msg, validEmail) {
 }
 
 
-/**
- * Resets email input field styling when clicked.
- * Removes border styling and hides error message.
- * @listens {Event} click
- */
-document.getElementById("email").addEventListener("click", () => {
-  document.getElementById("valid-email").style.border = "";
-  document.getElementById("msg").style.display = "none";
-});
+
 
 
 /**
