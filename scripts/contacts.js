@@ -148,15 +148,24 @@ function getUserkeyLoggedInUser() {
 
 
 /**
+ * Fetches all tasks from the database
+ * @returns {Promise<Object|null>} Tasks object or null if none exist
+ * @throws {Error} If fetch fails
+ */
+async function fetchAllTasks() {
+    const response = await fetch(DB_URL + "tasks.json");
+    if (!response.ok) throw new Error(`Failed to fetch tasks: ${response.status}`);
+    return await response.json();
+}
+
+
+/**
  * Removes a specific contact from all tasks' assignedContacts arrays (batch update)
  * @param {string} contactToRemove - The contact ID to remove (e.g., "EM123")
  */
 async function removeContactFromAllTasks(contactToRemove) {
     try {
-        const response = await fetch(DB_URL + "tasks.json");
-        if (!response.ok) throw new Error(`Failed to fetch tasks: ${response.status}`);
-        const tasks = await response.json();
-        if (!tasks) return 0;
+        const tasks = await fetchAllTasks();
         const updates = {};
         for (const [taskKey, taskData] of Object.entries(tasks)) {
             if (taskData.assignedContacts && Array.isArray(taskData.assignedContacts) && taskData.assignedContacts.includes(contactToRemove)) {
@@ -164,8 +173,7 @@ async function removeContactFromAllTasks(contactToRemove) {
             }
         }
         if (Object.keys(updates).length > 0) {
-            const updateResponse = await fetch(DB_URL + ".json", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(updates) });
-            if (!updateResponse.ok) throw new Error(`Batch update failed: ${updateResponse.status}`);
+            await applyBatchUpdates(updates)
         }
     } catch (error) {
         console.error('Error removing contact from tasks:', error);
@@ -175,11 +183,26 @@ async function removeContactFromAllTasks(contactToRemove) {
 
 
 /**
+ * Sends batch update to database
+ * @param {Object} updates - Update object to send
+ * @throws {Error} If update fails
+ */
+async function applyBatchUpdates(updates) {
+    const updateResponse = await fetch(DB_URL + ".json", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates)
+    });
+    if (!updateResponse.ok) throw new Error(`Batch update failed: ${updateResponse.status}`);
+}
+
+
+/**
  * Removes the delete contact dialog styling class from the dialog element.
  * @returns {void}
  */
 function removeDeleteClass() {
-        dialog.classList.remove('delete-contact__dialog');
+    dialog.classList.remove('delete-contact__dialog');
 }
 
 
