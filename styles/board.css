@@ -240,7 +240,6 @@
   color: var(--color-lightgrey);
 }
 
-
 .board__table {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -289,7 +288,6 @@
   scrollbar-width: none;
   height: calc(100vh - 27rem);
 }
-
 
 .task--placeholder {
   border: 2px dashed #888;
@@ -414,7 +412,6 @@
 }
 
 @media screen and (max-width: 1024px) {
-
   #dlg-confirm {
     height: fit-content;
   }
@@ -512,12 +509,11 @@
     left: 50%;
     transform: translate(-50%, 100vh);
   }
-
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 540px) {
   .dlg {
-    width: 90vw;
+    width: 100vw;
   }
 }
 
@@ -526,4 +522,22 @@
     flex-direction: column;
     gap: 0.5rem;
   }
+}
+
+@media screen and (max-height: 920px) {
+  .dlg {
+    height: 100vh !important;
+  }
+}
+
+@media (max-width: 420px) and (max-height: 920px) {
+  .dlg-edit__textarea {
+    height: 15rem !important;
+  }
+
+  .dlg-edit__subtask-list {
+    min-height: unset !important;
+    min-width: unset !important;
+    overflow: unset !important;
+  }  
 }
