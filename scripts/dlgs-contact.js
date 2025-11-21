@@ -143,25 +143,50 @@ async function checkNameAlreadyExists(data) {
     let fetchedData = await fetchUsers();
     let dataArray = Object.values(fetchedData);
     let existingUsers = dataArray.filter(user =>
-        user.name.toLowerCase() === data.name &&
-        user.email.toLowerCase() !== data.email
+        user.name.toLowerCase() === data.name.toLowerCase()
     );
     return existingUsers.length;
 }
 
+
 /**
- * Resets all input field styling to default state.
- * Resets border colors to light grey, hides error messages, and resets email warning text.
+ * Resets name input field styling to default state.
+ * Removes error and success classes from parent element, hides error warning, and resets warning text to default message.
+ * @param {HTMLElement} element - The name input element to reset
  * @returns {void}
  */
-function resetInputInfo() {
-    document.querySelectorAll('.inputfield__wrapper').forEach(element => {
-        element.classList.remove('error');
-        element.classList.remove('success');
-    });
-    document.querySelectorAll('.inputfield_fill-in-info').forEach(element => element.style.opacity = '0');
-    document.getElementById('email-error-warning').innerHTML = 'Enter a valid e-mail adress';
+function resetInputName(element) {
+    element.parentElement.classList.remove('error');
+    element.parentElement.classList.remove('success');
+    document.getElementById('name-error-warning').style.opacity = '0';
     document.getElementById('name-error-warning').innerHTML = 'Connect double names with "-", max. 50 letter';
+}
+
+
+/**
+ * Resets email input field styling to default state.
+ * Removes error and success classes from parent element, hides error warning, and resets warning text to default message.
+ * @param {HTMLElement} element - The email input element to reset
+ * @returns {void}
+ */
+function resetInputEmail(element) {
+    element.parentElement.classList.remove('error');
+    element.parentElement.classList.remove('success');
+    document.getElementById('email-error-warning').style.opacity = '0';
+    document.getElementById('email-error-warning').innerHTML = 'Enter a valid e-mail adress';
+}
+
+
+/**
+ * Resets phone input field styling to default state.
+ * Removes error and success classes from parent element and hides error warning.
+ * @param {HTMLElement} element - The phone input element to reset
+ * @returns {void}
+ */
+function resetInputPhone(element) {
+    element.parentElement.classList.remove('error');
+    element.parentElement.classList.remove('success');
+    document.getElementById('phone-error-warning').style.opacity = '0';
 }
 
 
@@ -369,7 +394,7 @@ async function editCheckNameAlreadyExists(data) {
     let existingUsers = dataArray.filter(([userId, user]) =>
         user.name === data.name
         &&
-            userId !== STORED_USER_KEY 
+        userId !== STORED_USER_KEY
     );
     return existingUsers.length;
 }
@@ -391,6 +416,5 @@ async function editCheckEmailAlreadyExists(data) {
         user.email === data.email &&
         userId !== STORED_USER_KEY
     );
-
     return existingUsers.length;
 }

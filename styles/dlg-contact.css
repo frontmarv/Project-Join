@@ -380,4 +380,10 @@
     .inputfield__wrapper {
         padding: 6px 1.3125rem;
     }
+
+    .scalable-profil-img {
+        width: 9vh;
+        min-width: 60px;
+        max-width: 90px;
+    }
 }

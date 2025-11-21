@@ -125,12 +125,23 @@ function initEmailValidation() {
  * @param {HTMLElement} validEmail - Validation wrapper element.
  */
 function bindEmailInputHandler(email, msg, validEmail) {
-  email.addEventListener("input", async () => {
+  email.addEventListener("blur", async () => {
     const value = email.value.trim();
     if (!value) return resetEmailValidationUI(validEmail, msg);
     await handleEmailValidation(value, validEmail, msg);
   });
 }
+
+
+/**
+ * Resets email input field styling when clicked.
+ * Removes border styling and hides error message.
+ * @listens {Event} click
+ */
+document.getElementById("email").addEventListener("click", () => {
+  document.getElementById("valid-email").style.border = "";
+  document.getElementById("msg").style.display = "none";
+});
 
 
 /**

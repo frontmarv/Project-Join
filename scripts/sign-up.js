@@ -98,14 +98,23 @@ function isValidFullName(element) {
 function handleNameValidation(element) {
     let validInput = isValidFullName(element);
     if (element.value === "") {
-        nameWrapper.classList.remove('error', 'valid-input');
-        nameErrorWarning.style.visibility = "hidden";
+        resetNameErrorWarning();
     } else {
         setWrapperColor(validInput, nameWrapper);
     }
     evaluateFormValidity();
 }
 
+
+/**
+ * Resets name input field styling to default state.
+ * Removes error and valid-input classes from wrapper element and hides error warning message.
+ * @returns {void}
+ */
+function resetNameErrorWarning() {
+    nameWrapper.classList.remove('error', 'valid-input');
+    nameErrorWarning.style.visibility = "hidden";
+}
 
 /**
  * Updates wrapper element styling based on validation state

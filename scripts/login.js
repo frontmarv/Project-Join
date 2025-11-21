@@ -64,6 +64,7 @@ window.addEventListener("DOMContentLoaded", () => {
  * @listens keyup
  */
 email.addEventListener('keyup', clearLoginError);
+email.addEventListener('click', clearLoginError);
 
 /**
  * Clears error state & updates password lock icon with each keyup.
@@ -73,7 +74,7 @@ password.addEventListener('keyup', () => {
     clearLoginError();
     updatePasswordLockIcon();
 });
-
+password.addEventListener('click', clearLoginError) 
 
 /**
  * Handles responsive layout adjustments.
