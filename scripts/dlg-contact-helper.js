@@ -143,3 +143,68 @@ function editContactSuccessDlg() {
     const successDlg = getEditContactSuccessDlg();
     animationDlg(successDlg);
 }
+
+
+/**
+ * Renders the add contact dialog and displays it with animation.
+ * Populates dialog with the add contact form template.
+ * @returns {void}
+ */
+function renderAddContactDlg() {
+    dialog.innerHTML = getAddContactDlgTpl();
+    showDlgWtihAnimation();
+}
+
+
+/**
+ * Renders the delete contact confirmation dialog.
+ * Hides the contact action menu and displays delete confirmation with animation.
+ * @returns {void}
+ */
+function renderDeleteContactDlg() {
+    hideContactActionMenu();
+    dialog.innerHTML = getDeleteContactDlg();
+    dialog.classList.add('delete-contact__dialog');
+    showDlgWtihAnimation();
+}
+
+
+/**
+ * Renders the edit contact dialog with pre-filled contact data.
+ * Populates form fields with current contact information and profile image.
+ * @returns {void}
+ */
+function renderEditContactDlg() {
+    dialog.innerHTML = getEditContactDlgTpl();
+    document.getElementById("contact-dlg-name-input").value = contactName.innerHTML;
+    document.getElementById("contact-dlg-email-input").value = contactMail.innerHTML;
+    document.getElementById("contact-dlg-phone-input").value = contactPhone.innerHTML;
+    const userName = contactName.innerHTML;
+    const profilImgColor = document.getElementById('scalable-profil-img').style.backgroundColor;
+    const userInitals = getUserNameInitials(userName);
+    document.querySelector('.profil-img__wrapper').innerHTML = getScalableProfilImg(profilImgColor, userInitals);
+    showDlgWtihAnimation();
+    getAndStoreUserId(userName);
+}
+
+
+/**
+ * Validates input field and applies visual feedback via border color.
+ * @param {HTMLInputElement} input - The input element being validated
+ * @param {Function} validationFn - Validation function to use (isValidUsername, isValidEmail, isValidPhone)
+ * @returns {void}
+ */
+async function validateInputField(input, validationFn, submit) {
+    const value = input.value;
+    const wrapper = input.closest('.inputfield__wrapper');
+    const infoText = input.closest('.inputfield-section').querySelector('.inputfield_fill-in-info');
+    if (value.length > 0 || submit) {
+        if (await validationFn(value)) {
+            styleInputsSuccess(wrapper, infoText);
+        } else {
+            styleInputsError(wrapper, infoText);
+        }
+    } else {
+        styleInputsNeutral(wrapper, infoText);
+    }
+}

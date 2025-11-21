@@ -1,48 +1,4 @@
 /**
- * Renders the add contact dialog and displays it with animation.
- * Populates dialog with the add contact form template.
- * @returns {void}
- */
-function renderAddContactDlg() {
-    dialog.innerHTML = getAddContactDlgTpl();
-    showDlgWtihAnimation();
-}
-
-
-/**
- * Renders the delete contact confirmation dialog.
- * Hides the contact action menu and displays delete confirmation with animation.
- * @returns {void}
- */
-function renderDeleteContactDlg() {
-    hideContactActionMenu();
-    dialog.innerHTML = getDeleteContactDlg();
-    dialog.classList.add('delete-contact__dialog');
-    showDlgWtihAnimation();
-}
-
-
-/**
- * Renders the edit contact dialog with pre-filled contact data.
- * Populates form fields with current contact information and profile image.
- * @returns {void}
- */
-function renderEditContactDlg() {
-    dialog.innerHTML = getEditContactDlgTpl();
-    document.getElementById("contact-dlg-name-input").value = contactName.innerHTML;
-    document.getElementById("contact-dlg-email-input").value = contactMail.innerHTML;
-    document.getElementById("contact-dlg-phone-input").value = contactPhone.innerHTML;
-    const userName = contactName.innerHTML;
-    const profilImgColor = document.getElementById('scalable-profil-img').style.backgroundColor;
-    const userInitals = getUserNameInitials(userName);
-    document.querySelector('.profil-img__wrapper').innerHTML = getScalableProfilImg(profilImgColor, userInitals);
-    showDlgWtihAnimation();
-    getAndStoreUserId(userName);
-}
-
-
-
-/**
  * Creates a data patch object from contact form inputs.
  * Extracts values from name, email, and phone input fields.
  * @returns {Object} Multipatch object containing contact data
@@ -51,9 +7,9 @@ function renderEditContactDlg() {
  * @returns {string} return.phone - Contact's phone number
  */
 function setMultipatch() {
-    const nameValue = document.getElementById("contact-dlg-name-input").value;
-    const emailValue = document.getElementById("contact-dlg-email-input").value;
-    const phoneValue = document.getElementById("contact-dlg-phone-input").value;
+    const nameValue = document.getElementById("contact-dlg-name-input").value.trim();
+    const emailValue = document.getElementById("contact-dlg-email-input").value.trim();
+    const phoneValue = document.getElementById("contact-dlg-phone-input").value.trim();
     const multipatch = {
         "name": nameValue,
         "email": emailValue,
@@ -71,7 +27,7 @@ function setMultipatch() {
  */
 async function saveDataEditContactDlg(data) {
     removeAnimationClass();
-    const multipatch = { "name": data.name, "email": data.email, "phone": data.phone };
+    const multipatch = { "name": data.name.trim(), "email": data.email.trim(), "phone": data.phone.trim() };
     await saveChangesToDB(multipatch);
     await renderContactList();
     const userName = rawData[STORED_USER_KEY].name;
@@ -119,7 +75,7 @@ async function putNewContactToDB() {
  */
 async function validateAndSaveData() {
     const { key, data, addUserName } = collectDataFromDlg();
-    const validation = await performContactValidation(addUserName, data);
+    const validation = await performEditContactValidation(addUserName, data);
     if (validation.isValid) {
         saveDataEditContactDlg(data);
         editContactSuccessDlg();
@@ -168,8 +124,8 @@ async function checkEmailAlreadyExists(data) {
     let fetchedData = await fetchUsers();
     let dataArray = Object.values(fetchedData);
     let existingUsers = dataArray.filter(user =>
-        user.email.toLowerCase() === data.email.toLowerCase() &&
-        user.name.toLowerCase() !== data.name.toLowerCase()
+        user.email.toLowerCase() === data.email &&
+        user.name.toLowerCase() !== data.name
     );
     return existingUsers.length;
 }
@@ -185,10 +141,11 @@ async function checkEmailAlreadyExists(data) {
  */
 async function checkNameAlreadyExists(data) {
     let fetchedData = await fetchUsers();
+    console.log(fetchedData);
     let dataArray = Object.values(fetchedData);
     let existingUsers = dataArray.filter(user =>
-        user.name.toLowerCase() === data.name.toLowerCase() &&
-        user.email.toLowerCase() !== data.email.toLowerCase()
+        user.name.toLowerCase() === data.name &&
+        user.email.toLowerCase() !== data.email
     );
     return existingUsers.length;
 }
@@ -218,9 +175,9 @@ function resetInputInfo() {
  * @returns {string} return.addUserName - Contact's name from form
  */
 function collectDataFromDlg() {
-    const addUserName = document.getElementById('contact-dlg-name-input').value;
-    const addEmail = document.getElementById('contact-dlg-email-input').value;
-    const addPhone = document.getElementById('contact-dlg-phone-input').value;
+    const addUserName = document.getElementById('contact-dlg-name-input').value.toLowerCase().trim();
+    const addEmail = document.getElementById('contact-dlg-email-input').value.toLowerCase().trim();
+    const addPhone = document.getElementById('contact-dlg-phone-input').value.toLowerCase().trim();
     const key = generateUserId(addUserName);
     const data = createDataObjectAddContact(addUserName, addEmail, addPhone);
     return { key, data, addUserName };
@@ -248,17 +205,17 @@ async function validateInputfieldsDlg(addUserName, data) {
 /**
  * Validates username format.
  * Username must contain at least 2 letters, allows alphabetic characters, spaces, and hyphens.
- * Maximum 2 words allowed (hyphenated names like Ann-Cathrin count as one word).
+ * Maximum 2 words allowed with exactly one space between them (hyphenated names like Ann-Cathrin count as one word).
  * @param {string} username - Username to validate
  * @returns {boolean} True if username is valid, false otherwise
  */
 function isValidUsername(username) {
     if (!username || typeof username !== 'string') return false;
     const trimmed = username.trim();
-    const regex = /^[a-zA-ZäöüÄÖÜß\-\s]{2,50}$/;
+    const regex = /^[a-zA-ZäöüÄÖÜß\-]+(\s[a-zA-ZäöüÄÖÜß\-]+)?$/;
     const letterCount = (trimmed.match(/[a-zA-ZäöüÄÖÜß]/g) || []).length;
-    const wordCount = trimmed.split(/\s+/).filter(word => word.length > 0).length;
-    return regex.test(trimmed) && letterCount >= 2 && wordCount <= 2;
+    const isValidLength = trimmed.length >= 2 && trimmed.length <= 50;
+    return regex.test(trimmed) && letterCount >= 2 && isValidLength;
 }
 
 
@@ -273,28 +230,6 @@ function isValidPhone(phone) {
     const cleaned = phone.replace(/[\s\-\(\)]/g, '');
     const regex = /^\+?[0-9][0-9]{7,14}$/;
     return regex.test(cleaned);
-}
-
-
-/**
- * Validates input field and applies visual feedback via border color.
- * @param {HTMLInputElement} input - The input element being validated
- * @param {Function} validationFn - Validation function to use (isValidUsername, isValidEmail, isValidPhone)
- * @returns {void}
- */
-async function validateInputField(input, validationFn, submit) {
-    const value = input.value;
-    const wrapper = input.closest('.inputfield__wrapper');
-    const infoText = input.closest('.inputfield-section').querySelector('.inputfield_fill-in-info');
-    if (value.length > 0 || submit) {
-        if (await validationFn(value)) {
-            styleInputsSuccess(wrapper, infoText);
-        } else {
-            styleInputsError(wrapper, infoText);
-        }
-    } else {
-        styleInputsNeutral(wrapper, infoText);
-    }
 }
 
 
@@ -386,4 +321,82 @@ async function performContactValidation(addUserName, data) {
         validPhone,
         isValid: validInput && emailNotAlreadyTaken && nameNotAlreadyTaken && validPhone
     };
+}
+
+/**
+ * Performs comprehensive validation checks for contact form data.
+ * Validates input fields, checks for duplicate emails and names, and validates phone number.
+ * @async
+ * @param {string} addUserName - The username to validate
+ * @param {Object} data - Contact data object
+ * @param {string} data.email - Email address to validate
+ * @param {string} data.phone - Phone number to validate
+ * @param {string} data.name - Name to validate
+ * @returns {Promise<Object>} Validation results object
+ * @returns {boolean} return.validInput - True if username and email are valid
+ * @returns {boolean} return.emailNotAlreadyTaken - True if email doesn't exist in database
+ * @returns {boolean} return.nameNotAlreadyTaken - True if name doesn't exist in database
+ * @returns {boolean} return.validPhone - True if phone is empty or valid format
+ * @returns {boolean} return.isValid - True if all validation checks pass
+ */
+async function performEditContactValidation(addUserName, data) {
+    const validInput = await validateInputfieldsDlg(addUserName, data);
+    const emailNotAlreadyTaken = await editCheckEmailAlreadyExists(data) === 0;
+    const nameNotAlreadyTaken = await editCheckNameAlreadyExists(data) === 0;
+    const validPhone = data.phone === "" || isValidPhone(data.phone);
+
+    return {
+        validInput,
+        emailNotAlreadyTaken,
+        nameNotAlreadyTaken,
+        validPhone,
+        isValid: validInput && emailNotAlreadyTaken && nameNotAlreadyTaken && validPhone
+    };
+}
+
+
+/**
+ * Checks if a name already exists in the database.
+ * Fetches all users and returns count of users with matching name (case-insensitive).
+ * Excludes the current user being edited by comparing user IDs.
+ * @async
+ * @param {Object} data - Contact data object
+ * @param {string} data.name - Name to check
+ * @returns {Promise<number>} Count of existing users with matching name (excluding current user)
+ */
+async function editCheckNameAlreadyExists(data) {
+    let fetchedData = await fetchUsers();
+    let dataArray = Object.entries(fetchedData);
+    dataArray.forEach(([userId, user]) => {
+        console.log('DB user.name:', user.name, data.name);
+    });
+    let existingUsers = dataArray.filter(([userId, user]) =>
+        user.name === data.name
+        &&
+            userId !== STORED_USER_KEY 
+    );
+    console.log(existingUsers);
+
+    return existingUsers.length;
+}
+
+
+/**
+ * Checks if a email already exists in the database.
+ * Fetches all users and returns count of users with matching email (case-insensitive).
+ * Excludes the current user being edited by comparing user IDs.
+ * @async
+ * @param {Object} data - Contact data object
+ * @param {string} data.email - Name to check
+ * @returns {Promise<number>} Count of existing users with matching name (excluding current user)
+ */
+async function editCheckEmailAlreadyExists(data) {
+    let fetchedData = await fetchUsers();
+    let dataArray = Object.entries(fetchedData);
+    let existingUsers = dataArray.filter(([userId, user]) =>
+        user.email === data.email &&
+        userId !== STORED_USER_KEY
+    );
+
+    return existingUsers.length;
 }

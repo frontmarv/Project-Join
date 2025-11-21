@@ -1,5 +1,5 @@
 /** Regular expression for validating full names (first and last name) */
-const nameInputRegex = /^[a-zA-ZäöüÄÖÜß\-\s]{2,50}$/;
+const nameInputRegex = /^[a-zA-ZäöüÄÖÜß\-]+(\s[a-zA-ZäöüÄÖÜß\-]+)?$/;
 
 /** @type {HTMLElement} DOM elements for form inputs and validation */
 const nameInput = document.getElementById('name');
@@ -84,12 +84,9 @@ function handlePasswordInputChange(element) {
 function isValidFullName(element) {
     let inputName = element.value.trim();
     if (!inputName) return false;
-
     const testResult = nameInputRegex.test(inputName);
     const letterCount = (inputName.match(/[a-zA-ZäöüÄÖÜß]/g) || []).length;
-    const wordCount = inputName.split(/\s+/).filter(word => word.length > 0).length;
-
-    return testResult && letterCount >= 2 && wordCount <= 2;
+    return testResult && letterCount >= 2 && inputName.length <= 50;
 }
 
 
@@ -268,9 +265,9 @@ function evaluateFormValidity() {
 async function NameAndEmailAlreadyExist() {
     let data = await fetchUsers();
     let dataArray = Object.values(data)
-    let existingUserEmail = dataArray.find(user => user.email.toLowerCase() === email.value.toLowerCase());
+    let existingUserEmail = dataArray.find(user => user.email.toLowerCase() === email.value.toLowerCase().trim());
     let existingUserName = dataArray.find(user =>
-        user.name.toLowerCase() === nameInput.value.toLowerCase()
+        user.name.toLowerCase() === nameInput.value.toLowerCase().trim()
     );
     return { existingUserEmail, existingUserName };
 }
