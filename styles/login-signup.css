@@ -332,6 +332,10 @@ input[type="checkbox"]:checked+label:hover {
         display: none !important;
     }
 
+    main {
+        height: fit-content;
+    }
+
     .header__joinlogo {
         width: 64px;
         height: 78px;
