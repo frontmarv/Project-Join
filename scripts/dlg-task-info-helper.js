@@ -216,7 +216,7 @@ async function toggleSubtaskChecked(taskId, subtaskKey, rowEl) {
   const willBeChecked = !(imgEl.dataset.checked === "true");
   updateCheckboxUI(imgEl, willBeChecked);
 
-  const taskObj = tasks.find(t => t.id === taskId);
+  const taskObj = tasks.find(task => task.id === taskId);
   const text =
     taskObj?.subtasks?.[subtaskKey]?.task ||
     rowEl.querySelector(".subtask-text")?.textContent?.trim() ||
