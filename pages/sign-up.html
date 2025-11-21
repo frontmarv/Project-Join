@@ -39,7 +39,7 @@
             <div class="form__inputfields">
                 <div id="name__wrapper" class="inputfield__wrapper">
                     <input id="name" type="text" maxlength="50" placeholder="Name and Surname" aria-label="name"
-                        onkeyup="handleNameValidation(this)">
+                        onclick="resetNameErrorWarning()" onblur="handleNameValidation(this)">
                     <img src="../assets/img/person.svg" alt="icon of an person">
                     <p id="name-error-warning" class="name-error-warning">Connect double names with "-", max. 50 letters</p>
                 </div>
@@ -54,14 +54,14 @@
 
                 <div id="password__wrapper" class="inputfield__wrapper">
                     <input id="password" type="password" placeholder="Password" aria-label="password"
-                        onkeyup="handlePasswordInputChange(this)">
+                        onclick="resetPwStyles()"  onblur="handlePasswordInputChange(this)">
                     <img id="password-icon" src="../assets/img/lock.svg" alt="icon of a lock"
                         onclick="setPasswordVisibility(this)">
                 </div>
 
                 <div id="confirm-pw__wrapper" class="inputfield__wrapper">
                     <input id="confirm-password" type="password" placeholder="Confirm Password"
-                        aria-label="confirm password" onkeyup="validatePasswordMatch()">
+                        aria-label="confirm password" onclick="resetPwStyles()" onblur="validatePasswordMatch()">
                     <img id="confirm-password-icon" src="../assets/img/lock.svg" alt="icon of a lock"
                         onclick="setPasswordVisibility(this)">
                     <p id="pw-error-warning" class="confirm-password__err-warning">Your passwords don't match. Please

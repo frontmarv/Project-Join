@@ -26,24 +26,24 @@ function getAddContactDlgTpl() {
                     <div class="inputfields">
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-name-input" type="text" maxlength="50" placeholder="Name (and Surname)" aria-label="name" onkeyup="validateUsernameInput(this)">
+                            <input id="contact-dlg-name-input" type="text" maxlength="50" placeholder="Name (and Surname)" aria-label="name" onclick="resetInputName(this)" onblur="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
                         <p class="inputfield_fill-in-info" id="name-error-warning">Connect double names with "-", max. 50 letters</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-email-input" type="email" maxlength="60" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
+                            <input id="contact-dlg-email-input" type="email" maxlength="60" placeholder="Email" aria-label="email" onclick="resetInputEmail(this)" onblur="validateEmailInput(this)">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
                         <p class="inputfield_fill-in-info" id="email-error-warning">Enter a valid e-mail adress</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-phone-input" type="tel" maxlength="50" placeholder="Phone (optional)" aria-label="Phone (optional)" onkeyup="validatePhoneInput(this)">
+                            <input id="contact-dlg-phone-input" type="tel" maxlength="50" placeholder="Phone (optional)" aria-label="Phone (optional)" onclick="resetInputPhone(this)" onblur="validatePhoneInput(this)">
                             <img src="../assets/img/call.svg" alt="icon of an phone">
                         </div>
-                        <p class="inputfield_fill-in-info">Enter a valid phone number</p>
+                        <p class="inputfield_fill-in-info" id="phone-error-warning">Enter a valid phone number</p>
                     </div>
                         <div class="inputfields__button-holder">
                             <button class="empty-btn" onclick="removeAnimationClass()">Cancel<img src="../assets/img/close.svg"
@@ -84,24 +84,24 @@ function getEditContactDlgTpl() {
                     <div class="inputfields">
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-name-input" type="text" maxlength="50" placeholder="Name (and Surname)" aria-label="name" onkeyup="validateUsernameInput(this)">
+                            <input id="contact-dlg-name-input" type="text" maxlength="50" placeholder="Name (and Surname)" aria-label="name" onclick="resetInputName(this)" onblur="validateUsernameInput(this)">
                             <img src="../assets/img/person.svg" alt="icon of an person">
                         </div>
                         <p class="inputfield_fill-in-info" id="name-error-warning">Connect double names with "-", max. 50 letters</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-email-input" type="email" maxlength="60" placeholder="Email" aria-label="email" onkeyup="validateEmailInput(this)">
+                            <input id="contact-dlg-email-input" type="email" maxlength="60" placeholder="Email" aria-label="email" onclick="resetInputEmail(this)" onblur="validateEmailInput(this)">
                             <img src="../assets/img/mail.svg" alt="icon of an email">
                         </div>
                         <p class="inputfield_fill-in-info" id="email-error-warning">Enter a valid e-mail adress</p>
                     </div>
                     <div class="inputfield-section">
                         <div class="inputfield__wrapper">
-                            <input id="contact-dlg-phone-input" type="tel" maxlength="50" placeholder="Phone (optional)" aria-label="Phone (optional)" onkeyup="validatePhoneInput(this)">
+                            <input id="contact-dlg-phone-input" type="tel" maxlength="50" placeholder="Phone (optional)" aria-label="Phone (optional)" onclick="resetInputPhone(this)" onblur="validatePhoneInput(this)">
                             <img src="../assets/img/call.svg" alt="icon of an phone">
                         </div>
-                        <p class="inputfield_fill-in-info">Enter a valid phone number</p>
+                        <p class="inputfield_fill-in-info" id="phone-error-warning">Enter a valid phone number</p>
                     </div>
                         <div class="inputfields__button-holder">
                             <button class="empty-btn" onclick="removeAnimationClass()">Cancel<img src="../assets/img/close.svg"
