@@ -141,7 +141,6 @@ async function checkEmailAlreadyExists(data) {
  */
 async function checkNameAlreadyExists(data) {
     let fetchedData = await fetchUsers();
-    console.log(fetchedData);
     let dataArray = Object.values(fetchedData);
     let existingUsers = dataArray.filter(user =>
         user.name.toLowerCase() === data.name &&
@@ -367,16 +366,11 @@ async function performEditContactValidation(addUserName, data) {
 async function editCheckNameAlreadyExists(data) {
     let fetchedData = await fetchUsers();
     let dataArray = Object.entries(fetchedData);
-    dataArray.forEach(([userId, user]) => {
-        console.log('DB user.name:', user.name, data.name);
-    });
     let existingUsers = dataArray.filter(([userId, user]) =>
         user.name === data.name
         &&
             userId !== STORED_USER_KEY 
     );
-    console.log(existingUsers);
-
     return existingUsers.length;
 }
 
