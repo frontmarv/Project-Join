@@ -359,6 +359,7 @@ input[type="checkbox"]:checked+label:hover {
     .useraccess-form {
         padding: 32px calc(-29px + 14vw);
         gap: 1rem;
+        margin-bottom: 1rem;
     }
 
     .inputfield__wrapper {
