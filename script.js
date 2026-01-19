@@ -2,7 +2,7 @@
  * Base URL of the Firebase Realtime Database (must end with a trailing slash).
  * @constant {string}
  */
-const DB_URL = 'https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/';
+const DB_URL = 'https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/';
 
 /**
  * Header user dropdown menu element.
