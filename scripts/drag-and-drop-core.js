@@ -138,7 +138,7 @@ function setClickSuppression(duration = 300) {
  * @returns {Promise<void>}
  */
 async function updateTaskState(id, state) {
-  await fetch(`https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${id}.json`,
+  await fetch(`https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/tasks/${id}.json`,
     {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },

@@ -3,7 +3,7 @@
  * All fetch requests use this URL as their root endpoint.
  * @constant {string}
  */
-const databaseURL = "https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/.json";
+const databaseURL = "https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/.json";
 
 
 /**
@@ -68,7 +68,7 @@ async function getData() {
  * await saveTaskToFirebase(newTask, "task12");
  */
 async function saveTaskToFirebase(task, taskKey) {
-  const url = `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskKey}.json`;
+  const url = `https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskKey}.json`;
 
   const response = await fetch(url, {
     method: 'PUT',
@@ -96,7 +96,7 @@ async function saveTaskToFirebase(task, taskKey) {
  * console.log(key); // "task7"
  */
 async function getNextTaskKey() {
-  const url = 'https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks.json';
+  const url = 'https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/tasks.json';
   const res = await fetch(url);
   const obj = await res.json() || {};
 

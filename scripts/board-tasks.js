@@ -34,7 +34,7 @@ function loadTasks() {
  */
 async function deleteTask(taskId) {
   try {
-    const url = `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`;
+    const url = `https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`;
     const response = await fetch(url, { method: "DELETE" });
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     await getData();

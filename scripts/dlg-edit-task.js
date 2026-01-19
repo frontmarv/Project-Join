@@ -144,7 +144,7 @@ function buildSubtaskResult(items, oldCheckedByText) {
  */
 async function updateTaskInDatabase(taskId, payload) {
   const res = await fetch(
-    `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`,
+    `https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`,
     getPutRequestConfig(payload)
   );
   if (!res.ok) throw new Error(`Save failed: ${res.status} ${res.statusText}`);
@@ -271,7 +271,7 @@ async function deleteSubtask(taskId, subtaskKey) {
  * @returns {string} The full Firebase URL.
  */
 function getSubtaskUrl(taskId, subtaskKey) {
-  return `https://join-25a0e-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/subtasks/${subtaskKey}.json`;
+  return `https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/subtasks/${subtaskKey}.json`;
 }
 
 
