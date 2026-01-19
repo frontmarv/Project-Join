@@ -74,7 +74,7 @@ password.addEventListener('keyup', () => {
     clearLoginError();
     updatePasswordLockIcon();
 });
-password.addEventListener('click', clearLoginError) 
+password.addEventListener('click', clearLoginError)
 
 /**
  * Handles responsive layout adjustments.
@@ -97,10 +97,12 @@ window.addEventListener('load', () => {
         if (window.innerWidth < 1025) {
             welcomeScreenAnimationMobile();
 
-        } else { welcomeScreenAnimationDesktop();
+        } else {
+            welcomeScreenAnimationDesktop();
         }
 
-    } else { welcomeScreenNoAnimation();
+    } else {
+        welcomeScreenNoAnimation();
     }
 });
 
@@ -157,11 +159,13 @@ function welcomeScreenAnimationDesktop() {
 function welcomeScreenAnimationMobile() {
     logo.classList.add('welcome-logo');
 
-    setTimeout(() => { welcomescreenMobile.classList.add('hidden');
+    setTimeout(() => {
+        welcomescreenMobile.classList.add('hidden');
         welcomeScreenAnimation()
     }, 300);
 
-    setTimeout(() => { logo.classList.remove('welcome-logo')
+    setTimeout(() => {
+        logo.classList.remove('welcome-logo')
     }, 400);
 }
 
@@ -244,7 +248,8 @@ async function logoutAllUsers() {
     try {
         const users = await fetchAllUsersForLogout();
         await Promise.all(Object.keys(users).map(key => logoutSingleUser(key)));
-    } catch (error) { console.error("Error applying multipatch to all users:", error);
+    } catch (error) {
+        console.error("Error applying multipatch to all users:", error);
     }
 }
 
@@ -268,13 +273,15 @@ async function guestLogin() {
  * @returns {Promise<boolean>} True if valid login, otherwise false.
  */
 async function validateLoginInputs(existingUser) {
-    if (!existingUser) { showLoginError();
+    if (!existingUser) {
+        showLoginError();
         return false;
     }
 
     const passwordMatches = await verifyPassword(existingUser);
 
-    if (!passwordMatches) { showLoginError();
+    if (!passwordMatches) {
+        showLoginError();
         return false;
     }
 
@@ -391,7 +398,8 @@ async function fetchUsers() {
         rawData = await response.json();
         return rawData;
 
-    } catch (error) { console.error("Error fetching data:", error.message);
+    } catch (error) {
+        console.error("Error fetching data:", error.message);
         return null;
     }
 }

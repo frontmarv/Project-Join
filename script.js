@@ -1,8 +1,34 @@
+if (!localStorage.getItem('guestBoardId')) {
+    localStorage.setItem('guestBoardId', 'board_' + Math.random().toString(36).substr(2, 9));
+}
+
+const myBoardId = localStorage.getItem('guestBoardId');
+
+async function syncDefaultData() {
+    const firebaseURL = `https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/${myBoardId}.json`;
+    const check = await fetch(firebaseURL);
+    const existingData = await check.json();
+    if (!existingData) {
+        try {
+            const response = await fetch('./data-backup.json');
+            const dataFromFile = await response.json();
+            await fetch(firebaseURL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dataFromFile)
+            });
+        } catch (error) {
+            console.error("Error loading JSON file:", error);
+        }
+    }
+}
+syncDefaultData();
+
 /**
  * Base URL of the Firebase Realtime Database (must end with a trailing slash).
  * @constant {string}
  */
-const DB_URL = 'https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/';
+const DB_URL = `https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/${myBoardId}/`;
 
 /**
  * Header user dropdown menu element.

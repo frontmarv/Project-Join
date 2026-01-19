@@ -1,0 +1,388 @@
+{
+  "tasks": {
+    "task13": {
+      "assignedContacts": [
+        "EM123",
+        "LS123",
+        "MB123",
+        "SK123"
+      ],
+      "category": "User Story",
+      "categoryValue": "user-story",
+      "description": "As a user, I want to be able to filter my task list by priority level so that I can focus on the most important tasks first.",
+      "dueDate": "2025-11-15",
+      "priority": "medium",
+      "subtasks": {
+        "subtask0": {
+          "task": "Design filter UI component",
+          "taskChecked": true
+        },
+        "subtask1": {
+          "task": "Implement filter logic",
+          "taskChecked": true
+        },
+        "subtask2": {
+          "task": "Add unit tests for filtering",
+          "taskChecked": true
+        }
+      },
+      "taskState": "await-feedback",
+      "title": "Implement Task Priority Filter"
+    },
+    "task14": {
+      "assignedContacts": [
+        "AM123",
+        "BZ123"
+      ],
+      "category": "Technical Task",
+      "categoryValue": "technical",
+      "description": "Upgrade the Firebase Realtime Database security rules to prevent unauthorized access and ensure data integrity across all collections.",
+      "dueDate": "2025-11-12",
+      "priority": "medium",
+      "subtasks": {
+        "subtask0": {
+          "task": "Review current security rules",
+          "taskChecked": true
+        },
+        "subtask1": {
+          "task": "Define new rule structure",
+          "taskChecked": true
+        },
+        "subtask2": {
+          "task": "Test rules in staging environment",
+          "taskChecked": true
+        },
+        "subtask3": {
+          "task": "Deploy to production",
+          "taskChecked": true
+        }
+      },
+      "taskState": "await-feedback",
+      "title": "Update Firebase Security Rules"
+    },
+    "task17": {
+      "assignedContacts": [
+        "AM123",
+        "AS123",
+        "BZ123",
+        "LS123",
+        "SK123"
+      ],
+      "category": "User Story",
+      "categoryValue": "user-story",
+      "description": "As a mobile user, I want the app to be fully responsive on tablets so that I can manage tasks comfortably on my iPad.",
+      "dueDate": "2025-11-25",
+      "priority": "medium",
+      "subtasks": {
+        "subtask0": {
+          "task": "Design tablet layouts",
+          "taskChecked": false
+        },
+        "subtask1": {
+          "task": "Implement resp. CSS for tablet",
+          "taskChecked": false
+        },
+        "subtask2": {
+          "task": "Test on multiple tablet devices",
+          "taskChecked": true
+        }
+      },
+      "taskState": "to-do",
+      "title": "Tablet Responsive Design"
+    },
+    "task18": {
+      "assignedContacts": [
+        "AM123",
+        "AS123",
+        "BZ123",
+        "DS123",
+        "EF123",
+        "EM123",
+        "LS123",
+        "MB123",
+        "SK123"
+      ],
+      "category": "Technical Task",
+      "categoryValue": "technical",
+      "description": "Implement comprehensive JSDoc documentation across all JavaScript files to improve code maintainability and developer onboarding.",
+      "dueDate": "2025-11-22",
+      "priority": "low",
+      "subtasks": {
+        "subtask0": {
+          "task": "Document all template files",
+          "taskChecked": true
+        },
+        "subtask1": {
+          "task": "Document core functionality files",
+          "taskChecked": true
+        },
+        "subtask2": {
+          "task": "Generate documentation website",
+          "taskChecked": true
+        }
+      },
+      "taskState": "done",
+      "title": "Complete JSDoc Documentation"
+    },
+    "task20": {
+      "assignedContacts": [
+        "DS123",
+        "MB123"
+      ],
+      "category": "Technical Task",
+      "categoryValue": "technical",
+      "description": "Optimize the contact list rendering performance by implementing virtual scrolling for large datasets containing more then 100 contacts",
+      "dueDate": "2025-11-29",
+      "priority": "urgent",
+      "subtasks": {
+        "subtask0": {
+          "task": "Reserach virtual scrolling libraries",
+          "taskChecked": false
+        },
+        "subtask1": {
+          "task": "Implement virtual scrolling",
+          "taskChecked": true
+        }
+      },
+      "taskState": "in-progress",
+      "title": "Contact List Performance Optimization"
+    },
+    "task21": {
+      "assignedContacts": [
+        "AM123",
+        "AS123",
+        "EM123"
+      ],
+      "category": "User Story",
+      "categoryValue": "user-story",
+      "description": "As a user, I want to be able to drag and drop tasks between different status columns on the board so that I can quickly update task progress",
+      "dueDate": "2025-11-12",
+      "priority": "urgent",
+      "subtasks": {
+        "subtask0": {
+          "task": "Implement DnD functionality",
+          "taskChecked": true
+        },
+        "subtask1": {
+          "task": "Add visual feedback during drag",
+          "taskChecked": true
+        },
+        "subtask2": {
+          "task": "Update task state in database",
+          "taskChecked": true
+        },
+        "subtask3": {
+          "task": "Add touch support for mobile",
+          "taskChecked": true
+        }
+      },
+      "taskState": "await-feedback",
+      "title": "Drag & Drog Task Management"
+    },
+    "task22": {
+      "category": "Technical Task",
+      "description": "",
+      "dueDate": "2025-12-24",
+      "priority": "medium",
+      "taskState": "in-progress",
+      "title": "Empty-Task - See my Placeholders"
+    },
+    "task23": {
+      "assignedContacts": [
+        "EF123",
+        "EM123",
+        "KM250",
+        "SK123"
+      ],
+      "category": "User Story",
+      "description": "As a user, I don't want to accidentally delete a task or subtask. It's better to be asked again before actually deleting something.",
+      "dueDate": "2025-11-28",
+      "priority": "urgent",
+      "subtasks": {
+        "subtask0": {
+          "task": "Add a query to delete a task",
+          "taskChecked": true
+        },
+        "subtask1": {
+          "task": "Add a query to delete a subtask",
+          "taskChecked": true
+        }
+      },
+      "taskState": "done",
+      "title": "Task & Subtask deletion"
+    },
+    "task24": {
+      "assignedContacts": [
+        "AM123",
+        "AS123",
+        "BZ123",
+        "DS123",
+        "EF123",
+        "EM123",
+        "KM250",
+        "LS123",
+        "MB123",
+        "SK123"
+      ],
+      "category": "Technical Task",
+      "description": "Complete preparations for project submission and check the prerequisites.",
+      "dueDate": "2025-11-30",
+      "priority": "low",
+      "subtasks": {
+        "subtask0": {
+          "task": "Work through Checklist",
+          "taskChecked": true
+        }
+      },
+      "taskState": "await-feedback",
+      "title": "Project Submission - Name Change"
+    },
+    "task25": {
+      "assignedContacts": [
+        "EF123",
+        "EM123",
+        "KM250",
+        "LF930"
+      ],
+      "category": "User Story",
+      "description": "super umgesetzt",
+      "dueDate": "2025-11-25",
+      "priority": "urgent",
+      "subtasks": {
+        "subtask0": {
+          "task": "test",
+          "taskChecked": true
+        }
+      },
+      "taskState": "in-progress",
+      "title": "test"
+    },
+    "task26": {
+      "assignedContacts": [
+        "AM123"
+      ],
+      "category": "Technical Task",
+      "description": "Die Daten sollen strukturiert gespeichert werden.",
+      "dueDate": "2026-01-04",
+      "priority": "urgent",
+      "subtasks": {
+        "subtask0": {
+          "task": "Daten in Funktion geben",
+          "taskChecked": false
+        },
+        "subtask1": {
+          "task": "Daten in Firebase speichern",
+          "taskChecked": false
+        }
+      },
+      "taskState": "to-do",
+      "title": "Daten aus Add Task speichern können"
+    }
+  },
+  "users": {
+    "AM123": {
+      "email": "antonm@gmail.com",
+      "loggedIn": false,
+      "name": "Anton Mayer",
+      "password": "",
+      "phone": "+49 1111 111 11 1",
+      "profilImgColor": "#FF7A00"
+    },
+    "AM840": {
+      "email": "muster@muster.de",
+      "loggedIn": false,
+      "name": "Anja Muster",
+      "password": "e797c0013811a1d1e35ad7edd10fb99986db664b0996c76ed9ae5e0a5151bbf9",
+      "phone": "",
+      "profilImgColor": "#9327FF"
+    },
+    "AS123": {
+      "email": "schulz@hotmail.com",
+      "loggedIn": false,
+      "name": "Anja Schulz",
+      "password": "",
+      "phone": "+49 2222 222 22 2",
+      "profilImgColor": "#FF5EB3"
+    },
+    "BZ123": {
+      "email": "benedikt@gmail.com",
+      "loggedIn": false,
+      "name": "Benedikt Ziegler",
+      "password": "",
+      "phone": "+49 333 3333333",
+      "profilImgColor": "#6E52FF"
+    },
+    "DS123": {
+      "email": "davidberg@gmail.com",
+      "loggedIn": false,
+      "name": "David Eisenberg",
+      "password": "DavidE@456",
+      "phone": "+49 4444 444 44 4",
+      "profilImgColor": "#9327FF"
+    },
+    "EF123": {
+      "email": "eva@gmail.com",
+      "loggedIn": false,
+      "name": "Eva Fischer",
+      "password": "",
+      "phone": "+49 5555 555 55 5",
+      "profilImgColor": "#00BEE8"
+    },
+    "EM123": {
+      "email": "emmanuelma@gmail.com",
+      "loggedIn": false,
+      "name": "Emmanuel Mauer",
+      "password": "",
+      "phone": "+49 6666 666 66 6",
+      "profilImgColor": "#1FD7C1"
+    },
+    "KM250": {
+      "email": "k.mueller@hotmail.com",
+      "loggedIn": false,
+      "name": "Katharina Müller",
+      "password": "",
+      "phone": "07151610295",
+      "profilImgColor": "#FFA35E"
+    },
+    "LF930": {
+      "email": "lilly.fee@fee.de",
+      "loggedIn": false,
+      "name": "Lilly Fee",
+      "password": "",
+      "phone": "",
+      "profilImgColor": "#FFC701"
+    },
+    "LS123": {
+      "email": "lukas.steiner@gmail.com",
+      "loggedIn": false,
+      "name": "Lukas Steiner",
+      "password": "",
+      "phone": "+49 9999 999 99 9",
+      "profilImgColor": "#FFC701"
+    },
+    "MB123": {
+      "email": "bauer@gmail.com",
+      "loggedIn": false,
+      "name": "Marcel Bauer",
+      "password": "",
+      "phone": "+49 7777 777 77 7",
+      "profilImgColor": "#FF745E"
+    },
+    "PP411": {
+      "email": "peter@pan.de",
+      "loggedIn": false,
+      "name": "Peter Pan",
+      "password": "f0e4c2f76c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b",
+      "phone": "",
+      "profilImgColor": "#0038FF"
+    },
+    "SK123": {
+      "email": "sophie.keller@yahoo.com",
+      "loggedIn": false,
+      "name": "Sophie Keller",
+      "password": "",
+      "phone": "+49 1010 101 010",
+      "profilImgColor": "#C3FF2B"
+    }
+  }
+}

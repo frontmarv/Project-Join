@@ -247,7 +247,7 @@ function updateCheckboxUI(imgEl, checked) {
  * @param {boolean} checked - Whether subtask is checked.
  */
 async function updateSubtaskInFirebase(taskId, subtaskKey, text, checked) {
-  const url = `https://remotestorage-468cc-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/subtasks/${subtaskKey}.json`;
+  const url = `${DB_URL}tasks/${taskId}/subtasks/${subtaskKey}.json`;
 
   await fetch(url, {
     method: "PUT",

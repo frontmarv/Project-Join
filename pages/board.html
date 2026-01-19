@@ -7,7 +7,7 @@
 
     <title>Kanban Board</title>
     <link rel="icon" href="../assets/img/logo-black.png" type="image/x-icon">
-    
+
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../styles/header.css">
     <link rel="stylesheet" href="../styles/navigation.css">
@@ -19,9 +19,10 @@
     <link rel="stylesheet" href="../styles/dlg-add-task.css">
 
     <script src="../scripts/authentication.js"></script>
+    <script src="../script.js" defer></script>
     <script src="../scripts/db.js" defer></script>
     <script src="../scripts/load-inserts.js" defer></script>
-    <script src="../script.js" defer></script>
+
 
     <script src="../templates/tpl-user-profil-img.js" defer></script>
     <script src="../templates/tpl-task-card.js" defer></script>
@@ -108,24 +109,24 @@
                                 <span id="sort-selected-text">Due Date</span>
                                 <span class="sort-arrow"></span>
                             </div>
-                                <ul class="custom-sort-options d-none">
-                                    <li data-value="dueDate">Due Date</li>
-                                    <li data-value="priority">Priority</li>
-                                    <li data-value="title">Title (A–Z)</li>
-                                </ul>
+                            <ul class="custom-sort-options d-none">
+                                <li data-value="dueDate">Due Date</li>
+                                <li data-value="priority">Priority</li>
+                                <li data-value="title">Title (A–Z)</li>
+                            </ul>
                         </div>
                         <div class="task-search-and-add-box">
-                                <div class="board__head-searchbox-wrapper">
-                                    <div class="searchbox-wrapper">
-                                        <div class="board__head__searchbox">
-                                            <input id="search-tasks" type="search" maxlength="20" placeholder="Find Task">
-                                            <img class="search-btn" src="../assets/img/search.svg" alt="Search icon">
-                                        </div>
-                                        <div id="search-mode-indicator" class="search-mode-indicator d-none">
-                                            🔍 Read Only (Drag & Drop disabled)
-                                        </div>
+                            <div class="board__head-searchbox-wrapper">
+                                <div class="searchbox-wrapper">
+                                    <div class="board__head__searchbox">
+                                        <input id="search-tasks" type="search" maxlength="20" placeholder="Find Task">
+                                        <img class="search-btn" src="../assets/img/search.svg" alt="Search icon">
                                     </div>
-                                </div>                            
+                                    <div id="search-mode-indicator" class="search-mode-indicator d-none">
+                                        🔍 Read Only (Drag & Drop disabled)
+                                    </div>
+                                </div>
+                            </div>
                             <div id="add-task-btn" class="add-task-btn filled-btn" onclick="renderAddTaskDlg()">
                                 <span class="add-task-btn__text">Add Task</span>
                                 <img src="../assets/img/add.svg" alt="Add Task Button">

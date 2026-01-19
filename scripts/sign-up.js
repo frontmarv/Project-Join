@@ -273,6 +273,7 @@ function evaluateFormValidity() {
  */
 async function NameAndEmailAlreadyExist() {
     let data = await fetchUsers();
+    console.log(data);
     let dataArray = Object.values(data)
     let existingUserEmail = dataArray.find(user => user.email.toLowerCase() === email.value.toLowerCase().trim());
     let existingUserName = dataArray.find(user =>
