@@ -362,7 +362,7 @@ input[type="checkbox"]:checked+label:hover {
     .useraccess-form {
         padding: 32px calc(-29px + 14vw);
         gap: 1rem;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
     }
 
     .inputfield__wrapper {
@@ -410,5 +410,9 @@ input[type="checkbox"]:checked+label:hover {
 @media screen and (max-width: 460px) {
     .link-to-start {
         left: 6%;
+    }
+
+    .content-wrapper.header {
+        padding: 16px 0px 16px 16px;
     }
 }
