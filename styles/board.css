@@ -1,5 +1,5 @@
 .board-content {
-  margin-top: 8rem;
+  margin-top: 2rem;
 }
 
 .board__head {
@@ -286,7 +286,7 @@
   padding: 0.625rem;
   overflow-y: auto;
   scrollbar-width: none;
-  height: calc(100vh - 27rem);
+  height: calc(100vh - 23rem);
 }
 
 .task--placeholder {

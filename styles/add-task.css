@@ -92,7 +92,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  height: calc(100vh - 20rem);
+  height: calc(100vh - 200px);
   overflow: auto;
 }
 
@@ -177,13 +177,13 @@ textarea.input-error:focus,
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 8rem;
+  margin-top: 2rem;
   gap: 1.5rem;
 }
 
 .task-content__container {
   display: flex;
-  margin-top: 4rem;
+  margin-top: 2rem;
   flex: 1;
   overflow-y: auto;
   scrollbar-width: thin;
